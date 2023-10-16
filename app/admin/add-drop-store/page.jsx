@@ -14,7 +14,6 @@ const AddDropStore = () => {
     const fetchStores = async () => {
       try {
         const response = await axios.post("/api/admin/add-drop-stores/fetch-all-stores"); // Replace with your API endpoint
-        console.log(response.data)
         if (response.data.success){
         setStores(response.data.stores);
         } else {

@@ -43,7 +43,7 @@ const AvailableStores = ( {stores, currentFilter} ) => {
                     onClick={() => router.push(`/admin/store-details?id=${store._id}`)}
                     className="mx-1 bg-yellow-300 hover:bg-yellow-700 text-gray-800 text-sm py-1 px-2 rounded-full"
                   >
-                    <EditIcon /> Edit
+                    <EditIcon />
                   </button>
                 </td>
               </tr>

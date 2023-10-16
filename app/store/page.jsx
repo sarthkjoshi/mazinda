@@ -45,7 +45,7 @@ const StoreDashboard = () => {
         </div>
       ) : (
         <>
-          <div className="min-h-screen flex items-center justify-center flex-col">
+          <div className="flex items-center justify-center flex-col">
             <Image
               className="my-4 mt-12"
               src={MazindaLogoFull}

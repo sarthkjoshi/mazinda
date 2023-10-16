@@ -36,11 +36,6 @@ const LoginPage = () => {
     e.preventDefault();
     setSubmitting(true);
 
-    // You can access the identifier and password values from the `credentials` object
-    console.log("Email/Phone:", credentials.identifier);
-    console.log("Password:", credentials.password);
-    // Perform login logic or API call here
-
     const response = await axios.post("/api/store/auth/login-store", {
       credentials,
     });
