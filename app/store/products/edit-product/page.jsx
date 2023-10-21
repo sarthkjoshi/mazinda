@@ -257,7 +257,7 @@ const ProductDetails = () => {
           ) : (
             <button
               onClick={handleEditClick}
-              className="bg-[#fb691e] my-5 text-white px-10 py-2 rounded-md hover:opacity-70 focus:outline-none mb-1"
+              className="bg-[#fb691e] my-5 text-white px-10 py-2 rounded-md hover:opacity-70 focus:outline-none mb-10"
             >
               Edit
             </button>

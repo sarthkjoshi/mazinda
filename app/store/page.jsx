@@ -4,18 +4,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import OvalLoader from "@/components/admin/utility/OvalLoader";
-import { useRouter } from "next/navigation";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 import Dashboard from "@/components/store/Dashboard";
 
 const StoreDashboard = () => {
-  const router = useRouter();
   const [approvalStatus, setApprovalStatus] = useState("");
   const store_token = Cookies.get("store_token");
-  if (!store_token) {
-    router.push("/store/auth/login");
-  }
 
   useEffect(() => {
     // Fetch the store's approval status using the store ID from the JWT token

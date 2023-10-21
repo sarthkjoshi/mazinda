@@ -36,6 +36,8 @@ const ProductsPage = () => {
       storeToken: Cookies.get("store_token"),
     });
 
+    console.log(response.data)
+
     if (response.data.success) {
       // Filter products with approvalStatus true
       const approvedProducts = response.data.products.filter(
