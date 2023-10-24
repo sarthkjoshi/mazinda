@@ -1,9 +1,11 @@
-'use client'
-import { useState } from 'react';
+"use client";
+import axios from "axios";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-const AddCategory = ({ onAddCategory }) => {
-  const [newCategory, setNewCategory] = useState('');
-  const [newSubcategory, setNewSubcategory] = useState('');
+const AddCategory = () => {
+  const [newCategory, setNewCategory] = useState("");
+  const [newSubcategory, setNewSubcategory] = useState("");
   const [subcategories, setSubcategories] = useState([]);
 
   const handleChangeCategory = (e) => {
@@ -15,26 +17,34 @@ const AddCategory = ({ onAddCategory }) => {
   };
 
   const handleAddSubcategory = () => {
-    if (newSubcategory.trim() !== '') {
+    if (newSubcategory.trim() !== "") {
       setSubcategories([...subcategories, newSubcategory]);
-      setNewSubcategory('');
+      setNewSubcategory("");
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newCategory.trim() !== '') {
-      onAddCategory(newCategory);
-      setNewCategory('');
+
+    const response = await axios.post('/api/category/add-new-category', { categoryName: newCategory, subcategories })
+
+    console.log(response.data)
+    if (response.data.success) {
+      toast.success(response.data.message)
+      setNewCategory("")
+      setSubcategories([])
     }
   };
 
   return (
-    <div className='m-2 bg-white rounded-xl p-4'>
-      <h2 className='text-2xl'>Add Category</h2>
-      <form onSubmit={handleSubmit} className="mt-4">
+    <div className="m-2 bg-white rounded-xl p-4">
+      <h2 className="text-2xl">Add Category</h2>
+      <div className="mt-4">
         <div className="mb-4">
-          <label htmlFor="category" className="block text-gray-700 text-sm font-bold mb-2">
+          <label
+            htmlFor="category"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
             Category Name
           </label>
           <input
@@ -46,15 +56,7 @@ const AddCategory = ({ onAddCategory }) => {
             onChange={handleChangeCategory}
           />
         </div>
-        <div className="mb-4">
-          <button
-            type="submit"
-            className="bg-black hover:opacity-70 rounded-full text-white font-bold py-2 px-4"
-          >
-            Add Category
-          </button>
-        </div>
-      </form>
+      </div>
       <div className="mt-4">
         <h3>Add Subcategories:</h3>
         <div className="flex items-center">
@@ -64,18 +66,17 @@ const AddCategory = ({ onAddCategory }) => {
             placeholder="Enter subcategory name"
             value={newSubcategory}
             onChange={handleChangeSubcategory}
-            />
+          />
           <button
             onClick={handleAddSubcategory}
             className="bg-black hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2"
-            >
+          >
             +
           </button>
         </div>
       </div>
       {subcategories.length > 0 && (
-        <div>
-          <h3>Subcategories:</h3>
+        <div className="my-1">
           <ul>
             {subcategories.map((subcategory, index) => (
               <li key={index}>{subcategory}</li>
@@ -83,6 +84,12 @@ const AddCategory = ({ onAddCategory }) => {
           </ul>
         </div>
       )}
+
+      <div className="my-4">
+        <button onClick={handleSubmit} className="bg-black hover:opacity-70 rounded-full text-white font-bold py-2 px-4">
+          Add Category
+        </button>
+      </div>
     </div>
   );
 };

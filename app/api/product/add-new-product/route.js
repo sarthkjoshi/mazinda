@@ -7,11 +7,14 @@ export async function POST(req) {
         const { productData } = await req.json();
         const { productName, storeToken, category, pricing, description } = productData;
 
+        const storeData = jwt.verify(storeToken, 'this is jwt secret');
+        const storeId = storeData['id']
+
         await connectDB()
-        let product = await Product.findOne({ storeToken, productName })
+        let product = await Product.findOne({ storeId, productName })
 
         if (!product) {
-            await Product.create({ productName, storeToken, category, pricing, description });
+            await Product.create({ productName, storeId, category, pricing, description });
 
             return NextResponse.json({ success: true, message: "Product created successfully" });
         }

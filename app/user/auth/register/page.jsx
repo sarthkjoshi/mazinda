@@ -13,10 +13,10 @@ import Image from "next/image";
 const RegisterPage = () => {
   const router = useRouter();
 
-  //   const store_token = Cookies.get("store_token");
-  //   if (store_token) {
-  //     router.push('/store')
-  //   }
+  const token = Cookies.get('user_token');
+  if (token) {
+    router.push('/')
+  }
 
   const [submitting, setSubmitting] = useState(false);
   const [credentials, setCredentials] = useState({
@@ -38,15 +38,14 @@ const RegisterPage = () => {
     e.preventDefault();
     setSubmitting(true);
 
-    const response = await axios.post("/api/store/auth/login-store", {
+    const response = await axios.post("/api/user/auth/register", {
       credentials,
     });
 
-    console.log(response.data);
     if (response.data.success) {
-      const { store_token } = response.data;
-      Cookies.set("store_token", store_token, { expires: 1000 });
-      router.push(`/store`);
+      const { token } = response.data;
+      Cookies.set("user_token", token, { expires: 1000 });
+      router.push('/');
     } else {
       toast.error(response.data.message, {
         position: "top-center",
@@ -70,7 +69,7 @@ const RegisterPage = () => {
         <div className="flex items-center justify-center">
           <p className="inline text-center text-gray-600">
             or{" "}
-            <Link href="/store/register" className="text-gray-600 underline">
+            <Link href="/user/auth/login" className="text-gray-600 underline">
               log into account
             </Link>
           </p>
@@ -87,7 +86,7 @@ const RegisterPage = () => {
               type="text"
               id="name"
               name="name"
-              className="w-full px-5 py-2 border rounded-full text-sm"
+              className=" w-full px-5 py-2 border rounded-full"
               placeholder="Enter your name"
               value={credentials.name}
               onChange={handleInputChange}
@@ -104,7 +103,7 @@ const RegisterPage = () => {
               type="text"
               id="phoneNumber"
               name="phoneNumber"
-              className="w-full px-5 py-2 border rounded-full text-sm"
+              className=" w-full px-5 py-2 border rounded-full"
               placeholder="Enter your phone number"
               value={credentials.phoneNumber}
               onChange={handleInputChange}
@@ -122,7 +121,7 @@ const RegisterPage = () => {
               type="email"
               id="email"
               name="email"
-              className="w-full px-5 py-2 border rounded-full text-sm"
+              className=" w-full px-5 py-2 border rounded-full"
               placeholder="Enter your Email"
               value={credentials.email}
               onChange={handleInputChange}
@@ -140,7 +139,7 @@ const RegisterPage = () => {
               type="password"
               id="password"
               name="password"
-              className="w-full px-5 py-2 border rounded-full text-sm"
+              className=" w-full px-5 py-2 border rounded-full"
               placeholder="Enter your password"
               value={credentials.password}
               onChange={handleInputChange}
@@ -150,15 +149,10 @@ const RegisterPage = () => {
           <div className="mb-4">
             <button
               type="submit"
-              className="w-full bg-black text-white font-bold py-1 px-4 rounded-full hover:opacity-70"
+              className="w-full bg-black text-white font-bold py-2 px-4 rounded-full hover:opacity-70"
             >
-              {submitting ? <OvalLoader /> : "Log In"}
+              {submitting ? <OvalLoader /> : "Sign Up"}
             </button>
-            <div className="text-center mt-1">
-              <a href="#" className="underline font-semibold text-sm">
-                Forgot Password?
-              </a>
-            </div>
           </div>
         </form>
 
@@ -184,7 +178,7 @@ const RegisterPage = () => {
               onClick={() => {}}
             >
               <svg
-                class="w-6 h-6 text-white"
+                className="w-6 h-6 text-white"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"

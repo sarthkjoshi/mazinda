@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from '@/components/user/Navbar'
+import BottomNavigationBar from '@/components/user/BottomNavigationBar'
 
 export const metadata = {
   title: 'Mazinda - Ab Maze Mein India !',
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
         />
         <Navbar />
         {children}
+        <BottomNavigationBar />
       </body>
     </html>
   )

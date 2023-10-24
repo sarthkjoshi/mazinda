@@ -12,23 +12,23 @@ const StoreDashboard = () => {
   const [approvalStatus, setApprovalStatus] = useState("");
   const store_token = Cookies.get("store_token");
 
-  useEffect(() => {
-    // Fetch the store's approval status using the store ID from the JWT token
-    const fetchApprovalStatus = async () => {
-      try {
-        const response = await axios.post(`/api/store/fetch-store`, {
-          store_token,
-        });
-        if (response.data.success) {
-          setApprovalStatus(response.data.store.approvedStatus);
-        } else {
-          console.error("Error fetching approval status");
-        }
-      } catch (error) {
-        console.error("Error fetching approval status: ", error);
+  const fetchApprovalStatus = async () => {
+    try {
+      const response = await axios.post(`/api/store/fetch-store`, {
+        store_token,
+      });
+      console.log(response.data)
+      if (response.data.success) {
+        setApprovalStatus(response.data.store.approvedStatus);
+      } else {
+        console.error("Error fetching approval status");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching approval status: ", error);
+    }
+  };
 
+  useEffect(() => {
     fetchApprovalStatus();
   }, []);
 
@@ -53,7 +53,7 @@ const StoreDashboard = () => {
 
               <div className="text-center">
                 {approvalStatus === "pending" ? (
-                  <div className="text-yellow-700 mb-4">
+                  <div className="text-yellow-400 mb-4">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 inline-block mr-2"

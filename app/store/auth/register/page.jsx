@@ -78,7 +78,7 @@ const RegisterStorePage = () => {
           <p className="inline text-center text-gray-600">
             Or{" "}
             <Link
-              href="/store/login"
+              href="/store/auth/login"
               className="text-gray-600 hover:underline"
             >
               Log in to store

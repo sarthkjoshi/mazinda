@@ -22,7 +22,7 @@ const CurrentOrders = () => {
   ];
 
   return (
-    <div className="p-4">
+    <div className="p-4 md:w-3/4 md:mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-gray-800 text-center">
         Current Orders
       </h1>
@@ -39,16 +39,16 @@ const CurrentOrders = () => {
           <tbody>
             {orders.map((order) => (
               <tr key={order.id}>
-                <td className="py-2">{order.date}</td>
-                <td className="py-2">{order.time}</td>
-                <td className="py-2">
+                <td className="py-2 text-center">{order.date}</td>
+                <td className="py-2 text-center">{order.time}</td>
+                <td className="py-2 text-center">
                   {order.productName} ✕{" "}
                   <span className="bg-yellow-300 text-yellow-500 px-2 py-1 rounded-full text-sm">
                     {order.quantity}
                   </span>
                 </td>
                 <td
-                  className={`rounded-full ${
+                  className={`rounded-full text-center ${
                     order.status === "Accepted"
                       ? "text-green-600"
                       : order.status === "Rejected"

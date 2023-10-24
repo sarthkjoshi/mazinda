@@ -1,24 +1,19 @@
-import React from "react";
+"use client";
+
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const AvailableCategories = () => {
-  // Sample category data
-  const categories = [
-    {
-      id: 1,
-      name: "Electronics",
-      subcategories: ["Mobile Phones", "Laptops", "Cameras", "Accessories"],
-    },
-    {
-      id: 2,
-      name: "Clothing",
-      subcategories: ["Men", "Women", "Kids", "Accessories"],
-    },
-    {
-      id: 3,
-      name: "Home Decor",
-      subcategories: ["Furniture", "Lighting", "Home Accents", "Rugs"],
-    },
-  ];
+  const [categories, setcategories] = useState([]);
+
+  const fetchCategories = async () => {
+    const response = await axios.post("/api/category/fetch-categories");
+    setcategories(response.data.categories);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <div className="bg-white p-5">
@@ -26,11 +21,11 @@ const AvailableCategories = () => {
       <div className="flex flex-wrap">
         {categories.map((category) => (
           <div
-            key={category.id}
-            className="bg-gray-50 rounded-lg shadow-md p-4 hover:shadow-lg w-56 h-56 m-2"
+            key={category._id}
+            className="bg-gray-50 rounded-lg shadow-sm border p-4 hover:shadow-lg w-56 h-56 m-2"
           >
             <h2 className="text-2xl font-semibold mb-2 text-center">
-              {category.name}
+              {category.categoryName}
             </h2>
             <ul className="list-disc ml-4">
               {category.subcategories.map((subcategory) => (
