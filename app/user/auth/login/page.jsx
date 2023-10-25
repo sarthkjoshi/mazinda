@@ -40,19 +40,10 @@ const LoginPage = () => {
 
     if (response.data.success) {
       const { user_token } = response.data;
-      Cookies.set("store_token", user_token, { expires: 1000 });
+      Cookies.set("user_token", user_token, { expires: 1000 });
       router.push("/");
     } else {
-      toast.warn(response.data.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.warn(response.data.message, { autoClose: 3000 });
     }
     setSubmitting(false);
   };

@@ -27,7 +27,7 @@ function BottomMenu() {
                 >
                   <path
                     d="M6.22197 20.0501H9.33299V13.8281H15.555V20.0501H18.6661V10.7171L12.444 6.05056L6.22197 10.7171V20.0501ZM6.22197 22.1241C5.65161 22.1241 5.16353 21.9212 4.75771 21.5153C4.3512 21.1088 4.14795 20.6204 4.14795 20.0501V10.7171C4.14795 10.3887 4.22158 10.0776 4.36883 9.78376C4.5154 9.48995 4.7183 9.24798 4.97756 9.05786L11.1996 4.39136C11.3897 4.2531 11.5885 4.1494 11.7959 4.08026C12.0033 4.01113 12.2193 3.97656 12.444 3.97656C12.6687 3.97656 12.8847 4.01113 13.0921 4.08026C13.2995 4.1494 13.4983 4.2531 13.6884 4.39136L19.9105 9.05786C20.1697 9.24798 20.373 9.48995 20.5202 9.78376C20.6668 10.0776 20.7401 10.3887 20.7401 10.7171V20.0501C20.7401 20.6204 20.5372 21.1088 20.1314 21.5153C19.7249 21.9212 19.2364 22.1241 18.6661 22.1241H13.481V15.9021H11.407V22.1241H6.22197Z"
-                    fill="#F17E13"
+                    fill="#676161"
                   />
                 </svg>
                 <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-[#F17E13] dark:group-hover:text-blue-500">
@@ -36,8 +36,8 @@ function BottomMenu() {
               </Link>
 
               <Link
-                href="/store/stock"
-                className="inline-flex flex-col items-center justify-center px-5 hover-bg-gray-50 dark:hover-bg-gray-800 group"
+                href="/user/my-cart"
+                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
               >
                 <svg
                   width="25"
@@ -58,7 +58,7 @@ function BottomMenu() {
               </Link>
 
               <Link
-                className="inline-flex flex-col items-center justify-center px-5 hover-bg-gray-50 dark:hover-bg-gray-800 group"
+                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
                 href="/store/products"
               >
                 <svg
@@ -106,9 +106,10 @@ function BottomMenu() {
                 </span>
               </Link>
 
-              <button
+              <Link
+                href='#'
                 type="button"
-                className="inline-flex flex-col items-center justify-center px-5 hover-bg-gray-50 dark:hover-bg-gray-800 group"
+                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
               >
                 <svg
                   width="25"
@@ -125,10 +126,10 @@ function BottomMenu() {
                 <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-[#F17E13] dark:group-hover:text-blue-500">
                   Money
                 </span>
-              </button>
+              </Link>
               <button
                 type="button"
-                className="inline-flex flex-col items-center justify-center px-5 hover-bg-gray-50 dark:hover-bg-gray-800 group"
+                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
               >
                 <svg
                   width="26"

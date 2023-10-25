@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -11,8 +11,23 @@ const ProductDetails = () => {
   const [productData, setProductData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
 
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.post("/api/category/fetch-categories");
+      const fetchedCategories = response.data.categories;
+      setCategories(fetchedCategories);
+      setLoadingCategories(false); // Set loading state to false
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      setLoadingCategories(false); // Set loading state to false even on error
+    }
+  };
 
   const fetchProductData = async () => {
     try {
@@ -31,6 +46,7 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
+    fetchCategories();
     fetchProductData();
   }, [id]);
 
@@ -45,27 +61,9 @@ const ProductDetails = () => {
         productData,
       });
       if (response.data.success) {
-        toast.success(response.data.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toast.success(response.data.message, { autoClose: 3000 });
       } else {
-        toast.error(response.data.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toast.error(response.data.message, { autoClose: 3000 });
       }
     } catch (error) {
       console.error("Error saving product data: ", error);
@@ -94,6 +92,15 @@ const ProductDetails = () => {
     }
   };
 
+  // Define a function to get subcategories for a selected category
+  const getSubcategories = (selectedCategory) => {
+    // Find the selected category in the categories data
+    const selectedCategoryData = categories.find(
+      (category) => category.categoryName === selectedCategory
+    );
+    return selectedCategoryData ? selectedCategoryData.subcategories : [];
+  };
+
   return (
     <div className="container mx-auto p-4 bg-white shadow-sm rounded-xl">
       <h1 className="text-3xl font-semibold mb-4">Product Details</h1>
@@ -116,13 +123,18 @@ const ProductDetails = () => {
                 </div>
                 <div>
                   <label className="block font-semibold">Category:</label>
-                  <input
-                    type="text"
+                  <select
                     name="category"
                     value={productData.category}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                  />
+                  >
+                    {categories.map((category) => (
+                      <option key={category._id} value={category.categoryName}>
+                        {category.categoryName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -147,6 +159,28 @@ const ProductDetails = () => {
                   />
                 </div>
               </div>
+              {/* Show subcategories based on the selected category */}
+              {productData.category && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-semibold">Subcategory:</label>
+                    <select
+                      name="subcategory"
+                      value={productData.subcategory}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                    >
+                      {getSubcategories(productData.category).map(
+                        (subcategory) => (
+                          <option key={subcategory} value={subcategory}>
+                            {subcategory}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block font-semibold">Image URI:</label>
@@ -224,6 +258,14 @@ const ProductDetails = () => {
                   </p>
                   <p className="inline-block mx-2 text-lg">
                     {productData.category}
+                  </p>
+                </div>
+                <div>
+                  <p className="inline-block mx-2 my-3 font-semibold w-[240px] text-lg">
+                    Subcategory:
+                  </p>
+                  <p className="inline-block mx-2 text-lg">
+                    {productData.subcategory}
                   </p>
                 </div>
                 <div>

@@ -27,7 +27,7 @@ export async function POST(req) {
 
             if (password === decryptedPassword) {
                 const token = jwt.sign({ name: user.name, email: user.email }, 'this is jwt secret')
-                return NextResponse.json({ success: true, message: "Logged in successfully", token });
+                return NextResponse.json({ success: true, message: "Logged in successfully", user_token: token });
             } else {
                 return NextResponse.json({ success: false, message: "Invalid credentials" });
             }

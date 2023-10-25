@@ -16,6 +16,7 @@ export async function PUT(req) {
             
             product.productName = productData.productName;
             product.category = productData.category;
+            product.subcategory = productData.subcategory;
             product.pricing = productData.pricing;
             product.password = productData.password;
             product.imageURI = productData.imageURI;

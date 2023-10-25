@@ -5,6 +5,7 @@ const ProductSchema = new mongoose.Schema({
     storeId: { type: String, required: true },
     pricing: { type: Object },
     category: { type: String },
+    subcategory: { type: String },
     description: { type: String },
     topDeal: { type: Boolean, default: false },
     trending: { type: Boolean, default: false },

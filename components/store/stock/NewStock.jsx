@@ -1,15 +1,67 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const initialCategories = ["Category 1", "Category 2", "Category 3"];
-
 const AddNewStock = () => {
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+
+  const [subcategories, setSubcategories] = useState([]);
+  const [loadingSubcategories, setLoadingSubcategories] = useState(true);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.post("/api/category/fetch-categories");
+      const fetchedCategories = response.data.categories.map(
+        (category) => category.categoryName
+      );
+      setCategories(fetchedCategories);
+      setLoadingCategories(false); // Set loading state to false
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      setLoadingCategories(false); // Set loading state to false even on error
+    }
+  };
+
+  const fetchSubcategories = async (selectedCategory) => {
+    try {
+      const response = await axios.post("/api/category/fetch-categories");
+      const categoriesData = response.data;
+
+      console.log(categoriesData);
+
+      // Find the selected category object in the categoriesData array
+      const selectedCategoryData = categoriesData.categories.find(
+        (category) => category.categoryName === selectedCategory
+      );
+
+      if (selectedCategoryData) {
+        // Extract the subcategories from the selected category object
+        const fetchedSubCategories = selectedCategoryData.subcategories || [];
+        setSubcategories(fetchedSubCategories);
+      } else {
+        // Handle the case where the selected category is not found
+        console.error(
+          `Category "${selectedCategory}" not found in categoriesData.`
+        );
+      }
+      setLoadingSubcategories(false); // Set loading state to false
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      setLoadingSubcategories(false); // Set loading state to false even on error
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   const [productData, setProductData] = useState({
     productName: "",
     storeToken: Cookies.get("store_token"),
     category: "",
+    subcategory: "",
     pricing: {
       mrp: "",
       costPrice: "",
@@ -19,6 +71,7 @@ const AddNewStock = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(productData);
 
     try {
       const response = await axios.post("/api/product/add-new-product", {
@@ -26,27 +79,9 @@ const AddNewStock = () => {
       });
 
       if (response.data.success) {
-        toast.success(response.data.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toast.success(response.data.message, { autoClose: 3000 });
       } else {
-        toast.error(response.data.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toast.error(response.data.message, { autoClose: 3000 });
       }
 
       setProductData({
@@ -60,16 +95,7 @@ const AddNewStock = () => {
         description: "",
       });
     } catch (e) {
-      toast.error(e.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(e.message, { autoClose: 3000 });
     }
   };
 
@@ -108,24 +134,63 @@ const AddNewStock = () => {
             onChange={handleFieldChange}
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="category" className="block font-medium">
-            Category:
-          </label>
-          <select
-            id="category"
-            name="category"
-            className="w-full px-2 py-1 border border-gray-300 rounded-full text-gray-600"
-            value={productData.category}
-            onChange={handleFieldChange}
-          >
-            <option value="">Select Category</option>
-            {initialCategories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+
+        <div className="flex">
+          <div className="mb-4">
+            <label htmlFor="category" className="block font-medium">
+              Category:
+            </label>
+            <select
+              id="category"
+              name="category"
+              className="w-full px-2 py-1 border border-gray-300 rounded-full text-gray-600"
+              value={productData.category}
+              onChange={(e) => {
+                handleFieldChange(e);
+                const selectedCategory = e.target.value;
+                fetchSubcategories(selectedCategory);
+              }}
+            >
+              <option value="">Category</option>
+              {loadingCategories ? (
+                <option value="" disabled>
+                  Loading Categories...
+                </option>
+              ) : (
+                categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="subcategory" className="block font-medium">
+              Sub-Category:
+            </label>
+            <select
+              id="subcategory"
+              name="subcategory"
+              className="w-full px-2 py-1 border border-gray-300 rounded-full text-gray-600 ml-1"
+              value={productData.subcategory}
+              onChange={handleFieldChange}
+            >
+              <option value="">Subcategory</option>
+              {loadingSubcategories ? (
+                <option value="" disabled>
+                  Select a Category
+                </option>
+              ) : (
+                subcategories.map((subcat) => (
+                  <option key={subcat} value={subcat}>
+                    {subcat}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
         </div>
         <div className="flex justify-between">
           <div className="mb-4 mx-1">
