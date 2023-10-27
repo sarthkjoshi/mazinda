@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: { type: String, unique: true},
     password: { type: String },
     cart: { type: Array, default: []},
+    savedAddresses: { type: Array, default: []},
+    currentAddress: { type: Object, default: {}},
     password_reset_token: { type: String, trim: true },
 }, {timestamps: true });
 
