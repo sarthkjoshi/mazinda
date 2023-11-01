@@ -17,7 +17,7 @@ const StoreDashboard = () => {
       const response = await axios.post(`/api/store/fetch-store`, {
         store_token,
       });
-      console.log(response.data)
+      console.log(response.data);
       if (response.data.success) {
         setApprovalStatus(response.data.store.approvedStatus);
       } else {
@@ -100,7 +100,7 @@ const StoreDashboard = () => {
                       />
                     </svg>
                     Unfortunately, your store request has been rejected. You can
-                    reach out at contact@citikartt.com for more information
+                    reach out at contact@mazinda.com for more information
                   </div>
                 ) : (
                   <div className="text-indigo-700 mb-4">

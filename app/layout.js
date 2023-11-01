@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from '@/components/user/Navbar'
 import BottomNavigationBar from '@/components/user/BottomNavigationBar'
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata = {
   title: 'Mazinda - Ab Maze Mein India !',
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
           theme="light"
         />
         <Navbar />
+        <NextTopLoader color="#F17E13" showSpinner={false} />
         {children}
         <BottomNavigationBar />
       </body>

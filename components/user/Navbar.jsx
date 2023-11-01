@@ -4,9 +4,11 @@ import Link from "next/link";
 import MazindaLogo from "@/public/logo_mini.png";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import OvalLoader from "../admin/utility/OvalLoader";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const router = useRouter();
@@ -15,6 +17,11 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [products, setProducts] = useState([]);
+
+  const [locationLoading, setLocationLoading] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [showLocationDropbox, setShowLocationDropbox] = useState(false);
 
   const fetchProducts = async (searchQuery) => {
     const response = await axios.post(
@@ -25,6 +32,20 @@ const Navbar = () => {
     );
     setProducts(response.data.products);
   };
+
+  const fetchLocations = async () => {
+    const response = await axios.post("/api/location/fetch-locations");
+    setLocations(response.data.locations);
+    setSelectedLocation(response.data.locations[0].city);
+
+    // Setting location info in cookies
+    Cookies.set("selectedLocation", JSON.stringify(response.data.locations[0]));
+    setLocationLoading(false);
+  };
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
 
   return (
     <>
@@ -42,8 +63,8 @@ const Navbar = () => {
                   className="border rounded-md px-3 py-2 flex items-center text-sm font-semibold cursor-pointer"
                   onClick={() => {
                     router.push(`/user/search/${searchQuery}`);
-                    setShowSearchBox(false)
-                    setSearchQuery(searchQuery)
+                    setShowSearchBox(false);
+                    setSearchQuery(searchQuery);
                   }}
                 >
                   <svg
@@ -71,8 +92,8 @@ const Navbar = () => {
                         className="border rounded-md px-3 py-2 flex items-center text-sm font-semibold cursor-pointer"
                         onClick={() => {
                           router.push(`/user/search/${product.productName}`);
-                          setSearchQuery(product.productName)
-                          setShowSearchBox(false)
+                          setSearchQuery(product.productName);
+                          setShowSearchBox(false);
                         }}
                       >
                         <svg
@@ -96,7 +117,7 @@ const Navbar = () => {
             )}
 
             <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-              <Link href="/store">
+              <Link href="/">
                 <Image
                   width={50}
                   height={60}
@@ -156,8 +177,68 @@ const Navbar = () => {
                 </svg>
 
                 <div className="flex flex-col">
-                  <span className="text-gray-600 text-[9px]">Deliver to</span>
-                  <span className="text-gray-600 text-sm">Chandigarh</span>
+                  <span className="text-gray-600 text-[9px] md:text-sm">
+                    Deliver to
+                  </span>
+                  <span className="text-gray-600 text-sm md:text-lg">
+                    {!locationLoading ? (
+                      <span className="">
+                        <span
+                          className="flex items-center cursor-pointer"
+                          onClick={() =>
+                            setShowLocationDropbox(!showLocationDropbox)
+                          }
+                        >
+                          {selectedLocation}
+                          <svg
+                            className="w-2 h-2 text-gray-800 dark:text-white ml-1"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 14 8"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+                            />
+                          </svg>
+                        </span>
+                        {showLocationDropbox && (
+                          <div className="absolute mt-2 right-2">
+                            <div className="border shadow rounded-xl flex flex-col items-center">
+                              <span className="bg-[#f17e13] text-white w-full text-center rounded-t-lg p-2 px-5">
+                                Select Your City
+                              </span>
+                              <ul className="w-full">
+                                {locations.map((location) => {
+                                  return (
+                                    <li
+                                      key={location._id}
+                                      className="cursor-pointer px-3 py-2 hover:bg-gray-100 text-center"
+                                      onClick={() => {
+                                        Cookies.set("selectedLocation", JSON.stringify(location));
+                                        setShowLocationDropbox(false)
+                                      }}
+                                    >
+                                      {location.city}
+                                      <hr />
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          </div>
+                        )}
+                      </span>
+                    ) : (
+                      <div className="scale-50 md:scale-90">
+                        <OvalLoader />
+                      </div>
+                    )}
+                  </span>
                 </div>
               </div>
             </div>

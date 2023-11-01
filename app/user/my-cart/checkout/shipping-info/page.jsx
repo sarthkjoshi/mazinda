@@ -8,15 +8,19 @@ import Link from "next/link";
 const ShippingInfo = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [user, setUser] = useState({});
-  const [currentAddress, setCurrentAddress] = useState({});
   const [userToken, setUserToken] = useState("");
   const [savedAddresses, setSavedAddresses] = useState({});
+
+  const [pincodes, setPincodes] = useState([]);
+  const [pincodeError, setPincodeError] = useState(false);
+
+  const selectedLocation = JSON.parse(Cookies.get("selectedLocation"));
   const [newAddress, setNewAddress] = useState({
     name: "",
     phone: "",
     email: "",
     subaddress: "",
-    city: "",
+    city: selectedLocation.city,
     state: "",
   });
 
@@ -24,6 +28,15 @@ const ShippingInfo = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const handleOnChange = async (e) => {
+    // if the input is pincode, then handle it differently
+    if (e.target.name === "pincode" && e.target.value.length === 6) {
+      if (!pincodes.includes(e.target.value)) {
+        setPincodeError(true);
+      } else {
+        setPincodeError(false);
+      }
+    }
+
     setNewAddress({
       ...newAddress,
       [e.target.name]: e.target.value,
@@ -31,10 +44,28 @@ const ShippingInfo = () => {
   };
 
   const handleAddAddress = async () => {
+    // Validate if all required fields are filled
+    if (
+      !newAddress.name ||
+      !newAddress.phone ||
+      !newAddress.email ||
+      !newAddress.subaddress ||
+      !newAddress.pincode ||
+      !newAddress.state ||
+      pincodeError
+    ) {
+      toast.warn("Please provide all the required information.");
+      return;
+    }
+
     const response = await axios.post(
       "/api/user/shipping-addresses/add-new-address",
-      { newAddress, userToken }
+      {
+        newAddress,
+        userToken,
+      }
     );
+
     if (response.data.success) {
       const newSavedAddresses = response.data.newSavedAddresses;
       setSavedAddresses(newSavedAddresses);
@@ -54,11 +85,10 @@ const ShippingInfo = () => {
   const handleAddressClick = async (address) => {
     setSelectedAddress(selectedAddress === address ? null : address);
 
-    const response = await axios.post(
-      "/api/user/shipping-addresses/set-current-address",
-      { userToken, currentAddress: selectedAddress === address ? null : address }
-    );
-    console.log(response.data);
+    await axios.post("/api/user/shipping-addresses/set-current-address", {
+      userToken,
+      currentAddress: selectedAddress === address ? null : address,
+    });
   };
 
   const fetchData = async (userToken) => {
@@ -67,10 +97,15 @@ const ShippingInfo = () => {
     const user = response.data.user;
     const currentAddress = user.currentAddress;
     const savedAddresses = user.savedAddresses;
-    
+
+    const pincodeResponse = await axios.post("/api/location/fetch-pincodes", {
+      id: selectedLocation._id,
+    });
+
     setUser(user);
     setSelectedAddress(currentAddress);
     setSavedAddresses(savedAddresses);
+    setPincodes(pincodeResponse.data.pincodes);
   };
 
   useEffect(() => {
@@ -91,11 +126,7 @@ const ShippingInfo = () => {
         {!pageLoading ? (
           <div className="p-3">
             <div>
-              <div
-                className={`border ${
-                  expandedNewAddress ? "border-[#FE6321]" : ""
-                } rounded-3xl`}
-              >
+              <div className="border rounded-3xl">
                 <div
                   className="px-5 py-2 text-gray-600 flex justify-between items-center"
                   onClick={() => setExpandedNewAddress(true)}
@@ -123,96 +154,105 @@ const ShippingInfo = () => {
                 {expandedNewAddress && (
                   <div className="px-4">
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-600">
+                      <span className="text-sm font-bold text-gray-600 mt-2 mb-1">
                         Full Name
                       </span>
                       <input
                         onChange={handleOnChange}
                         value={newAddress.name}
                         name="name"
-                        className="p-1 rounded-full text-sm px-4"
+                        className="p-1 rounded-full text-sm px-4 border border-gray-200"
                         type="text"
                         placeholder="Your Full Name"
                       />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-600">
+                      <span className="text-sm font-bold text-gray-600 mt-2 mb-1">
                         Phone/Contact
                       </span>
                       <input
                         onChange={handleOnChange}
                         value={newAddress.phone}
                         name="phone"
-                        className="p-1 rounded-full text-sm px-4"
+                        className="p-1 rounded-full text-sm px-4 border border-gray-200"
                         type="text"
                         placeholder="10-Digit Phone Number"
                       />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-600">
+                      <span className="text-sm font-bold text-gray-600 mt-2 mb-1">
                         Email
                       </span>
                       <input
                         onChange={handleOnChange}
                         value={newAddress.email}
                         name="email"
-                        className="p-1 rounded-full text-sm px-4"
+                        className="p-1 rounded-full text-sm px-4 border border-gray-200"
                         type="email"
                         placeholder="for eg. youremail@xyz.com"
                       />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-600">
+                      <span className="text-sm font-bold text-gray-600 mt-2 mb-1">
                         Address
                       </span>
                       <input
                         onChange={handleOnChange}
                         value={newAddress.subaddress}
                         name="subaddress"
-                        className="p-1 rounded-full text-sm px-4"
+                        className="p-1 rounded-full text-sm px-4 border border-gray-200"
                         type="text"
                         placeholder="eg. House No, Street Name, etc"
                       />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-600">
-                        City
-                      </span>
-                      <input
-                        onChange={handleOnChange}
-                        value={newAddress.city}
-                        name="city"
-                        className="p-1 rounded-full text-sm px-4"
-                        type="text"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-600">
+                      <span className="text-sm font-bold text-gray-600 mt-2 mb-1">
                         Pincode
                       </span>
                       <input
                         onChange={handleOnChange}
                         value={newAddress.pincode}
                         name="pincode"
-                        className="p-1 rounded-full text-sm px-4"
+                        className={`p-1 rounded-full text-sm px-4 border border-gray-200 ${
+                          pincodeError ? "border-red-500" : ""
+                        }`}
+                        type="text"
+                      />
+                      {pincodeError && (
+                        <span className="text-sm text-yellow-400 mx-2 mt-1">
+                          Sorry, this location is currently unavailable
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-gray-600 mt-2 mb-1">
+                        City (Based on the selected location)
+                      </span>
+                      <input
+                        disabled
+                        onChange={handleOnChange}
+                        value={newAddress.city}
+                        name="city"
+                        className="p-1 rounded-full text-sm px-4 border border-gray-200 text-gray-400"
                         type="text"
                       />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-600">
+                      <span className="text-sm font-bold text-gray-600 mt-2 mb-1">
                         State
                       </span>
                       <input
                         onChange={handleOnChange}
                         value={newAddress.state}
                         name="state"
-                        className="p-1 rounded-full text-sm px-4"
+                        className="p-1 rounded-full text-sm px-4 border border-gray-200"
                         type="text"
                       />
                     </div>
 
                     <div className="w-full flex justify-center my-3">
                       <button
+                        disabled={pincodeError}
                         onClick={handleAddAddress}
                         className="border border-[#FE6321] bg-[#FE6321] px-5 py-1 rounded-full text-white font-bold text-sm mx-1"
                       >
@@ -240,7 +280,9 @@ const ShippingInfo = () => {
                 {savedAddresses && savedAddresses.length ? (
                   <div>
                     {savedAddresses.map((address) => {
-                      const isSelected = selectedAddress.id === address.id;
+                      const isSelected =
+                        selectedAddress && selectedAddress.id === address.id; // Perform null check
+
                       return (
                         <div
                           className={`border my-2 rounded-2xl p-4 ${
@@ -277,7 +319,9 @@ const ShippingInfo = () => {
                     </div>
                   </div>
                 ) : (
-                  "No saved addresses"
+                  <div className="flex justify-center my-3">
+                    <span className="text-gray-500">No saved addresses</span>
+                  </div>
                 )}
               </div>
             </div>

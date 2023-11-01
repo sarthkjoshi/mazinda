@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const ViewProduct = () => {
   const searchParams = useSearchParams();
@@ -127,9 +128,9 @@ const ViewProduct = () => {
                 )}
               </button>
             ) : (
-              <div className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]">
+              <Link href="/user/my-cart" className="cursor-pointer bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]">
                 ✔ Added to Cart
-              </div>
+              </Link>
             )}
           </div>
           <div className="mt-4 mb-12">

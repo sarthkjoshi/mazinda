@@ -1,6 +1,6 @@
 import { FallingLines } from "react-loader-spinner";
 
-const OvalLoader = () => {
+const FallingLinesLoader = () => {
   return (
     <div className="flex justify-center">
       <FallingLines
@@ -13,4 +13,4 @@ const OvalLoader = () => {
   );
 };
 
-export default OvalLoader;
+export default FallingLinesLoader;

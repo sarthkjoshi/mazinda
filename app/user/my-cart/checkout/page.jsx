@@ -50,7 +50,7 @@ const Checkout = () => {
 
   return (
     <>
-      <h1 className="text-center text-2xl">Checkout</h1>
+      <h1 className="text-center text-2xl mb-3">Checkout</h1>
 
       <div>
         <div>

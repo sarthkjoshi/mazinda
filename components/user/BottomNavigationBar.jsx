@@ -12,7 +12,7 @@ function BottomMenu() {
         !pathname.includes("auth") &&
         !pathname.includes("admin") && (
           <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-            <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
+            <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
               <Link
                 href="/"
                 type="button"
@@ -58,12 +58,12 @@ function BottomMenu() {
               </Link>
 
               <Link
-                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
-                href="/store/products"
+                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group pt-[2px]"
+                href="/user/browse-categories"
               >
                 <svg
-                  width="23"
-                  height="23"
+                  width="20"
+                  height="20"
                   viewBox="0 0 21 21"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -106,10 +106,9 @@ function BottomMenu() {
                 </span>
               </Link>
 
-              <Link
+              {/* <Link
                 href='#'
-                type="button"
-                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+                className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group cursor-pointer"
               >
                 <svg
                   width="25"
@@ -124,11 +123,12 @@ function BottomMenu() {
                   />
                 </svg>
                 <span className="text-sm text-gray-500 dark:text-gray-400  ">
-                  Money
+                  Wishlist
                 </span>
-              </Link>
-              <button
-                type="button"
+              </Link> */}
+
+              <Link
+                href='/user/my-account'
                 className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
               >
                 <svg
@@ -146,7 +146,7 @@ function BottomMenu() {
                 <span className="text-sm text-gray-500 dark:text-gray-400  ">
                   Account
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
         )}

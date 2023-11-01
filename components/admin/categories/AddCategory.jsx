@@ -5,8 +5,42 @@ import { toast } from "react-toastify";
 
 const AddCategory = () => {
   const [newCategory, setNewCategory] = useState("");
+  const [newCategoryImageName, setNewCategoryImageName] = useState("");
   const [newSubcategory, setNewSubcategory] = useState("");
   const [subcategories, setSubcategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [file, setFile] = useState();
+
+  const onFileSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (!file) return;
+
+    try {
+      const data = new FormData();
+      data.set("file", file);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
+      const json = await res.json();
+
+      console.log(json)
+
+      // handling the error
+      if (!json.success) throw new Error(await res.text());
+      else {
+        const fileName = json.fileName;
+        setNewCategoryImageName(fileName);
+        toast.success("Image uploaded successfully");
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChangeCategory = (e) => {
     setNewCategory(e.target.value);
@@ -26,13 +60,16 @@ const AddCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await axios.post('/api/category/add-new-category', { categoryName: newCategory, subcategories })
+    const response = await axios.post("/api/category/add-new-category", {
+      categoryName: newCategory,
+      categoryImage: newCategoryImageName,
+      subcategories,
+    });
 
-    console.log(response.data)
     if (response.data.success) {
-      toast.success(response.data.message)
-      setNewCategory("")
-      setSubcategories([])
+      toast.success(response.data.message);
+      setNewCategory("");
+      setSubcategories([]);
     }
   };
 
@@ -56,6 +93,18 @@ const AddCategory = () => {
             onChange={handleChangeCategory}
           />
         </div>
+        <form className="border p-2" onSubmit={onFileSubmit}>
+          <input
+            type="file"
+            name="file"
+            onChange={(e) => setFile(e.target.files?.[0])}
+          />
+          <input
+            className="w-fit my-2 bg-blue-500 px-4 py-2 text-white rounded-lg"
+            type="submit"
+            value={loading ? "Uploading..." : "Upload"}
+          />
+        </form>
       </div>
       <div className="mt-4">
         <h3>Add Subcategories:</h3>
@@ -86,7 +135,10 @@ const AddCategory = () => {
       )}
 
       <div className="my-4">
-        <button onClick={handleSubmit} className="bg-black hover:opacity-70 rounded-full text-white font-bold py-2 px-4">
+        <button
+          onClick={handleSubmit}
+          className="bg-black hover:opacity-70 rounded-full text-white font-bold py-2 px-4"
+        >
           Add Category
         </button>
       </div>
