@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from '@/components/user/Navbar'
 import BottomNavigationBar from '@/components/user/BottomNavigationBar'
 import NextTopLoader from 'nextjs-toploader';
+import { Slide } from 'react-toastify';
 
 export const metadata = {
   title: 'Mazinda - Ab Maze Mein India !',
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
           pauseOnFocusLoss
           draggable
           pauseOnHover
+          transition={Slide}
           theme="light"
         />
         <Navbar />

@@ -41,7 +41,7 @@ const Categories = () => {
                   width={72}
                   height={72}
                   style={{ maxWidth: '72px', maxHeight: '72px', minWidth: '72px', minHeight: '72px' }}
-                  src={`https://mazinda-bucket.s3.ap-south-1.amazonaws.com/${category.categoryImage}`}
+                  src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/${category.categoryImage}`}
                   alt={category.categoryName}
                 />
                 <span className="text-gray-600 font-bold">

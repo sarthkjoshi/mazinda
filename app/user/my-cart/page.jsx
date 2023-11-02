@@ -57,13 +57,13 @@ const MyCart = () => {
   }, []);
 
   return (
-    <>
-      <h1 className="text-center text-2xl">Your Shopping Cart</h1>
+    <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
+      <h1 className="text-center text-2xl md:mb-10">Your Shopping Cart</h1>
 
       <div>
         {cart.length > 0 ? (
           <>
-            <div className="px-2">
+            <div className="px-2 md:px-0">
               <div>
                 {cartLoading ? (
                   <FallingLinesLoader />
@@ -161,7 +161,16 @@ const MyCart = () => {
               </div>
             </div>
 
-            <div className="w-full flex items-center justify-center">
+            <div className="hidden md:flex w-full items-center justify-center mt-7">
+            <Link
+              href="/user/my-cart/checkout"
+              className="bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center"
+            >
+              Continue to Checkout
+            </Link>
+          </div>
+
+            <div className="w-full flex items-center justify-center md:hidden">
               <Link href='/user/my-cart/checkout' className="absolute bottom-20 bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75">
                 Continue to Checkout
               </Link>
@@ -180,7 +189,7 @@ const MyCart = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

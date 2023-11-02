@@ -7,11 +7,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import Image from "next/image";
+import ImageLoading from "@/public/loading/ImageLoading.png";
+import PriceLoading from "@/public/loading/PricingLoading.png";
+import ButtonLoading from "@/public/loading/ButtonLoading.png";
+import SmallRectangleLoading from "@/public/loading/SmallRectangleLoading.png";
 
 const ViewProduct = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const product_id = searchParams.get("id");
+
+  const [pageLoading, setPageLoading] = useState(true);
   const [product, setProduct] = useState({});
   const [cart, setCart] = useState([]);
   const [isProductInCart, setIsProductInCart] = useState(false);
@@ -85,11 +92,15 @@ const ViewProduct = () => {
     <div>
       <div className="flex items-center justify-center mt-8">
         <div className="w-64 relative">
-          <img
-            src={isProductDefined ? product.imageURI : ""}
-            alt=""
-            className="object-cover w-full h-full"
-          />
+          {isProductDefined ? (
+            <img
+              src={product.imageURI}
+              alt=""
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <Image src={ImageLoading} alt="" />
+          )}
         </div>
       </div>
 
@@ -98,7 +109,7 @@ const ViewProduct = () => {
           {isProductDefined ? product.productName : ""}
         </span>
         <div>
-          <span className="text-[12px] text-gray-700">Price</span>
+          <span className="text-[12px] text-gray-700">{isProductDefined ? "Price" : <Image src={SmallRectangleLoading} alt="" />}</span>
           {isPricingDefined ? (
             <div>
               <span className="text-xl">Rs {product.pricing.costPrice}/-</span>
@@ -107,40 +118,51 @@ const ViewProduct = () => {
               </span>
             </div>
           ) : (
-            <div>No pricing information available</div>
+            <Image src={PriceLoading} alt="" />
           )}
-          <div className="mt-4 w-full flex justify-center">
-            <button className="bg-[#F17E13] px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold">
-              Buy Now
-            </button>
 
-            {!isProductInCart ? (
-              <button
-                onClick={() => {
-                  handleAddToCart(product);
-                }}
-                className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
-              >
-                {addingItemToCartLoading ? (
-                  "Adding to Cart..."
-                ) : (
-                  "Add to Cart"
-                )}
+          {isProductDefined ? (
+            <div className="mt-4 w-full flex justify-center">
+              <button className="bg-[#F17E13] px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold">
+                Buy Now
               </button>
-            ) : (
-              <Link href="/user/my-cart" className="cursor-pointer bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]">
-                ✔ Added to Cart
-              </Link>
-            )}
-          </div>
-          <div className="mt-4 mb-12">
+
+              {!isProductInCart ? (
+                <button
+                  onClick={() => {
+                    handleAddToCart(product);
+                  }}
+                  className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
+                >
+                  {addingItemToCartLoading
+                    ? "Adding to Cart..."
+                    : "Add to Cart"}
+                </button>
+              ) : (
+                <Link
+                  href="/user/my-cart"
+                  className="cursor-pointer bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
+                >
+                  ✔ Added to Cart
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center mt-5">
+              <Image className="mx-2" src={ButtonLoading} alt="" />
+              <Image className="mx-2" src={ButtonLoading} alt="" />
+            </div>
+          )}
+
+          {isProductDefined ? <div className="mt-4 mb-12">
             <div className="text-[#F17E13] text-center text-lg">
               Description
             </div>
             <p className="text-sm">
               {isProductDefined ? product.description : ""}
             </p>
-          </div>
+          </div>: <Image src={PriceLoading} alt="" />}
+
         </div>
       </div>
     </div>

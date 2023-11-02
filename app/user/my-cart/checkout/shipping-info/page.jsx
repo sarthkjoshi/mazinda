@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Link from "next/link";
+import { toast } from 'react-toastify';
 
 const ShippingInfo = () => {
   const [pageLoading, setPageLoading] = useState(true);

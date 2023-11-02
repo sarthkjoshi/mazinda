@@ -12,7 +12,7 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const bucketName = 'mazinda-bucket';
+    const bucketName = 'mazindabucket';
 
     try {
 

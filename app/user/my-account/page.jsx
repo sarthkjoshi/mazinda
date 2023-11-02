@@ -82,8 +82,8 @@ const MyAccount = () => {
   }, []);
 
   return (
-    <>
-      <h1 className="text-center text-2xl">My Account</h1>
+    <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
+      <h1 className="text-center text-2xl md:mb-7">My Account</h1>
 
       <div>
         <div className="flex items-center justify-between p-5">
@@ -138,12 +138,23 @@ const MyAccount = () => {
           </div>
           {currentOpenBox === "gethelp" ? <DownArrorSvg /> : <RightArrorSvg />}
         </div>
-        {currentOpenBox === "gethelp" ? 
-        <div className="flex justify-center flex-col items-center">
-          <textarea className="rounded-md mx-4" name="gethelpinput" id="" cols="30" rows="5"></textarea>
-          <button className="bg-[#F17E13] px-5 py-1 w-fit my-1 rounded-full font-bold text-white">Submit</button>
-        </div>
-         : null}
+        {currentOpenBox === "gethelp" ? (
+          <div
+            className="flex justify-center flex-col items-center px-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <textarea
+              className="rounded-md mx-4 w-full"
+              name="gethelpinput"
+              id=""
+              cols="30"
+              rows="5"
+            ></textarea>
+            <button className="bg-[#F17E13] px-5 py-1 w-fit my-1 rounded-full font-bold text-white md:rounded-lg">
+              Submit
+            </button>
+          </div>
+        ) : null}
         <hr />
       </div>
 
@@ -191,7 +202,7 @@ const MyAccount = () => {
         </div>
         <hr />
       </div>
-    </>
+    </div>
   );
 };
 
