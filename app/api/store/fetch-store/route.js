@@ -10,6 +10,7 @@ export async function POST(req) {
         const data = jwt.verify(store_token, 'this is jwt secret')
 
         const mobileNumber = data.mobileNumber
+        
         // Connecting to database
         await connectDB()
 
