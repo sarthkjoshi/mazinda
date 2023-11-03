@@ -13,7 +13,7 @@ function BottomMenu() {
       {!pathname.includes("/store") &&
         !pathname.includes("auth") &&
         !pathname.includes("admin") && (
-          <div className="fixed bottom-2 z-50 w-full h-14 border-t border-gray-200 bg-[#fbe4d0] md:hidden rounded-3xl">
+          <div className="fixed bottom-0 z-50 w-full h-14 border-t border-gray-200 bg-[#fbe4d0] md:hidden rounded-t-2xl">
             <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium scale-90">
               <Link
                 href="/"
