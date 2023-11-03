@@ -36,8 +36,6 @@ const ViewProduct = () => {
     if (userToken) {
       const response = await axios.post("/api/user/fetch-user", { userToken });
       setCart(response.data.user.cart);
-    } else {
-      router.push("/user/auth/login");
     }
   };
 
@@ -72,7 +70,7 @@ const ViewProduct = () => {
       }
     } else {
       toast.info(
-        "Hmm, seems like you aren't logged in. Log in and customize your cart."
+        "Log in to customize your cart."
       );
       router.push("/user/auth/login");
     }
@@ -89,7 +87,7 @@ const ViewProduct = () => {
   }, [cart, product]);
 
   return (
-    <div>
+    <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
       <div className="flex items-center justify-center mt-8">
         <div className="w-64 relative">
           {isProductDefined ? (

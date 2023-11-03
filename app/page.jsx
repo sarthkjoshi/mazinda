@@ -6,7 +6,7 @@ import banner from "@/public/banner.JPG"
 
 const Home = () => {
   return (
-    <div className="mb-20">
+    <div className="mb-20 md:px-5 py-2">
       <div className="mb-5">
         <Topdeal />
       </div>

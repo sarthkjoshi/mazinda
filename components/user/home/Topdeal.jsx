@@ -33,7 +33,7 @@ const Topdeal = () => {
             return (
               <div
                 key={product._id}
-                className="w-40 p-2 m-2 rounded-md border shadow"
+                className="p-2 m-2 rounded-md border shadow"
               >
                 <div
                   className="flex items-center justify-center cursor-pointer"
@@ -48,7 +48,7 @@ const Topdeal = () => {
                   />
                 </div>
 
-                <div className="flex mt-2 justify-between">
+                <div className="flex mt-2 justify-between items-center">
                   <span
                     className="cursor-pointer text-[12px] font-bold mx-1"
                     onClick={() => {

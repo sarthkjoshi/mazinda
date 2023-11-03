@@ -48,7 +48,7 @@ const TrendingPage = () => {
                   />
                 </div>
 
-                <div className="flex mt-2 justify-between">
+                <div className="flex mt-2 justify-between items-center">
                   <span
                     className="cursor-pointer text-[12px] font-bold mx-1"
                     onClick={() => {

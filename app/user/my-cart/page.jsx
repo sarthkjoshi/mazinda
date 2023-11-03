@@ -29,12 +29,14 @@ const MyCart = () => {
     let total_mrp = 0;
     let total_costPrice = 0;
 
-    cart.forEach((item) => {
+    if (cart) {
+      cart.forEach((item) => {
       console.log(item.mrp);
       console.log(item.costPrice);
       total_mrp += parseFloat(item.mrp) * item.quantity;
       total_costPrice += parseFloat(item.costPrice) * item.quantity;
     });
+  }
 
     setPricing({
       ...pricing,
@@ -61,7 +63,7 @@ const MyCart = () => {
       <h1 className="text-center text-2xl md:mb-10">Your Shopping Cart</h1>
 
       <div>
-        {cart.length > 0 ? (
+        {cart && cart.length > 0 ? (
           <>
             <div className="px-2 md:px-0">
               <div>
@@ -183,9 +185,9 @@ const MyCart = () => {
             <h4 className="text-sm text-gray-500 text-center mt-3">
               Your cart looks empty, time to fill it with some amazing finds!
             </h4>
-            <div className="font-semibold bg-[#F17E13] text-white px-7 py-1 rounded-full shadow flex items-center justify-center mt-3 cursor-pointer hover:opacity-75">
+            <Link href='/' className="font-semibold bg-[#F17E13] text-white px-7 py-1 rounded-full shadow flex items-center justify-center mt-3 cursor-pointer hover:opacity-75">
               Browse Products
-            </div>
+            </Link>
           </div>
         )}
       </div>
