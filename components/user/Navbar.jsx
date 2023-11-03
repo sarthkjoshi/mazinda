@@ -10,7 +10,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import OvalLoader from "../admin/utility/OvalLoader";
 import Cookies from "js-cookie";
-import CartSVG from "@/public/svg/cart";
+import CartSVG from "@/public/svg/Cart";
 import ProfileSVG from "@/public/svg/Profile";
 import SearchSVG from "@/public/svg/Search";
 import LocationSVG from "@/public/svg/Location";
