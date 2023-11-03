@@ -3,20 +3,19 @@
 import Link from "next/link";
 import MazindaLogo from "@/public/logo_mini.png";
 import MazindaLogoFull from "@/public/logo_mazinda_full.png";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import OvalLoader from "../admin/utility/OvalLoader";
 import Cookies from "js-cookie";
+
+import Image from "next/image";
 import CartSVG from "@/public/svg/Cart";
 import ProfileSVG from "@/public/svg/Profile";
 import SearchSVG from "@/public/svg/Search";
 import LocationSVG from "@/public/svg/Location";
 
 const Navbar = () => {
-  const router = useRouter();
   const pathname = usePathname();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -105,10 +104,9 @@ const Navbar = () => {
                       searchQuery.length === 0 ? "hidden" : ""
                     }`}
                   >
-                    <div
+                    <Link href={`/user/search/${searchQuery}`}
                       className="rounded-md px-3 py-2 flex items-center text-sm font-semibold cursor-pointer"
                       onClick={() => {
-                        router.push(`/user/search/${searchQuery}`);
                         setShowSearchBox(false);
                         setSearchQuery(searchQuery);
                       }}
@@ -116,26 +114,24 @@ const Navbar = () => {
                       <SearchSVG />
 
                       {searchQuery}
-                    </div>
+                    </Link>
                     <hr />
 
                     {products.length > 0 &&
                       products.map((product, index) => {
                         return (
                           <div key={index}>
-                            <div
+                            <Link
+                            href={`/user/search/${product.productName}`}
                               className="rounded-md px-3 py-2 flex items-center text-sm font-semibold cursor-pointer"
                               onClick={() => {
-                                router.push(
-                                  `/user/search/${product.productName}`
-                                );
                                 setSearchQuery(product.productName);
                                 setShowSearchBox(false);
                               }}
                             >
                               <SearchSVG />
                               {product.productName}
-                            </div>
+                            </Link>
                             <hr />
                           </div>
                         );

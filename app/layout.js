@@ -42,6 +42,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         <NextTopLoader color="#F17E13" showSpinner={false} />
         {children}
+
         <BottomNavigationBar />
       </body>
     </html>
