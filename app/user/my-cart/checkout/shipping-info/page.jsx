@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Link from "next/link";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const ShippingInfo = () => {
   const [pageLoading, setPageLoading] = useState(true);
@@ -15,13 +15,21 @@ const ShippingInfo = () => {
   const [pincodes, setPincodes] = useState([]);
   const [pincodeError, setPincodeError] = useState(false);
 
-  const selectedLocation = JSON.parse(Cookies.get("selectedLocation"));
+  let selectedLocation = Cookies.get("selectedLocation");
+  let selectedCity;
+  try {
+    selectedLocation = JSON.parse(Cookies.get("selectedLocation"));
+    selectedCity = selectedLocation.city;
+  } catch (e) {
+    console.log(e);
+  }
+
   const [newAddress, setNewAddress] = useState({
     name: "",
     phone: "",
     email: "",
     subaddress: "",
-    city: selectedLocation.city,
+    city: selectedCity,
     state: "",
   });
 
@@ -310,14 +318,17 @@ const ShippingInfo = () => {
                         </div>
                       );
                     })}
-                    <div className="w-full flex items-center justify-center">
-                      <Link
-                        href="/user/my-cart/checkout"
-                        className="absolute bottom-20 bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75"
-                      >
-                        Continue to Checkout
-                      </Link>
-                    </div>
+
+                    {!expandedNewAddress && (
+                      <div className="w-full flex items-center justify-center">
+                        <Link
+                          href="/user/my-cart/checkout"
+                          className="absolute bottom-20 bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75"
+                        >
+                          Continue to Checkout
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="flex justify-center my-3">
