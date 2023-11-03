@@ -3,11 +3,9 @@
 import { useEffect, useState } from "react";
 import OvalLoader from "@/components/admin/utility/OvalLoader";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Topdeal = () => {
-  const router = useRouter();
-
   const [products, setProducts] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -31,15 +29,13 @@ const Topdeal = () => {
         {!pageLoading ? (
           products.map((product) => {
             return (
-              <div
+              <Link
                 key={product._id}
+                href={`/product/view-product?id=${product._id}`}
                 className="p-2 m-2 rounded-md border shadow"
               >
                 <div
                   className="flex items-center justify-center cursor-pointer"
-                  onClick={() => {
-                    router.push(`/product/view-product?id=${product._id}`);
-                  }}
                 >
                   <img
                     className="rounded-lg w-32 h-32"
@@ -51,9 +47,6 @@ const Topdeal = () => {
                 <div className="flex mt-2 justify-between items-center">
                   <span
                     className="cursor-pointer text-[12px] font-bold mx-1"
-                    onClick={() => {
-                      router.push(`/product/view-product?id=${product._id}`);
-                    }}
                   >
                     {product.productName.slice(0, 20)}...
                   </span>
@@ -65,7 +58,7 @@ const Topdeal = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })
         ) : (

@@ -3,11 +3,9 @@
 import { useEffect, useState } from "react";
 import OvalLoader from "@/components/admin/utility/OvalLoader";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const TrendingPage = () => {
-  const router = useRouter();
-
   const [products, setProducts] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -31,16 +29,12 @@ const TrendingPage = () => {
         {!pageLoading ? (
           products.map((product) => {
             return (
-              <div
+              <Link
                 key={product._id}
+                href={`/product/view-product?id=${product._id}`}
                 className="p-2 m-2 rounded-md border shadow"
               >
-                <div
-                  className="flex items-center justify-center cursor-pointer"
-                  onClick={() => {
-                    router.push(`/product/view-product?id=${product._id}`);
-                  }}
-                >
+                <div className="flex items-center justify-center cursor-pointer">
                   <img
                     className="rounded-lg w-32 h-32"
                     src={product.imageURI}
@@ -49,12 +43,7 @@ const TrendingPage = () => {
                 </div>
 
                 <div className="flex mt-2 justify-between items-center">
-                  <span
-                    className="cursor-pointer text-[12px] font-bold mx-1"
-                    onClick={() => {
-                      router.push(`/product/view-product?id=${product._id}`);
-                    }}
-                  >
+                  <span className="cursor-pointer text-[12px] font-bold mx-1">
                     {product.productName.slice(0, 20)}...
                   </span>
 
@@ -65,7 +54,7 @@ const TrendingPage = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })
         ) : (
