@@ -1,11 +1,18 @@
 import './globals.css'
 import Head from 'next/head'
+import { Quicksand } from 'next/font/google'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from '@/components/user/Navbar'
 import BottomNavigationBar from '@/components/user/BottomNavigationBar'
 import NextTopLoader from 'nextjs-toploader';
 import { Slide } from 'react-toastify';
+
+const quicksand = Quicksand({
+  weight: '500',
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'Mazinda - Ab Maze Mein India !',
@@ -14,7 +21,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={quicksand.className}>
       <Head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </Head>

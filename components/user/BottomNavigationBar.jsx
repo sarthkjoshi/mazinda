@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import CartSVG from "@/public/svg/cart";
+import CartSVG from "@/public/svg/Cart";
 import ProfileSVG from "@/public/svg/Profile";
 
 function BottomMenu() {

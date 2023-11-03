@@ -2,7 +2,7 @@ import Topdeal from "@/components/user/home/Topdeal"
 import TrendingPage from "@/components/user/home/TrendingPage"
 
 import Image from "next/image"
-import banner from "@/public/banner.jpg"
+import banner from "@/public/banner.JPG"
 
 const Home = () => {
   return (
