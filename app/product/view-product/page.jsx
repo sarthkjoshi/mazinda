@@ -88,8 +88,8 @@ const ViewProduct = () => {
 
   return (
     <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
-      <div className="flex items-center justify-center mt-8">
-        <div className="w-64 relative">
+      <div className="flex items-center justify-center mt-8 p-4">
+        <div className="w-full flex justify-center">
           {isProductDefined ? (
             <img
               src={product.imageURI}
@@ -107,7 +107,7 @@ const ViewProduct = () => {
           {isProductDefined ? product.productName : ""}
         </span>
         <div>
-          <span className="text-[12px] text-gray-700">{isProductDefined ? "Price" : <Image src={SmallRectangleLoading} alt="" />}</span>
+          <span className="text-[12px] text-gray-700">{isProductDefined ? "Price" : <Image className="mb-3" src={SmallRectangleLoading} alt="" />}</span>
           {isPricingDefined ? (
             <div>
               <span className="text-xl">Rs {product.pricing.costPrice}/-</span>
@@ -146,7 +146,7 @@ const ViewProduct = () => {
               )}
             </div>
           ) : (
-            <div className="flex items-center justify-center mt-5">
+            <div className="flex items-center justify-center my-5">
               <Image className="mx-2" src={ButtonLoading} alt="" />
               <Image className="mx-2" src={ButtonLoading} alt="" />
             </div>

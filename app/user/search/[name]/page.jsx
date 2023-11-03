@@ -35,7 +35,7 @@ const SearchPage = ({ params }) => {
               return (
                 <div
                   key={product._id}
-                  className="w-40 p-2 border shadow m-2 rounded-md"
+                  className="w-40 md:w-52 p-3 md:p-4 border shadow m-2 rounded-md"
                 >
                   <div
                     className="h-44 flex items-center justify-center cursor-pointer"
@@ -51,29 +51,33 @@ const SearchPage = ({ params }) => {
                   </div>
 
                   <div>
-                  <div className="flex mt-2 justify-between">
-                  <span
-                    className="cursor-pointer text-[12px] font-bold mx-1"
-                    onClick={() => {
-                      router.push(`/product/view-product?id=${product._id}`);
-                    }}
-                  >
-                    {product.productName.slice(0, 20)}...
-                  </span>
+                    <div className="flex mt-2 justify-between">
+                      <span
+                        className="cursor-pointer text-[12px] font-bold mx-1"
+                        onClick={() => {
+                          router.push(
+                            `/product/view-product?id=${product._id}`
+                          );
+                        }}
+                      >
+                        {product.productName.slice(0, 20)}...
+                      </span>
 
-                  <div className="flex flex-col ml-2">
-                    <span className="font-bold self-end text-[15px]">₹{product.pricing.costPrice}</span>
-                    <span className="text-[10px] line-through text-gray-500 self-end">
-                      ₹{product.pricing.mrp}
-                    </span>
-                  </div>
-                </div>
+                      <div className="flex flex-col ml-2">
+                        <span className="font-bold self-end text-[15px]">
+                          ₹{product.pricing.costPrice}
+                        </span>
+                        <span className="text-[10px] line-through text-gray-500 self-end">
+                          ₹{product.pricing.mrp}
+                        </span>
+                      </div>
+                    </div>
 
-                    <div className="flex mt-2 w-full">
-                      <div className="cursor-pointer font-semibold mx-1 text-[0.6em] border border-[#F17E13] px-2 py-1 rounded-full shadow flex items-center justify-center">
+                    <div className="flex mt-3 md:mt-5 w-full justify-between">
+                      <div className="cursor-pointer font-semibold mx-1 text-[9px] md:text-[0.7em] border border-[#F17E13] px-2 py-1 rounded-full shadow flex items-center justify-center">
                         Add to Cart
                       </div>
-                      <div className="cursor-pointer font-semibold text-[0.6em] bg-[#F17E13] text-white px-2 py-1 rounded-full shadow flex items-center justify-center">
+                      <div className="cursor-pointer font-semibold text-[9px] md:text-[0.7em] bg-[#F17E13] text-white px-2 py-1 rounded-full shadow flex items-center justify-center">
                         Buy Now
                       </div>
                     </div>
