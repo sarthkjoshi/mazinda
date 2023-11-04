@@ -10,6 +10,13 @@ const AddNewStock = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [loadingSubcategories, setLoadingSubcategories] = useState(true);
 
+  const [file, setFile] = useState();
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  const [imageNames, setImageNames] = useState([]);
+
+  const [submitLoading, setSubmitLoading] = useState(false)
+
   const fetchCategories = async () => {
     try {
       const response = await axios.post("/api/category/fetch-categories");
@@ -62,6 +69,7 @@ const AddNewStock = () => {
     storeToken: Cookies.get("store_token"),
     category: "",
     subcategory: "",
+    imageNames:[],
     pricing: {
       mrp: "",
       costPrice: "",
@@ -77,6 +85,7 @@ const AddNewStock = () => {
       const response = await axios.post("/api/product/add-new-product", {
         productData,
       });
+      console.log(response.data);
 
       if (response.data.success) {
         toast.success(response.data.message, { autoClose: 3000 });
@@ -118,8 +127,48 @@ const AddNewStock = () => {
     }));
   };
 
+  const onFileSubmit = async (e) => {
+    e.preventDefault();
+    setUploadLoading(true);
+    if (!file) return;
+
+    try {
+      const data = new FormData();
+      data.append("file", file);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
+      const json = await res.json();
+
+      if (!json.success) {
+        throw new Error(await res.text());
+      } else {
+        const fileName = json.fileName;
+        toast.success("Image uploaded successfully");
+
+        setImageNames((prevImageNames) => {
+          return [...prevImageNames, fileName];
+        });
+
+        // Update productData with the image names
+        setProductData((prevData) => ({
+          ...prevData,
+          imageNames: [...prevData.imageNames, fileName],
+        }));
+
+        setFile(null);
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("Error uploading image");
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
   return (
-    <div>
+    <div className="p-2">
       <form onSubmit={handleSubmit} className="text-sm">
         <div className="mb-4">
           <label htmlFor="productName" className="block font-medium">
@@ -135,8 +184,8 @@ const AddNewStock = () => {
           />
         </div>
 
-        <div className="flex">
-          <div className="mb-4">
+        <div className="flex justify-between">
+          <div className="mb-4 w-full">
             <label htmlFor="category" className="block font-medium">
               Category:
             </label>
@@ -166,7 +215,7 @@ const AddNewStock = () => {
             </select>
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <label htmlFor="subcategory" className="block font-medium">
               Sub-Category:
             </label>
@@ -220,6 +269,46 @@ const AddNewStock = () => {
             />
           </div>
         </div>
+
+        <label htmlFor="file" className="block font-medium">
+          Upload Product Images (Upto 10)
+        </label>
+
+        <div className="p-2 border rounded-xl">
+          <input
+            type="file"
+            name="file"
+            onChange={(e) => setFile(e.target.files?.[0])}
+          />
+          <button
+            className="w-fit my-2 bg-blue-500 px-4 py-2 text-white rounded-lg"
+            onClick={onFileSubmit}
+            disabled={!file || uploadLoading || imageNames.length >= 10}
+          >
+            {uploadLoading ? "Uploading..." : "Upload"}
+          </button>
+
+          <div>
+            {imageNames.length > 0 && (
+              <span className="text-yellow-400 text-lg">
+                You can add {parseInt(10 - imageNames.length)} more images
+              </span>
+            )}
+          </div>
+
+          {/* Display the list of uploaded image filenames */}
+          {imageNames.length > 0 && (
+            <div>
+              <h2 className="mb-3">Uploaded Images:</h2>
+              <ul>
+                {imageNames.map((imageName, index) => (
+                  <li key={index}>{imageName}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
         <div className="mb-4">
           <label htmlFor="description" className="block font-medium">
             Description:
@@ -233,14 +322,16 @@ const AddNewStock = () => {
             onChange={handleFieldChange}
           />
         </div>
+
         <div className="w-full flex justify-center">
           <button
             type="submit"
             className="bg-[#f17e13] text-white px-4 py-1 rounded-full hover:opacity-75"
           >
-            Add Stock
+            {!setSubmitLoading ? "Adding Stock" : "Add Stock"}
           </button>
         </div>
+        
       </form>
     </div>
   );

@@ -1,11 +1,12 @@
 import Product from "@/models/Product";
 import connectDB from "@/libs/mongoose";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(req) {
     try {
         const { productData } = await req.json();
-        const { productName, storeToken, category, subcategory, pricing, description } = productData;
+        const { productName, storeToken, category, subcategory, imageNames, pricing, description } = productData;
 
         const storeData = jwt.verify(storeToken, 'this is jwt secret');
         const storeId = storeData['id']
@@ -14,8 +15,7 @@ export async function POST(req) {
         let product = await Product.findOne({ storeId, productName })
 
         if (!product) {
-            await Product.create({ productName, storeId, category, subcategory, pricing, description });
-
+            await Product.create({ productName, storeId, category, subcategory, imageNames, pricing, description });
             return NextResponse.json({ success: true, message: "Product created successfully" });
         }
 

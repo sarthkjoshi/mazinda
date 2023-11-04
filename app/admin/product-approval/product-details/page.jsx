@@ -122,22 +122,22 @@ const ProductDetails = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold">Category:</label>
+                  <label className="block font-semibold">
+                    Approved Status:
+                  </label>
                   <select
-                    name="category"
-                    value={productData.category}
+                    name="approvalStatus"
+                    value={productData.approvalStatus}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                    className={`w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 ${productData.approvalStatus ? "bg-green-300" : "bg-yellow-300"}`}
                   >
-                    {categories.map((category) => (
-                      <option key={category._id} value={category.categoryName}>
-                        {category.categoryName}
-                      </option>
-                    ))}
+                    <option value={true}>Approved</option>
+                    <option value={false}>Pending</option>
                   </select>
                 </div>
+                
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block font-semibold">MRP:</label>
                   <input
@@ -158,10 +158,36 @@ const ProductDetails = () => {
                     className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label className="block font-semibold">Sales Price:</label>
+                  <input
+                    type="text"
+                    name="pricing.salesPrice"
+                    value={productData.pricing.salesPrice}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
               </div>
               {/* Show subcategories based on the selected category */}
               {productData.category && (
                 <div className="grid grid-cols-2 gap-4">
+                  <div>
+                  <label className="block font-semibold">Category:</label>
+                  <select
+                    name="category"
+                    value={productData.category}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                  >
+                    {categories.map((category) => (
+                      <option key={category._id} value={category.categoryName}>
+                        {category.categoryName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                   <div>
                     <label className="block font-semibold">Subcategory:</label>
                     <select
@@ -181,32 +207,9 @@ const ProductDetails = () => {
                   </div>
                 </div>
               )}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-semibold">Image URI:</label>
-                  <input
-                    type="text"
-                    name="imageURI"
-                    value={productData.imageURI}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold">
-                    Approved Status:
-                  </label>
-                  <select
-                    name="approvalStatus"
-                    value={productData.approvalStatus}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                  >
-                    <option value={true}>Approved</option>
-                    <option value={false}>Pending</option>
-                  </select>
-                </div>
-              </div>
+              {/* <div className="grid grid-cols-2 gap-4"> */}
+                
+              {/* </div> */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block font-semibold">Trending:</label>
@@ -286,6 +289,14 @@ const ProductDetails = () => {
                 </div>
                 <div>
                   <p className="inline-block mx-2 my-3 font-semibold w-[240px] text-lg">
+                    Sales Price:
+                  </p>
+                  <p className="inline-block mx-2 text-lg">
+                    {productData.pricing.salesPrice}
+                  </p>
+                </div>
+                <div>
+                  <p className="inline-block mx-2 my-3 font-semibold w-[240px] text-lg">
                     Trending:
                   </p>
                   <p className="inline-block mx-2 text-lg">
@@ -313,12 +324,20 @@ const ProductDetails = () => {
           )}
 
           {isEditing ? (
+            <div className="flex">
             <button
               onClick={handleSaveClick}
               className="bg-[#fb691e] my-2 text-white px-4 py-2 rounded-md hover:opacity-70 focus:outline-none"
             >
               Save
             </button>
+            <button
+              onClick={() => setIsEditing(false)}
+              className="mx-3 border border-[#fb691e] my-2 text-[#fb691e] px-4 py-2 rounded-md hover:opacity-70 focus:outline-none"
+            >
+              Cancel
+            </button>
+            </div>
           ) : (
             <button
               onClick={handleEditClick}

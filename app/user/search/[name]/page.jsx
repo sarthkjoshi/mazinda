@@ -41,7 +41,7 @@ const SearchPage = ({ params }) => {
                   <Link href={`/product/view-product?id=${product._id}`} className="px-2 py-1 flex items-center justify-center cursor-pointer">
                     <img
                       className="rounded-lg w-full"
-                      src={product.imageURI}
+                      src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/${product.imageNames[0]}`}
                       alt="product"
                     />
                   </Link>

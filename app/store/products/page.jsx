@@ -55,7 +55,7 @@ const ProductsPage = () => {
   }, []);
 
   return (
-    <div className="p-4 md:w-3/4 mx-auto">
+    <div className="p-4 md:w-1/2 mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-center">Your Products</h1>
 
       {!loading ? (

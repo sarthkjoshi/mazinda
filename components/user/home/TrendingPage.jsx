@@ -37,7 +37,7 @@ const TrendingPage = () => {
                 <div className="flex items-center justify-center cursor-pointer">
                   <img
                     className="rounded-lg w-32 h-32"
-                    src={product.imageURI}
+                    src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${product.imageNames[0]}`}
                     alt="product"
                   />
                 </div>

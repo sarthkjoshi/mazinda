@@ -6,11 +6,11 @@ const ProductSchema = new mongoose.Schema({
     pricing: { type: Object },
     category: { type: String },
     subcategory: { type: String },
+    imageNames : { type: Array },
     topDeal: { type: Boolean, default: false },
     trending: { type: Boolean, default: false },
     description: { type: String },
     isAvailable: { type: Boolean, default: true },
-    imageURI: { type: String, default: "https://images.examples.com/wp-content/uploads/2017/05/Store-Inventory-Examples-amp-Samples2.jpg" },
     approvalStatus: { type: Boolean, default: false }
 }, { timestamps: true });
 

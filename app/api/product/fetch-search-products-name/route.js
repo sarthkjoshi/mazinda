@@ -10,7 +10,7 @@ export async function POST(req) {
 
         const lowercaseSearchQuery = searchQuery.toLowerCase();
 
-        const products = await Product.find().select('productName description').exec();
+        const products = await Product.find({ approvalStatus: true }).select('productName description').exec();
 
         // Create two arrays to store products matching in 'productName' and 'description'
         const matchingName = [];

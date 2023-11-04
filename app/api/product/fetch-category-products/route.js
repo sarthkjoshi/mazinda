@@ -6,7 +6,7 @@ export async function POST(req) {
     const { categoryName } = await req.json();
     try {
         await connectDB()
-        const categoryProducts = await Product.find({ category: categoryName })
+        const categoryProducts = await Product.find({ category: categoryName, approvalStatus: true })
         if (!categoryProducts) {
             return NextResponse.json({ success: false, error: "Products doesn't exist" + error });
         }

@@ -192,7 +192,7 @@ const Navbar = () => {
                           </svg>
                         </span>
                         {showLocationDropbox && (
-                          <div className="absolute mt-2 right-2">
+                          <div className="absolute mt-2 right-2 z-50">
                             <div className="border shadow rounded-xl flex flex-col items-center md:w-40">
                               <span className="bg-[#f17e13] text-white w-full text-center rounded-t-lg p-2 px-5 md:text-[0.8em]">
                                 Select Your City
@@ -239,7 +239,7 @@ const Navbar = () => {
         <button
           id="backBtn"
           type="button"
-          className="text-gray-600 rounded-md ml-2 hover:text-gray-700 focus:outline-none absolute lg:hidden"
+          className="text-gray-600 rounded-md ml-2 hover:text-gray-700 focus:outline-none absolute lg:hidden z-50"
           onClick={() => window.history.back()}
         >
           <svg
