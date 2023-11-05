@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import OvalLoader from "@/components/admin/utility/OvalLoader";
 import axios from "axios";
 import Link from "next/link";
+
+import Image from "next/image";
+import homepage_image_loading from "@/public/loading/homepage_image_loading.png";
 
 const TrendingPage = () => {
   const [products, setProducts] = useState([]);
@@ -32,11 +34,11 @@ const TrendingPage = () => {
               <Link
                 key={product._id}
                 href={`/product/view-product?id=${product._id}`}
-                className="p-2 m-2 rounded-md border shadow"
+                className="p-2 m-2 rounded-md border shadow w-2/5 md:w-fit"
               >
                 <div className="flex items-center justify-center cursor-pointer">
                   <img
-                    className="rounded-lg w-32 h-32"
+                    className="rounded-lg w-32 md:w-44"
                     src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${product.imageNames[0]}`}
                     alt="product"
                   />
@@ -48,7 +50,9 @@ const TrendingPage = () => {
                   </span>
 
                   <div className="flex flex-col ml-2">
-                    <span className="font-bold self-end text-[15px]">₹{product.pricing.costPrice}</span>
+                    <span className="font-bold self-end text-[15px]">
+                      ₹{product.pricing.costPrice}
+                    </span>
                     <span className="text-[10px] line-through text-gray-500 self-end">
                       ₹{product.pricing.mrp}
                     </span>
@@ -58,7 +62,19 @@ const TrendingPage = () => {
             );
           })
         ) : (
-          <OvalLoader />
+          <div className="flex overflow-y-scroll">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
+              return (
+                <Image
+                  src={homepage_image_loading}
+                  key={num}
+                  className="m-2"
+                  alt="loading"
+                  width={128}
+                />
+              );
+            })}
+          </div>
         )}
       </div>
     </>

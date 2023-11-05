@@ -3,7 +3,7 @@ import TrendingPage from "@/components/user/home/TrendingPage"
 
 const Home = () => {
   return (
-    <div className="mb-14 md:px-5 px-1 py-2">
+    <div className="mb-14 md:px-5 py-2">
       <div>
         <img src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/diwali_banner.JPG`} alt="" />
       </div>
