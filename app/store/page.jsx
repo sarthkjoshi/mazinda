@@ -10,12 +10,18 @@ import Dashboard from "@/components/store/Dashboard";
 import { useRouter } from "next/navigation";
 
 const StoreDashboard = () => {
-  const router = useRouter();
+  let router;
+  try {
+    router = useRouter();
+  } catch (err) {
+    console.log(err);
+  }
 
   const [approvalStatus, setApprovalStatus] = useState("");
   const store_token = Cookies.get("store_token");
+
   if (!store_token) {
-    router.push('/store/auth/register');
+    router.push("/store/auth/register");
     return;
   }
 
@@ -24,7 +30,6 @@ const StoreDashboard = () => {
       const response = await axios.post(`/api/store/fetch-store`, {
         store_token,
       });
-      console.log(response.data);
       if (response.data.success) {
         setApprovalStatus(response.data.store.approvedStatus);
       } else {

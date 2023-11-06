@@ -5,11 +5,16 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import axios from 'axios';
+import axios from "axios";
 import Navbar from "@/components/store/Navbar";
 
 export default function RootLayout({ children }) {
-  const router = useRouter();
+  let router;
+  try {
+    router = useRouter();
+  } catch (e) {
+    console.log(e);
+  }
   const pathname = usePathname();
 
   const store_token = Cookies.get("store_token");
@@ -35,7 +40,7 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
     const store_token = Cookies.get("store_token");
-    if (!store_token && !pathname.includes('store/auth/login')) {
+    if (!store_token && !pathname.includes("store/auth/login")) {
       setLoggedIn(false);
       router.push("/store/auth/register");
     } else {

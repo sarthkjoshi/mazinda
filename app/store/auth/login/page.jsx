@@ -7,15 +7,20 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
 import OvalLoader from "@/components/admin/utility/OvalLoader";
-import MazindaLogoFull from '@/public/logo_mazinda.png';
-import Image from 'next/image';
+import MazindaLogoFull from "@/public/logo_mazinda.png";
+import Image from "next/image";
 
 const LoginPage = () => {
-  const router = useRouter();
+  let router;
+  try {
+    router = useRouter();
+  } catch (e) {
+    console.log(e);
+  }
 
   const store_token = Cookies.get("store_token");
   if (store_token) {
-    router.push('/store')
+    router.push("/store");
   }
 
   const [submitting, setSubmitting] = useState(false);
@@ -53,7 +58,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <Image className="my-4" src={MazindaLogoFull} alt="Mazinda Logo"/>
+      <Image className="my-4" src={MazindaLogoFull} alt="Mazinda Logo" />
       <div className="max-w-md w-full p-6 bg-white rounded-lg">
         <h1 className="mb-1 text-center font-bold text-4xl">Store Login</h1>
         <div className="flex items-center justify-center">
