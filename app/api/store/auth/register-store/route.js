@@ -1,6 +1,7 @@
 import Store from "@/models/Store";
 import connectDB from "@/libs/mongoose";
 import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken'
 
 // import CryptoJS from "crypto-js";
 
@@ -12,9 +13,11 @@ export async function POST(req) {
         let store = await Store.findOne({ mobileNumber })
 
         if (!store) {
-            await Store.create({ ownerName, storeName, mobileNumber, alternateMobileNumber, email, password, storeAddress: { address, city, pincode } });
+            const newStore = await Store.create({ ownerName, storeName, mobileNumber, alternateMobileNumber, email, password, storeAddress: { address, city, pincode } });
+
+            const store_token = jwt.sign({ id: newStore._id, storeName, mobileNumber, email }, 'this is jwt secret')
             // await Vendor.create({ name, number, alternateNumber, password: CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString(), deliveryLocations, deliveryCharges, foodTypes });
-            return NextResponse.json({ success: true, message: "Store created successfully" });
+            return NextResponse.json({ success: true, message: "Store created successfully", store_token });
         }
 
         else {

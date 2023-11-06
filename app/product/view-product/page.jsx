@@ -56,7 +56,7 @@ const ViewProduct = () => {
             productID: product._id,
             productName: product.productName,
             quantity: 1,
-            imageURI: product.imageURI,
+            imageNames: product.imageNames,
             storeID: product.storeId,
             costPrice: product.pricing.costPrice,
             mrp: product.pricing.mrp,

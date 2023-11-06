@@ -46,16 +46,7 @@ const LoginPage = () => {
       Cookies.set("store_token", store_token, { expires: 1000 });
       router.push(`/store`);
     } else {
-      toast.error(response.data.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(response.data.message, { autoClose: 3000 });
     }
     setSubmitting(false);
   };

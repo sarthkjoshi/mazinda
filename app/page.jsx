@@ -1,5 +1,6 @@
 import Topdeal from "@/components/user/home/Topdeal"
 import TrendingPage from "@/components/user/home/TrendingPage"
+import Link from "next/link"
 
 const Home = () => {
   return (
@@ -10,17 +11,17 @@ const Home = () => {
       <div className="my-5">
         <Topdeal />
       </div>
-      <div>
+      <Link href="/">
         <img src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/banner_mid.JPG`} alt="" />
-      </div>
+      </Link>
       <div className="my-5">
         <TrendingPage />
       </div>
-      <div>
+      <Link href="/store">
         <img src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/banner_end.JPG`} alt="" />
-      </div>
+      </Link>
     </div>
   )
 }
 
-export default Home
+export default Home;

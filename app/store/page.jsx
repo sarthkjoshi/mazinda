@@ -7,10 +7,17 @@ import OvalLoader from "@/components/admin/utility/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 import Dashboard from "@/components/store/Dashboard";
+import { useRouter } from "next/navigation";
 
 const StoreDashboard = () => {
+  const router = useRouter();
+
   const [approvalStatus, setApprovalStatus] = useState("");
   const store_token = Cookies.get("store_token");
+  if (!store_token) {
+    router.push('/store/auth/register');
+    return;
+  }
 
   const fetchApprovalStatus = async () => {
     try {

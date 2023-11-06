@@ -11,6 +11,7 @@ import empty_cart_img from "@/public/empty_cart.png";
 import { fetchUserCart, removeItemFromCart } from "@/utils/cart";
 
 import FallingLinesLoader from "@/components/admin/utility/FallingLinesLoader";
+import axios from "axios";
 
 const MyCart = () => {
   const [cart, setCart] = useState([]);
@@ -31,12 +32,10 @@ const MyCart = () => {
 
     if (cart) {
       cart.forEach((item) => {
-      console.log(item.mrp);
-      console.log(item.costPrice);
-      total_mrp += parseFloat(item.mrp) * item.quantity;
-      total_costPrice += parseFloat(item.costPrice) * item.quantity;
-    });
-  }
+        total_mrp += parseFloat(item.mrp) * item.quantity;
+        total_costPrice += parseFloat(item.costPrice) * item.quantity;
+      });
+    }
 
     setPricing({
       ...pricing,
@@ -44,6 +43,24 @@ const MyCart = () => {
       total_costPrice,
     });
   };
+
+  useEffect(() => {
+    const setPricing = async () => {
+      const response = await axios.post("/api/user/cart/set-pricing", {
+        userToken,
+        total_mrp: pricing.total_mrp,
+        total_costPrice: pricing.total_costPrice,
+        service_charge: pricing.service_charge,
+        delivery_fees: pricing.delivery_fees,
+        additional_discount: pricing.additional_discount,
+      });
+
+      console.log(response.data);
+    };
+    if(userToken) {
+      setPricing();
+    }
+  }, [pricing]);
 
   useEffect(() => {
     const fetchedUserToken = Cookies.get("user_token");
@@ -112,7 +129,7 @@ const MyCart = () => {
                         </div>
                         <img
                           className="w-14 h-auto"
-                          src={item.imageURI}
+                          src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${item.imageNames[0]}`}
                           alt="img"
                         />
                         <div className="flex flex-col ml-2">
@@ -164,16 +181,19 @@ const MyCart = () => {
             </div>
 
             <div className="hidden md:flex w-full items-center justify-center mt-7">
-            <Link
-              href="/user/my-cart/checkout"
-              className="bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center"
-            >
-              Continue to Checkout
-            </Link>
-          </div>
+              <Link
+                href="/user/my-cart/checkout"
+                className="bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center"
+              >
+                Continue to Checkout
+              </Link>
+            </div>
 
             <div className="w-full flex items-center justify-center md:hidden">
-              <Link href='/user/my-cart/checkout' className="absolute bottom-20 bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75">
+              <Link
+                href="/user/my-cart/checkout"
+                className="absolute bottom-20 bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75"
+              >
                 Continue to Checkout
               </Link>
             </div>
@@ -185,7 +205,10 @@ const MyCart = () => {
             <h4 className="text-sm text-gray-500 text-center mt-3">
               Your cart looks empty, time to fill it with some amazing finds!
             </h4>
-            <Link href='/' className="font-semibold bg-[#F17E13] text-white px-7 py-1 rounded-full shadow flex items-center justify-center mt-3 cursor-pointer hover:opacity-75">
+            <Link
+              href="/"
+              className="font-semibold bg-[#F17E13] text-white px-7 py-1 rounded-full shadow flex items-center justify-center mt-3 cursor-pointer hover:opacity-75"
+            >
               Browse Products
             </Link>
           </div>

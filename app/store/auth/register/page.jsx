@@ -7,8 +7,11 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import MazindaLogoFull from '@/public/logo_mazinda.png';
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const RegisterStorePage = () => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     ownerName: "",
@@ -34,10 +37,8 @@ const RegisterStorePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // You can access the form data in the `formData` object and perform validation and submission logic here
-    console.log("Form Data:", formData);
 
-    const response = await axios.post("/api/auth/store/register-store", {
+    const response = await axios.post("/api/store/auth/register-store", {
       formData,
     });
     const json = await response.data;
@@ -45,27 +46,12 @@ const RegisterStorePage = () => {
     setIsSubmitting(false);
 
     if (json.success) {
-      toast.success(json.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      Cookies.set('store_token', json.store_token)
+      toast.success(json.message, { autoClose: 3000 });
+      router.push('/store')
+      
     } else {
-      toast.error(json.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(json.message, { autoClose: 3000 });
     }
   };
 

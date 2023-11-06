@@ -8,31 +8,39 @@ import FallingLinesLoader from "@/components/admin/utility/FallingLinesLoader";
 import Link from "next/link";
 import phonepesvg from "@/public/phonepe-1.svg";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import OvalLoader from "@/components/admin/utility/OvalLoader";
 
 const Checkout = () => {
   const router = useRouter();
 
   const [cartLoading, setCartLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const [user, setUser] = useState({});
   const [cart, setCart] = useState([]);
+  const [pricing, setPricing] = useState({});
   const [shippingAddress, setShippingAddress] = useState({});
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [showChoosePaymentMethod, setShowChoosePaymentMethod] = useState(false)
 
   const fetchData = async (userToken) => {
     const response = await axios.post("/api/user/fetch-user", { userToken });
 
     const user = response.data.user;
     const cart = user.cart;
+    const pricing = user.pricing;
     const currentAddress = user.currentAddress;
 
     setUser(user);
 
     if (cart.length) {
-      setCart(response.data.user.cart);
+      console.log(cart);
+      setCart(cart);
+      setPricing(pricing);
       setCartLoading(false);
       if (currentAddress && Object.keys(currentAddress).length > 0) {
         setShippingAddress(currentAddress);
-        console.log(currentAddress);
       } else {
         router.push("/user/my-cart/checkout/shipping-info");
       }
@@ -50,6 +58,41 @@ const Checkout = () => {
     fetchData(userToken);
   }, []);
 
+  const handlePlaceOrder = async () => {
+    if (!paymentMethod) {
+      setShowChoosePaymentMethod(true);
+      return;
+    }
+    try {
+      setSubmitting(true)
+      const response = await axios.post("/api/order/create-order", {
+        userToken: Cookies.get('user_token'),
+        storeId: cart[0]['storeID'],
+        userCart: cart,
+        pricing: user.pricing,
+        address: shippingAddress,
+        paymentMethod,
+      });
+      console.log(response.data); 
+
+      if (response.data.success) {
+        router.push('/user/my-cart/checkout/success');
+      } else {
+        toast.warn(response.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.warn("Oops.. A network error occurred while placing the order");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleOnChange = (e) => {
+    setPaymentMethod(e.target.value)
+    setShowChoosePaymentMethod(false);
+  }
+
   return (
     <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
       <h1 className="text-center text-2xl mb-3">Checkout</h1>
@@ -63,12 +106,10 @@ const Checkout = () => {
             cart.map((item) => {
               return (
                 <div key={item.productID}>
-                  <div
-                    className="flex rounded-lg px-2 py-1 items-center mx-2 relative"
-                  >
+                  <div className="flex rounded-lg px-2 py-1 items-center mx-2 relative">
                     <img
                       className="w-14 h-auto"
-                      src={item.imageURI}
+                      src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${item.imageNames[0]}`}
                       alt="img"
                     />
                     <div className="flex flex-col ml-2">
@@ -88,39 +129,78 @@ const Checkout = () => {
             className="flex my-2 items-center mx-2 justify-between"
           >
             <span className="text-sm">Shipping To</span>
-            <div className="mx-1 scale-90 flex items-center" key={shippingAddress.id}>
-              <div>
-
-              <h1 className="text-md">{shippingAddress.name}</h1>
-              <div className="text-sm text-gray-600">
-                <p>
-                  {shippingAddress.subaddress}
-                  <br />
-                  {shippingAddress.city}, {shippingAddress.state},{" "}
-                  {shippingAddress.pincode}, IN
-                </p>
-              </div>
-              </div>
-            <svg
-              className="w-3 h-3 text-gray-800 dark:text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 8 14"
+            <div
+              className="mx-1 scale-90 flex items-center"
+              key={shippingAddress.id}
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
-              />
-            </svg>
+              <div>
+                <h1 className="text-md">{shippingAddress.name}</h1>
+                <div className="text-sm text-gray-600">
+                  <p>
+                    {shippingAddress.subaddress}
+                    <br />
+                    {shippingAddress.city}, {shippingAddress.state},{" "}
+                    {shippingAddress.pincode}, IN
+                  </p>
+                </div>
+              </div>
+              <svg
+                className="w-3 h-3 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 8 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
+                />
+              </svg>
             </div>
           </Link>
           <hr />
 
           <div className="border p-4 m-2 shadow rounded-lg">
+            <h1 className="font-bold mb-1">Billing Details</h1>
+
+            {!cartLoading ? (
+              <>
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>₹{pricing.total_mrp}</span>
+                </div>
+
+                <div className="flex justify-between text-green-500 font-semibold">
+                  <span>Discount</span>
+                  <span>₹{parseFloat(pricing.total_mrp - pricing.total_costPrice)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Service Charge</span>
+                  <span>₹{pricing.service_charge}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Delivery Fees</span>
+                  <span>₹{pricing.delivery_fees}</span>
+                </div>
+                <div className="flex justify-between text-green-500 font-semibold">
+                  <span>Additional Discount</span>
+                  <span>₹{pricing.additional_discount}</span>
+                </div>
+                <div className="flex justify-between font-extrabold">
+                  <span>Total</span>
+                  <span>₹{parseFloat(pricing.total_costPrice + pricing.service_charge + pricing.delivery_fees - pricing.additional_discount)}</span>
+                </div>
+              </>
+            ) : (
+              <OvalLoader />
+            )}
+          </div>
+
+          {showChoosePaymentMethod && <span className="text-sm px-4 text-red-500">Kindly Choose Your Preferred Payment Method</span>}
+          <div className={`border p-4 m-2 shadow rounded-lg ${showChoosePaymentMethod ? "border-red-500 bg-red-50" : ""}`}>
             <h1 className="font-bold mb-1">Payment Details</h1>
 
             <form>
@@ -130,6 +210,7 @@ const Checkout = () => {
                 type="radio"
                 name="payment_method"
                 value="phonepe"
+                onChange={handleOnChange}
               />
               <label htmlFor="phonepe" className="ml-3 text-gray-500">
                 Pay With{" "}
@@ -147,6 +228,7 @@ const Checkout = () => {
                 type="radio"
                 name="payment_method"
                 value="card"
+                onChange={handleOnChange}
               />
               <label htmlFor="card" className="ml-3 text-gray-500">
                 Credit Or Debit Card
@@ -157,9 +239,10 @@ const Checkout = () => {
                 type="radio"
                 name="payment_method"
                 value="pod"
+                onChange={handleOnChange}
               />
               <label htmlFor="pod" className="ml-3">
-                Pay On Delivery
+                Pay On Delivery/Cash On Delivery
               </label>
             </form>
           </div>
@@ -167,7 +250,8 @@ const Checkout = () => {
           <div className="hidden md:flex w-full items-center justify-center mt-7">
             <Link
               href="/user/my-cart/checkout"
-              className="bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center"
+              className={ `bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center ${submitting ? "" : ""}`}
+              onClick={handlePlaceOrder}
             >
               Place Order
             </Link>
@@ -176,9 +260,10 @@ const Checkout = () => {
           <div className="w-full flex items-center justify-center md:hidden">
             <Link
               href="/user/my-cart/checkout"
-              className="absolute bottom-20 bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75"
+              className={`px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75 mb-20 mt-3 transition-all duration-300 ${submitting ? "bg-gray-300" : "bg-[#FE6321]"}`}
+              onClick={handlePlaceOrder}
             >
-              Place Order
+              {submitting ? "Placing Order..." : "Place Order"}
             </Link>
           </div>
         </div>

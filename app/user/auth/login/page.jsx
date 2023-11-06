@@ -10,13 +10,32 @@ import OvalLoader from "@/components/admin/utility/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 import AuthScreenPNG from "@/public/auth_screen.png";
+import { signIn, useSession } from "next-auth/react";
 
 const LoginPage = () => {
   const router = useRouter();
 
+  const session = useSession();
   const token = Cookies.get("user_token");
   if (token) {
+    console.log('here')
     router.push("/");
+  } else if (session.status === "authenticated" && !token) {
+    const handleContinuewithGoogle = async () => {
+      const response = await axios.post("/api/auth/continue-with-google", {
+        name: session.data.user.name,
+        email: session.data.user.email,
+      });
+      const json = response.data;
+      console.log(json);
+      if (json.success) {
+        Cookies.set("user_token", json.token, { expires: 1000 });
+        router.push("/");
+      } else {
+        toast.warn(json.message, { autoClose: 3000 });
+      }
+    };
+    handleContinuewithGoogle();
   }
 
   const [submitting, setSubmitting] = useState(false);
@@ -135,7 +154,8 @@ const LoginPage = () => {
                 <span>Continue with Google</span>
               </button>
 
-              <button
+              <Link
+                href='/'
                 className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
                 onClick={() => {}}
               >
@@ -149,7 +169,7 @@ const LoginPage = () => {
                   <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
                 </svg>
                 <span>Continue as Guest</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

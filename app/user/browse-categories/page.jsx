@@ -37,11 +37,9 @@ const Categories = () => {
                 className="m-2 p-2 flex flex-col items-center cursor-pointer"
               >
                 <img
-                  className="rounded-full"
-                  width={72}
-                  height={72}
-                  style={{ maxWidth: '72px', maxHeight: '72px', minWidth: '72px', minHeight: '72px' }}
-                  src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/${category.categoryImage}`}
+                  // className="rounded-full"
+                  style={{ maxWidth: '100px', minWidth: '100px' }}
+                  src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${category.categoryImage}`}
                   alt={category.categoryName}
                 />
                 <span className="text-gray-600 font-bold">

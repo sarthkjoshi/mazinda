@@ -7,6 +7,7 @@ import Navbar from '@/components/user/Navbar'
 import BottomNavigationBar from '@/components/user/BottomNavigationBar'
 import NextTopLoader from 'nextjs-toploader';
 import { Slide } from 'react-toastify';
+import Authprovider from '@/components/Authprovider/Authprovider';
 
 const quicksand = Quicksand({
   weight: '500',
@@ -39,11 +40,14 @@ export default function RootLayout({ children }) {
           transition={Slide}
           theme="light"
         />
-        <Navbar />
-        <NextTopLoader color="#F17E13" showSpinner={false} />
-        {children}
 
-        <BottomNavigationBar />
+        <Authprovider>
+          <Navbar />
+          <NextTopLoader color="#F17E13" showSpinner={false} />
+          {children}
+
+          <BottomNavigationBar />
+        </Authprovider>
       </body>
     </html>
   )

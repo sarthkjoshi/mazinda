@@ -7,8 +7,6 @@ export async function POST(req) {
     
     const { itemInfo, userToken } = await req.json();
 
-    console.log(itemInfo)
-
     // Verify the user's token to get their email
     const userData = jwt.verify(userToken, 'this is jwt secret');
 
@@ -32,7 +30,7 @@ export async function POST(req) {
                     productID: itemInfo.productID,
                     productName: itemInfo.productName,
                     quantity: 1,
-                    imageURI: itemInfo.imageURI,
+                    imageNames: itemInfo.imageNames,
                     storeID: itemInfo.storeID,
                     costPrice: itemInfo.costPrice,
                     mrp: itemInfo.mrp,

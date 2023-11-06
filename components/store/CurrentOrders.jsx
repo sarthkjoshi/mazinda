@@ -1,68 +1,56 @@
-import React from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
+import OvalLoader from "../admin/utility/OvalLoader";
+import Link from "next/link";
 
 const CurrentOrders = () => {
-  const orders = [
-    {
-      id: 1,
-      date: "2023-10-15",
-      time: "10:00 AM",
-      productName: "Product A",
-      quantity: 5,
-      status: "Accepted",
-    },
-    {
-      id: 2,
-      date: "2023-10-16",
-      time: "2:30 PM",
-      productName: "Product B",
-      quantity: 3,
-      status: "Rejected",
-    },
-    // Add more orders here...
-  ];
+
+  const [pageLoading, setPageLoading] = useState(true)
+  const [currentOrders, setCurrentOrders] = useState([])
+
+  const fetchData = async () => {
+    const storeToken = Cookies.get('store_token')
+    const response = await axios.post('/api/order/fetch-store-orders', { storeToken })
+    console.log(response.data)
+    setCurrentOrders(response.data.currentOrders);
+    setPageLoading(false);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+  
 
   return (
     <div className="p-4 md:w-3/4 md:mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-gray-800 text-center">
         Current Orders
       </h1>
-      <div className="rounded-lg overflow-hidden">
+      {!pageLoading ? <div className="rounded-lg overflow-hidden">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-100 text-gray-600">
               <th className="py-2">Date</th>
               <th className="py-2">Time</th>
-              <th className="py-2">Product</th>
-              <th className="py-2">Status</th>
+              <th className="py-2">Products</th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td className="py-2 text-center">{order.date}</td>
-                <td className="py-2 text-center">{order.time}</td>
+            {currentOrders.map((order) => (
+              <tr key={order._id}>
+                <td className="py-2 text-center">{order.createdAt}</td>
+                <td className="py-2 text-center">{order.updatedAt}</td>
                 <td className="py-2 text-center">
-                  {order.productName} ✕{" "}
-                  <span className="bg-yellow-300 text-yellow-500 px-2 py-1 rounded-full text-sm">
-                    {order.quantity}
-                  </span>
-                </td>
-                <td
-                  className={`rounded-full text-center ${
-                    order.status === "Accepted"
-                      ? "text-green-600"
-                      : order.status === "Rejected"
-                      ? "text-red-600"
-                      : "text-yellow-500"
-                  }`}
-                >
-                  {order.status}
+                  {order.cart.map( item => {
+                    return <Link key={item.productID} href={`product/view-product?id=${item.productID}`} target="_blank" className="block">{item.productName.slice(0,25)} x {item.quantity}</Link>
+                  })} 
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </div> : <OvalLoader />}
     </div>
   );
 };
