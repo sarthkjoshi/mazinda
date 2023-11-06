@@ -10,20 +10,20 @@ import Dashboard from "@/components/store/Dashboard";
 import { useRouter } from "next/navigation";
 
 const StoreDashboard = () => {
-  let router;
+  let store_token
   try {
-    router = useRouter();
-  } catch (err) {
-    console.log(err);
+    const router = useRouter();
+    store_token = Cookies.get("store_token");
+
+    if (!store_token) {
+      router.push("/store/auth/register");
+      return;
+    }
+  } catch (e) {
+    console.log(e);
   }
 
   const [approvalStatus, setApprovalStatus] = useState("");
-  const store_token = Cookies.get("store_token");
-
-  if (!store_token) {
-    router.push("/store/auth/register");
-    return;
-  }
 
   const fetchApprovalStatus = async () => {
     try {

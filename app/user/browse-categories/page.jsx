@@ -38,7 +38,7 @@ const Categories = () => {
               >
                 <img
                   // className="rounded-full"
-                  style={{ maxWidth: '100px', minWidth: '100px' }}
+                  style={{ maxWidth: '80px', minWidth: '80px' }}
                   src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${category.categoryImage}`}
                   alt={category.categoryName}
                 />

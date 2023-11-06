@@ -12,7 +12,6 @@ const CurrentOrders = () => {
   const fetchData = async () => {
     const storeToken = Cookies.get('store_token')
     const response = await axios.post('/api/order/fetch-store-orders', { storeToken })
-    console.log(response.data)
     setCurrentOrders(response.data.currentOrders);
     setPageLoading(false);
   }
