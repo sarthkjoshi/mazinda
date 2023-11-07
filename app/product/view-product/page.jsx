@@ -91,8 +91,7 @@ const ViewProduct = () => {
         <div>
           {isProductDefined ? (
             <div className="p-2">
-
-            <Carousel arr={product.imageNames} />
+              <Carousel arr={product.imageNames} />
             </div>
           ) : (
             <div className="w-full flex justify-center">
@@ -128,9 +127,15 @@ const ViewProduct = () => {
 
             {isProductDefined ? (
               <div className="mt-4 w-full flex justify-center">
-                <button className="bg-[#F17E13] px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold">
+                <Link
+                  onClick={() => {
+                    handleAddToCart(product);
+                  }}
+                  href="/user/my-cart"
+                  className="bg-[#F17E13] px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold"
+                >
                   Buy Now
-                </button>
+                </Link>
 
                 {!isProductInCart ? (
                   <button

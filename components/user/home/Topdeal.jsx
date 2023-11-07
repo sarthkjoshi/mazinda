@@ -30,6 +30,7 @@ const Topdeal = () => {
       <div className="flex overflow-y-scroll">
         {!pageLoading ? (
           products.map((product) => {
+            console.log(product);
             return (
               <Link
                 key={product._id}
