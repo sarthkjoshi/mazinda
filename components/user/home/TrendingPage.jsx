@@ -13,7 +13,6 @@ const TrendingPage = () => {
 
   const fetchData = async () => {
     const response = await axios.post("/api/product/fetch-trending-products");
-    console.log(response.data.products);
     if (response.data.success) {
       setProducts(response.data.products);
     }

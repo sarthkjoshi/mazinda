@@ -21,13 +21,13 @@ const SuccessPage = () => {
         </span>
       </div>
 
-      <div>
+      <div className="my-3">
         <Topdeal />
       </div>
 
       <div className="w-full flex justify-center">
         <Link
-          className="absolute bottom-16 bg-[#FE6321] rounded-full px-5 py-2 text-white font-bold"
+          className="my-5 bg-[#FE6321] rounded-full px-5 py-2 text-white font-bold"
           href="/"
         >
           Explore More Products

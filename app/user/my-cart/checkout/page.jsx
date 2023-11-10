@@ -22,7 +22,7 @@ const Checkout = () => {
   const [pricing, setPricing] = useState({});
   const [shippingAddress, setShippingAddress] = useState({});
   const [paymentMethod, setPaymentMethod] = useState(null);
-  const [showChoosePaymentMethod, setShowChoosePaymentMethod] = useState(false)
+  const [showChoosePaymentMethod, setShowChoosePaymentMethod] = useState(false);
 
   const fetchData = async (userToken) => {
     const response = await axios.post("/api/user/fetch-user", { userToken });
@@ -34,13 +34,25 @@ const Checkout = () => {
 
     setUser(user);
 
+    let selectedLocation;
+
+    try {
+      selectedLocation = JSON.parse(Cookies.get("selectedLocation"));
+    } catch (err) {
+      console.log(err);
+    }
+
     if (cart.length) {
-      console.log(cart);
       setCart(cart);
       setPricing(pricing);
       setCartLoading(false);
       if (currentAddress && Object.keys(currentAddress).length > 0) {
-        setShippingAddress(currentAddress);
+        if (selectedLocation.pincodes.includes(currentAddress.pincode)){
+          setShippingAddress(currentAddress);
+        }
+        else {
+          router.push("/user/my-cart/checkout/shipping-info");
+        }
       } else {
         router.push("/user/my-cart/checkout/shipping-info");
       }
@@ -64,19 +76,18 @@ const Checkout = () => {
       return;
     }
     try {
-      setSubmitting(true)
+      setSubmitting(true);
       const response = await axios.post("/api/order/create-order", {
-        userToken: Cookies.get('user_token'),
-        storeId: cart[0]['storeID'],
+        userToken: Cookies.get("user_token"),
+        storeId: cart[0]["storeID"],
         userCart: cart,
         pricing: user.pricing,
         address: shippingAddress,
         paymentMethod,
       });
-      console.log(response.data); 
 
       if (response.data.success) {
-        router.push('/user/my-cart/checkout/success');
+        router.push("/user/my-cart/checkout/success");
       } else {
         toast.warn(response.data.message);
       }
@@ -89,9 +100,9 @@ const Checkout = () => {
   };
 
   const handleOnChange = (e) => {
-    setPaymentMethod(e.target.value)
+    setPaymentMethod(e.target.value);
     setShowChoosePaymentMethod(false);
-  }
+  };
 
   return (
     <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
@@ -175,7 +186,9 @@ const Checkout = () => {
 
                 <div className="flex justify-between text-green-500 font-semibold">
                   <span>Discount</span>
-                  <span>₹{parseFloat(pricing.total_mrp - pricing.total_costPrice)}</span>
+                  <span>
+                    ₹{parseFloat(pricing.total_mrp - pricing.total_costPrice)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Service Charge</span>
@@ -191,7 +204,15 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between font-extrabold">
                   <span>Total</span>
-                  <span>₹{parseFloat(pricing.total_costPrice + pricing.service_charge + pricing.delivery_fees - pricing.additional_discount)}</span>
+                  <span>
+                    ₹
+                    {parseFloat(
+                      pricing.total_costPrice +
+                        pricing.service_charge +
+                        pricing.delivery_fees -
+                        pricing.additional_discount
+                    )}
+                  </span>
                 </div>
               </>
             ) : (
@@ -199,8 +220,16 @@ const Checkout = () => {
             )}
           </div>
 
-          {showChoosePaymentMethod && <span className="text-sm px-4 text-red-500">Kindly Choose Your Preferred Payment Method</span>}
-          <div className={`border p-4 m-2 shadow rounded-lg ${showChoosePaymentMethod ? "border-red-500 bg-red-50" : ""}`}>
+          {showChoosePaymentMethod && (
+            <span className="text-sm px-4 text-red-500">
+              Kindly Choose Your Preferred Payment Method
+            </span>
+          )}
+          <div
+            className={`border p-4 m-2 shadow rounded-lg ${
+              showChoosePaymentMethod ? "border-red-500 bg-red-50" : ""
+            }`}
+          >
             <h1 className="font-bold mb-1">Payment Details</h1>
 
             <form>
@@ -250,7 +279,9 @@ const Checkout = () => {
           <div className="hidden md:flex w-full items-center justify-center mt-7">
             <Link
               href="/user/my-cart/checkout"
-              className={ `bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center ${submitting ? "" : ""}`}
+              className={`bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center ${
+                submitting ? "" : ""
+              }`}
               onClick={handlePlaceOrder}
             >
               Place Order
@@ -260,7 +291,9 @@ const Checkout = () => {
           <div className="w-full flex items-center justify-center md:hidden">
             <Link
               href="/user/my-cart/checkout"
-              className={`px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75 mb-20 mt-3 transition-all duration-300 ${submitting ? "bg-gray-300" : "bg-[#FE6321]"}`}
+              className={`px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75 mb-20 mt-3 transition-all duration-300 ${
+                submitting ? "bg-gray-300" : "bg-[#FE6321]"
+              }`}
               onClick={handlePlaceOrder}
             >
               {submitting ? "Placing Order..." : "Place Order"}

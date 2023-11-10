@@ -1,7 +1,10 @@
+'use client'
+
 import Sidebar from "@/components/admin/Sidebar";
 import Navbar from "@/components/store/Navbar";
 
 export default function RootLayout({ children }) {
+
   return (
     <>
     <Navbar />

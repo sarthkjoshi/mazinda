@@ -209,6 +209,7 @@ const Navbar = () => {
                                             "selectedLocation",
                                             JSON.stringify(location)
                                           );
+                                          setSelectedLocation(location.city)
                                           setShowLocationDropbox(false);
                                         }}
                                       >

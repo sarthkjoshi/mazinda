@@ -13,7 +13,6 @@ const Topdeal = () => {
 
   const fetchData = async () => {
     const response = await axios.post("/api/product/fetch-top-deal-products");
-    console.log(response.data.products);
     if (response.data.success) {
       setProducts(response.data.products);
     }
@@ -30,7 +29,6 @@ const Topdeal = () => {
       <div className="flex overflow-y-scroll">
         {!pageLoading ? (
           products.map((product) => {
-            console.log(product);
             return (
               <Link
                 key={product._id}
