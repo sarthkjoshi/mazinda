@@ -19,7 +19,6 @@ const CurrentOrders = () => {
   useEffect(() => {
     fetchData();
   }, [])
-  
 
   return (
     <div className="p-4 md:w-3/4 md:mx-auto">
@@ -36,17 +35,23 @@ const CurrentOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {currentOrders.map((order) => (
-              <tr key={order._id}>
-                <td className="py-2 text-center">{order.createdAt}</td>
-                <td className="py-2 text-center">{order.updatedAt}</td>
-                <td className="py-2 text-center">
-                  {order.cart.map( item => {
-                    return <Link key={item.productID} href={`product/view-product?id=${item.productID}`} target="_blank" className="block">{item.productName.slice(0,25)} x {item.quantity}</Link>
-                  })} 
-                </td>
-              </tr>
-            ))}
+            {currentOrders.map((order) => {
+              const orderDate = new Date(order.createdAt);
+              const formattedDate = orderDate.toLocaleDateString();
+              const formattedTime = orderDate.toLocaleTimeString();
+
+              return (
+                <tr key={order._id}>
+                  <td className="py-2 text-center">{formattedDate}</td>
+                  <td className="py-2 text-center">{formattedTime}</td>
+                  <td className="py-2 text-center">
+                    {order.cart.map(item => (
+                      <Link key={item.productID} href={`product/view-product?id=${item.productID}`} target="_blank" className="block">{item.productName.slice(0, 25)} x {item.quantity}</Link>
+                    ))}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div> : <OvalLoader />}
