@@ -6,7 +6,7 @@ export async function POST(request) {
     const file = data.get('file');
 
     if (!file) {
-        return NextResponse.json({ success: false });
+        return NextResponse.json({ success: false, error: 'No file provided' });
     }
 
     const bytes = await file.arrayBuffer();
@@ -29,19 +29,12 @@ export async function POST(request) {
             Body: buffer,
         };
 
-        let fileLocation;
+        // Using promises instead of callbacks for the S3 upload
+        const data = await s3.upload(params).promise();
 
-        s3.upload(params, (err, data) => {
-            if (err) {
-                console.log(err);
-                return NextResponse.json({ success: false });
-            } else {
-                fileLocation = data.Location;
-                console.log('File uploaded successfully', data.Location);
-            }
-        });
+        console.log('File uploaded successfully', data.Location);
 
-        return NextResponse.json({ success: true, fileName: fileNameWithTimestamp, location: fileLocation });
+        return NextResponse.json({ success: true, fileName: fileNameWithTimestamp, location: data.Location });
     } catch (error) {
         console.error('Error uploading file:', error);
         return NextResponse.json({ success: false, error: 'Error uploading file' });

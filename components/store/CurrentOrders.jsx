@@ -46,7 +46,7 @@ const CurrentOrders = () => {
                   <td className="py-2 text-center">{formattedTime}</td>
                   <td className="py-2 text-center">
                     {order.cart.map(item => (
-                      <Link key={item.productID} href={`product/view-product?id=${item.productID}`} target="_blank" className="block">{item.productName.slice(0, 25)} x {item.quantity}</Link>
+                      <Link key={item.productID} href={`product/view-product?id=${item.productID}`} target="_blank" className="block">{item.productName.slice(0, 25)} x <span className="font-extrabold bg-gray-100 py-2 px-3 rounded-full">{item.quantity}</span></Link>
                     ))}
                   </td>
                 </tr>

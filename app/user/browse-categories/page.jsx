@@ -37,9 +37,8 @@ const Categories = () => {
                 className="m-2 p-2 flex flex-col items-center cursor-pointer"
               >
                 <img
-                  // className="rounded-full"
                   style={{ maxWidth: '80px', minWidth: '80px' }}
-                  src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${category.categoryImage}`}
+                  src={category.categoryImage}
                   alt={category.categoryName}
                 />
                 <span className="text-gray-600 font-bold">

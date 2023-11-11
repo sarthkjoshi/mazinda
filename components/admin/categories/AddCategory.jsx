@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const AddCategory = () => {
   const [newCategory, setNewCategory] = useState("");
-  const [newCategoryImageName, setNewCategoryImageName] = useState("");
+  const [newCategoryImagePath, setNewCategoryImagePath] = useState("");
   const [newSubcategory, setNewSubcategory] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,8 +31,7 @@ const AddCategory = () => {
       // handling the error
       if (!json.success) throw new Error(await res.text());
       else {
-        const fileName = json.fileName;
-        setNewCategoryImageName(fileName);
+        setNewCategoryImagePath(json.location);
         toast.success("Image uploaded successfully");
       }
     } catch (e) {
@@ -62,7 +61,7 @@ const AddCategory = () => {
 
     const response = await axios.post("/api/category/add-new-category", {
       categoryName: newCategory,
-      categoryImage: newCategoryImageName,
+      categoryImage: newCategoryImagePath,
       subcategories,
     });
 
@@ -74,7 +73,7 @@ const AddCategory = () => {
   };
 
   return (
-    <div className="m-2 bg-white rounded-xl p-4">
+    <div className="mx-2 bg-white rounded-xl p-4">
       <h2 className="text-2xl">Add Category</h2>
       <div className="mt-4">
         <div className="mb-4">
