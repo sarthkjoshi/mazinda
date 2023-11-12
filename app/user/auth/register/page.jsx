@@ -48,16 +48,7 @@ const RegisterPage = () => {
       Cookies.set("user_token", token, { expires: 1000 });
       router.push("/");
     } else {
-      toast.error(response.data.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(response.data.message, {autoClose: 3000});
     }
     setSubmitting(false);
   };
@@ -208,7 +199,7 @@ const RegisterPage = () => {
       </div>
 
       <div className="w-full hidden lg:block">
-        <Image src={AuthScreenPNG} className="h-screen w-full" />
+        <Image src={AuthScreenPNG} className="h-screen w-full" alt="mazinda" />
       </div>
     </div>
   );

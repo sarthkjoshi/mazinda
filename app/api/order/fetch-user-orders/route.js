@@ -8,6 +8,8 @@ export async function POST(req) {
     try {
         const { userToken, filter } = await req.json();
 
+        console.log(filter);
+
         const userData = jwt.verify(userToken, 'this is jwt secret');
 
         await connectDB()

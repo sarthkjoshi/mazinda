@@ -27,7 +27,7 @@ const OrdersList = ({ filter }) => {
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
-    return date.toLocaleString(); // Adjust options as needed
+    return date.toLocaleString();
   };
 
   return (

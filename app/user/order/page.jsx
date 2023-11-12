@@ -1,6 +1,5 @@
 "use client";
 
-import Topdeal from "@/components/user/home/Topdeal";
 import MagnifyingLoader from "@/components/utility/MagnifyingLoader";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
@@ -34,7 +33,7 @@ const Order = () => {
     fetchData();
   }, []);
   return (
-    <>
+    <div className="w-1/2 lg:w-1/3 mx-auto">
       <h1 className="text-center text-2xl md:mb-10">Your Order</h1>
       {!loading ? (
         <>
@@ -127,7 +126,7 @@ const Order = () => {
           <MagnifyingLoader />
         </div>
       )}
-    </>
+    </div>
   );
 };
 

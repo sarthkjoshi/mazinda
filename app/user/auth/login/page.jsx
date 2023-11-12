@@ -2,7 +2,7 @@
 
 import Cookies from "js-cookie";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -14,29 +14,37 @@ import { signIn, useSession } from "next-auth/react";
 
 const LoginPage = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
-  const session = useSession();
-  const token = Cookies.get("user_token");
-  if (token) {
-    console.log("here");
-    router.push("/");
-  } else if (session.status === "authenticated" && !token) {
-    const handleContinuewithGoogle = async () => {
-      const response = await axios.post("/api/auth/continue-with-google", {
-        name: session.data.user.name,
-        email: session.data.user.email,
-      });
-      const json = response.data;
-      console.log(json);
-      if (json.success) {
-        Cookies.set("user_token", json.token, { expires: 1000 });
-        router.push("/");
-      } else {
-        toast.warn(json.message, { autoClose: 3000 });
-      }
-    };
-    handleContinuewithGoogle();
-  }
+  useEffect(() => {
+    const token = Cookies.get("user_token");
+
+    if (token) {
+      router.push("/");
+    } else if (session?.status === "authenticated" && !token) {
+      const handleContinueWithGoogle = async () => {
+        try {
+          const response = await axios.post("/api/auth/continue-with-google", {
+            name: session.user.name,
+            email: session.user.email,
+          });
+
+          const { success, token: userToken, message } = response.data;
+
+          if (success) {
+            Cookies.set("user_token", userToken, { expires: 1000 });
+            router.push("/");
+          } else {
+            toast.warn(message, { autoClose: 3000 });
+          }
+        } catch (error) {
+          console.error("An error occurred during Continue with Google:", error);
+        }
+      };
+
+      handleContinueWithGoogle();
+    }
+  }, [session]);
 
   const [submitting, setSubmitting] = useState(false);
   const [credentials, setCredentials] = useState({
@@ -56,17 +64,23 @@ const LoginPage = () => {
     e.preventDefault();
     setSubmitting(true);
 
-    const response = await axios.post("/api/user/auth/login", { credentials });
+    try {
+      const response = await axios.post("/api/user/auth/login", { credentials });
 
-    if (response.data.success) {
-      const { user_token } = response.data;
-      Cookies.set("user_token", user_token, { expires: 1000 });
-      router.push("/");
-    } else {
-      toast.warn(response.data.message, { autoClose: 3000 });
+      if (response.data.success) {
+        const { user_token } = response.data;
+        Cookies.set("user_token", user_token, { expires: 1000 });
+        router.push("/");
+      } else {
+        toast.warn(response.data.message, { autoClose: 3000 });
+      }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
     }
+
     setSubmitting(false);
   };
+
 
   return (
     <div className="lg:flex">
@@ -193,7 +207,7 @@ const LoginPage = () => {
       </div>
 
       <div className="w-full hidden lg:block">
-        <Image src={AuthScreenPNG} className="h-screen w-full" />
+        <Image src={AuthScreenPNG} className="h-screen w-full" alt="mazinda" />
       </div>
     </div>
   );
