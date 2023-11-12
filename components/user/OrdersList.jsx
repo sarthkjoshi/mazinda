@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import MagnifyingLoader from "../utility/MagnifyingLoader";
 
 const OrdersList = ({ filter }) => {
@@ -30,25 +31,36 @@ const OrdersList = ({ filter }) => {
   };
 
   return (
-    <div className="py-2 px-4">
+    <div className="py-2 px-4" onClick={(e) => e.stopPropagation()}>
       {!loading ? (
         <ol>
-          {orders.length ?
+          {orders.length ? (
             orders.map((order) => {
               return (
                 <React.Fragment key={order._id}>
-                  <li className="p-2 my-1 text-gray-600 text-sm">
-                    <span className="text-[0.6em] text-gray-500 mr-3">
-                      {formatTimestamp(order.createdAt)}
-                    </span>
-                    {order.cart.map((product) => {
-                      return <span key={product.productName}>{product.productName.slice(0, 25)}...</span>;
-                    })}
+                  <li className="px-2 py-1 my-1 text-gray-600 text-sm">
+                    <Link href={`/user/order?id=${order._id}`}>
+                      <span className="text-[0.6em] text-gray-500 mr-3">
+                        {formatTimestamp(order.createdAt)}
+                      </span>
+                      {order.cart.map((product) => {
+                        return (
+                          <span key={product.productName}>
+                            {product.productName.slice(0, 25)}...
+                          </span>
+                        );
+                      })}
+                    </Link>
                   </li>
                   <hr />
                 </React.Fragment>
               );
-            }) : <span className="text-gray-500 text-sm">No {filter === "current" ? "Active" :"Previous"} Orders</span>}
+            })
+          ) : (
+            <span className="text-gray-500 text-sm">
+              No {filter === "current" ? "Active" : "Previous"} Orders
+            </span>
+          )}
         </ol>
       ) : (
         <MagnifyingLoader />
