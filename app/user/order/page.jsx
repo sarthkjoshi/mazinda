@@ -63,6 +63,14 @@ const Order = () => {
                 );
               })}
           </div>
+
+          <div className="p-3">
+            <span className="font-bold">Live Status</span> -{" "}
+            <span className="text-green-500 font-bold">{order.status}</span>
+          </div>
+
+          <hr />
+
           <div className="p-3">
             <h1 className="font-bold">Shipping Details</h1>
             <span className="text-sm text-gray-700">
@@ -88,14 +96,7 @@ const Order = () => {
           </div>
           <hr />
 
-          <div className="p-2">
-            <span className="font-bold">Live Status</span> -{" "}
-            <span className="text-green-500 font-bold">{order.status}</span>
-          </div>
-
-          <hr />
-
-          <div className="p-2">
+          <div className="p-3">
             {/* <h1 className="font-bold">Invoice</h1> */}
             <div>
               <div className="flex justify-between font-bold text-lg">
