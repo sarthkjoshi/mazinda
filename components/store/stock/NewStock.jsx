@@ -13,7 +13,7 @@ const AddNewStock = () => {
   const [file, setFile] = useState();
   const [uploadLoading, setUploadLoading] = useState(false);
 
-  const [imageNames, setImageNames] = useState([]);
+  const [imagePaths, setImagePaths] = useState([]);
 
   const [submitLoading, setSubmitLoading] = useState(false)
 
@@ -69,7 +69,7 @@ const AddNewStock = () => {
     storeToken: Cookies.get("store_token"),
     category: "",
     subcategory: "",
-    imageNames:[],
+    imagePaths:[],
     pricing: {
       mrp: "",
       costPrice: "",
@@ -144,17 +144,17 @@ const AddNewStock = () => {
       if (!json.success) {
         throw new Error(await res.text());
       } else {
-        const fileName = json.fileName;
+        const filePath = json.location;
         toast.success("Image uploaded successfully");
 
-        setImageNames((prevImageNames) => {
-          return [...prevImageNames, fileName];
+        setImagePaths((prevImagePaths) => {
+          return [...prevImagePaths, filePath];
         });
 
         // Update productData with the image names
         setProductData((prevData) => ({
           ...prevData,
-          imageNames: [...prevData.imageNames, fileName],
+          imagePaths: [...prevData.imagePaths, filePath],
         }));
 
         setFile(null);
@@ -283,25 +283,25 @@ const AddNewStock = () => {
           <button
             className="w-fit my-2 bg-blue-500 px-4 py-2 text-white rounded-lg"
             onClick={onFileSubmit}
-            disabled={!file || uploadLoading || imageNames.length >= 10}
+            disabled={!file || uploadLoading || imagePaths.length >= 10}
           >
             {uploadLoading ? "Uploading..." : "Upload"}
           </button>
 
           <div>
-            {imageNames.length > 0 && (
+            {imagePaths.length > 0 && (
               <span className="text-yellow-400 text-lg">
-                You can add {parseInt(10 - imageNames.length)} more images
+                You can add {parseInt(10 - imagePaths.length)} more images
               </span>
             )}
           </div>
 
           {/* Display the list of uploaded image filenames */}
-          {imageNames.length > 0 && (
+          {imagePaths.length > 0 && (
             <div>
               <h2 className="mb-3">Uploaded Images:</h2>
               <ul>
-                {imageNames.map((imageName, index) => (
+                {imagePaths.map((imageName, index) => (
                   <li key={index}>{imageName}</li>
                 ))}
               </ul>

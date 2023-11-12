@@ -10,7 +10,7 @@ import empty_cart_img from "@/public/empty_cart.png";
 
 import { fetchUserCart, removeItemFromCart } from "@/utils/cart";
 
-import FallingLinesLoader from "@/components/admin/utility/FallingLinesLoader";
+import FallingLinesLoader from "@/components/utility/FallingLinesLoader";
 import axios from "axios";
 
 const MyCart = () => {
@@ -20,6 +20,7 @@ const MyCart = () => {
 
   const [pricing, setPricing] = useState({
     total_mrp: 0,
+    total_salesPrice: 0,
     total_costPrice: 0,
     service_charge: 0,
     delivery_fees: 0,
@@ -28,11 +29,13 @@ const MyCart = () => {
 
   const fetchPricing = (cart) => {
     let total_mrp = 0;
+    let total_salesPrice = 0;
     let total_costPrice = 0;
 
     if (cart) {
       cart.forEach((item) => {
         total_mrp += parseFloat(item.mrp) * item.quantity;
+        total_salesPrice += parseFloat(item.salesPrice) * item.quantity;
         total_costPrice += parseFloat(item.costPrice) * item.quantity;
       });
     }
@@ -40,6 +43,7 @@ const MyCart = () => {
     setPricing({
       ...pricing,
       total_mrp,
+      total_salesPrice,
       total_costPrice,
     });
   };
@@ -49,6 +53,7 @@ const MyCart = () => {
       const response = await axios.post("/api/user/cart/set-pricing", {
         userToken,
         total_mrp: pricing.total_mrp,
+        total_salesPrice: pricing.total_salesPrice,
         total_costPrice: pricing.total_costPrice,
         service_charge: pricing.service_charge,
         delivery_fees: pricing.delivery_fees,
@@ -57,7 +62,7 @@ const MyCart = () => {
 
       console.log(response.data);
     };
-    if(userToken) {
+    if (userToken) {
       setPricing();
     }
   }, [pricing]);
@@ -129,7 +134,7 @@ const MyCart = () => {
                         </div>
                         <img
                           className="w-14 h-auto"
-                          src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${item.imageNames[0]}`}
+                          src={item.imagePaths[0]}
                           alt="img"
                         />
                         <div className="flex flex-col ml-2">
@@ -137,7 +142,7 @@ const MyCart = () => {
                             {item.productName}
                           </span>
                           <div className="text-gray-600">
-                            Rs {item.costPrice}/-
+                            Rs {item.salesPrice}/-
                           </div>
                         </div>
                       </div>
@@ -153,7 +158,7 @@ const MyCart = () => {
                 </div>
                 <div className="flex justify-between w-full text-green-500 font-bold">
                   <span>Discount</span>
-                  <span>₹{pricing.total_mrp - pricing.total_costPrice}</span>
+                  <span>₹{pricing.total_mrp - pricing.total_salesPrice}</span>
                 </div>
                 <div className="flex justify-between w-full">
                   <span>Service Charge</span>
@@ -171,7 +176,7 @@ const MyCart = () => {
                   <span>Total</span>
                   <span>
                     ₹
-                    {pricing.total_costPrice +
+                    {pricing.total_salesPrice +
                       pricing.delivery_fees +
                       pricing.service_charge -
                       pricing.additional_discount}

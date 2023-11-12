@@ -30,9 +30,10 @@ export async function POST(req) {
                     productID: itemInfo.productID,
                     productName: itemInfo.productName,
                     quantity: 1,
-                    imageNames: itemInfo.imageNames,
+                    imagePaths: itemInfo.imagePaths,
                     storeID: itemInfo.storeID,
                     costPrice: itemInfo.costPrice,
+                    salesPrice: itemInfo.salesPrice,
                     mrp: itemInfo.mrp,
                 });
             }

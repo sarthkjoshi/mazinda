@@ -6,7 +6,7 @@ import MazindaLogoFull from "@/public/logo_mazinda_full.png";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import OvalLoader from "../admin/utility/OvalLoader";
+import OvalLoader from "../utility/OvalLoader";
 import Cookies from "js-cookie";
 
 import Image from "next/image";
@@ -40,13 +40,36 @@ const Navbar = () => {
   };
 
   const fetchLocations = async () => {
-    const response = await axios.post("/api/location/fetch-locations");
-    setLocations(response.data.locations);
-    setSelectedLocation(response.data.locations[0].city);
+    try {
+      const response = await axios.post("/api/location/fetch-locations");
+      setLocations(response.data.locations);
 
-    // Setting location info in cookies
-    Cookies.set("selectedLocation", JSON.stringify(response.data.locations[0]));
-    setLocationLoading(false);
+      let selectedLocation;
+
+      try {
+        selectedLocation = JSON.parse(Cookies.get("selectedLocation"));
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (selectedLocation) {
+        setSelectedLocation(selectedLocation.city);
+      } else {
+        // If no selected location in cookies, set the first location as default
+        setSelectedLocation(response.data.locations[0].city);
+
+        // Setting location info in cookies
+        Cookies.set(
+          "selectedLocation",
+          JSON.stringify(response.data.locations[0])
+        );
+      }
+
+      setLocationLoading(false);
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      setLocationLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -104,7 +127,8 @@ const Navbar = () => {
                       searchQuery.length === 0 ? "hidden" : ""
                     }`}
                   >
-                    <Link href={`/user/search/${searchQuery}`}
+                    <Link
+                      href={`/user/search/${searchQuery}`}
                       className="rounded-md px-3 py-2 flex items-center text-sm font-semibold cursor-pointer"
                       onClick={() => {
                         setShowSearchBox(false);
@@ -122,7 +146,7 @@ const Navbar = () => {
                         return (
                           <div key={index}>
                             <Link
-                            href={`/user/search/${product.productName}`}
+                              href={`/user/search/${product.productName}`}
                               className="rounded-md px-3 py-2 flex items-center text-sm font-semibold cursor-pointer"
                               onClick={() => {
                                 setSearchQuery(product.productName);
@@ -209,7 +233,7 @@ const Navbar = () => {
                                             "selectedLocation",
                                             JSON.stringify(location)
                                           );
-                                          setSelectedLocation(location.city)
+                                          setSelectedLocation(location.city);
                                           setShowLocationDropbox(false);
                                         }}
                                       >

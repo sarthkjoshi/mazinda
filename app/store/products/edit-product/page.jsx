@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import OvalLoader from "@/components/admin/utility/OvalLoader";
+import OvalLoader from "@/components/utility/OvalLoader";
 import { toast } from "react-toastify";
 
 const ProductDetails = () => {
@@ -241,7 +241,6 @@ const ProductDetails = () => {
                       {productData.topDeal ? "Yes" : "No"}
                     </p>
                   </div>
-
                 </div>
               </div>
             </div>

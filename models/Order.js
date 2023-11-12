@@ -6,6 +6,7 @@ const OrderSchema = new mongoose.Schema({
     pricing: { type: Object, required: true },
     address: { type: Object, required: true },
     paymentMethod: { type: String, required: true },
+    isDelivered: { type: Boolean, default: false },
     status: { type: String, default: 'Confirmed' },
 }, { timestamps: true });
 

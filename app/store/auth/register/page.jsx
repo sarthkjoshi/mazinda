@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import OvalLoader from "@/components/admin/utility/OvalLoader";
+import OvalLoader from "@/components/utility/OvalLoader";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import axios from "axios";
-import MazindaLogoFull from '@/public/logo_mazinda.png';
-import Image from 'next/image';
+import MazindaLogoFull from "@/public/logo_mazinda.png";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
@@ -42,14 +42,12 @@ const RegisterStorePage = () => {
       formData,
     });
     const json = await response.data;
-    console.log(json);
     setIsSubmitting(false);
 
     if (json.success) {
-      Cookies.set('store_token', json.store_token)
+      Cookies.set("store_token", json.store_token);
       toast.success(json.message, { autoClose: 3000 });
-      router.push('/store')
-      
+      router.push("/store");
     } else {
       toast.error(json.message, { autoClose: 3000 });
     }
@@ -110,7 +108,7 @@ const RegisterStorePage = () => {
               name="storeAddress"
               className="w-full px-5 py-1 border rounded-full"
               placeholder="Enter store address"
-              value={formData.storeAddress}
+              value={formData.address}
               onChange={handleInputChange}
             />
           </div>

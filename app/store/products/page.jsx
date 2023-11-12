@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import Cookies from "js-cookie";
-import OvalLoader from "@/components/admin/utility/OvalLoader";
+import OvalLoader from "@/components/utility/OvalLoader";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -15,8 +15,13 @@ const ProductsPage = () => {
       return product._id === productId;
     });
 
-    const response = await axios.put("/api/product/update-product", { productData: {...updatedProduct[0], isAvailable: !updatedProduct[0].isAvailable} });
-    console.log(response.data)
+    const response = await axios.put("/api/product/update-product", {
+      productData: {
+        ...updatedProduct[0],
+        isAvailable: !updatedProduct[0].isAvailable,
+      },
+    });
+    console.log(response.data);
 
     setProducts((prevProducts) =>
       prevProducts.map((product) =>
@@ -27,16 +32,15 @@ const ProductsPage = () => {
     );
 
     if (!response.data.success) {
-      alert('Error while updating the product')
+      alert("Error while updating the product");
     }
   };
 
   const fetchProducts = async () => {
+    setLoading(true);
     const response = await axios.post("/api/product/fetch-store-products", {
       storeToken: Cookies.get("store_token"),
     });
-
-    console.log(response.data)
 
     if (response.data.success) {
       // Filter products with approvalStatus true
@@ -47,11 +51,11 @@ const ProductsPage = () => {
     } else {
       console.error("An error occurred" + response.data.message);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchProducts();
-    setLoading(false);
   }, []);
 
   return (

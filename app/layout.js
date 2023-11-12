@@ -3,10 +3,10 @@ import Head from 'next/head'
 import { Quicksand } from 'next/font/google'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Slide } from 'react-toastify';
 import Navbar from '@/components/user/Navbar'
 import BottomNavigationBar from '@/components/user/BottomNavigationBar'
 import NextTopLoader from 'nextjs-toploader';
-import { Slide } from 'react-toastify';
 import Authprovider from '@/components/Authprovider/Authprovider';
 
 const quicksand = Quicksand({

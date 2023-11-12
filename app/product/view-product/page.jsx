@@ -56,9 +56,10 @@ const ViewProduct = () => {
             productID: product._id,
             productName: product.productName,
             quantity: 1,
-            imageNames: product.imageNames,
+            imagePaths: product.imagePaths,
             storeID: product.storeId,
             costPrice: product.pricing.costPrice,
+            salesPrice: product.pricing.salesPrice,
             mrp: product.pricing.mrp,
           },
           userToken,
@@ -91,7 +92,7 @@ const ViewProduct = () => {
         <div>
           {isProductDefined ? (
             <div className="p-2">
-              <Carousel arr={product.imageNames} />
+              <Carousel arr={product.imagePaths} />
             </div>
           ) : (
             <div className="w-full flex justify-center">
@@ -115,7 +116,7 @@ const ViewProduct = () => {
             {isPricingDefined ? (
               <div>
                 <span className="text-xl">
-                  Rs {product.pricing.costPrice}/-
+                  Rs {product.pricing.salesPrice}/-
                 </span>
                 <span className="ml-4 text-[12px] text-gray-500">
                   <s>Rs {product.pricing.mrp}/-</s>

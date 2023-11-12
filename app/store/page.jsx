@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import OvalLoader from "@/components/admin/utility/OvalLoader";
+import OvalLoader from "@/components/utility/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 import Dashboard from "@/components/store/Dashboard";
 import { useRouter } from "next/navigation";
 
 const StoreDashboard = () => {
-  let store_token
+  let store_token;
   try {
     const router = useRouter();
     store_token = Cookies.get("store_token");

@@ -13,10 +13,10 @@ const Carousel = ({ arr }) => {
 
   return (
     <Slider {...settings}>
-      {arr.map((imageName) => {
+      {arr.map((path) => {
         return (
           <img
-            src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${imageName}`}
+            src={path}
             alt=""
             className="object-cover w-full h-full"
           />

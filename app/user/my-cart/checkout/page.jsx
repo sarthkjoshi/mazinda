@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
-import FallingLinesLoader from "@/components/admin/utility/FallingLinesLoader";
+import FallingLinesLoader from "@/components/utility/FallingLinesLoader";
 import Link from "next/link";
 import phonepesvg from "@/public/phonepe-1.svg";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import OvalLoader from "@/components/admin/utility/OvalLoader";
+import OvalLoader from "@/components/utility/OvalLoader";
 
 const Checkout = () => {
   const router = useRouter();
@@ -46,11 +46,11 @@ const Checkout = () => {
       setCart(cart);
       setPricing(pricing);
       setCartLoading(false);
+      console.log(selectedLocation);
       if (currentAddress && Object.keys(currentAddress).length > 0) {
-        if (selectedLocation.pincodes.includes(currentAddress.pincode)){
+        if (selectedLocation.pincodes.includes(currentAddress.pincode)) {
           setShippingAddress(currentAddress);
-        }
-        else {
+        } else {
           router.push("/user/my-cart/checkout/shipping-info");
         }
       } else {
@@ -120,14 +120,16 @@ const Checkout = () => {
                   <div className="flex rounded-lg px-2 py-1 items-center mx-2 relative">
                     <img
                       className="w-14 h-auto"
-                      src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${item.imageNames[0]}`}
+                      src={item.imagePaths[0]}
                       alt="img"
                     />
                     <div className="flex flex-col ml-2">
                       <span className="text-sm font-semibold">
                         {item.productName}
                       </span>
-                      <div className="text-gray-600">Rs {item.costPrice}/-</div>
+                      <div className="text-gray-600">
+                        Rs {item.salesPrice}/-
+                      </div>
                     </div>
                   </div>
                   <hr />
@@ -187,7 +189,7 @@ const Checkout = () => {
                 <div className="flex justify-between text-green-500 font-semibold">
                   <span>Discount</span>
                   <span>
-                    ₹{parseFloat(pricing.total_mrp - pricing.total_costPrice)}
+                    ₹{parseFloat(pricing.total_mrp - pricing.total_salesPrice)}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -207,7 +209,7 @@ const Checkout = () => {
                   <span>
                     ₹
                     {parseFloat(
-                      pricing.total_costPrice +
+                      pricing.total_salesPrice +
                         pricing.service_charge +
                         pricing.delivery_fees -
                         pricing.additional_discount
@@ -279,8 +281,8 @@ const Checkout = () => {
           <div className="hidden md:flex w-full items-center justify-center mt-7">
             <Link
               href="/user/my-cart/checkout"
-              className={`bg-black px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center ${
-                submitting ? "" : ""
+              className={`px-10 py-2 rounded-lg text-white font-bold hover:opacity-75 w-full text-center ${
+                submitting ? "bg-gray-300" : "bg-black"
               }`}
               onClick={handlePlaceOrder}
             >

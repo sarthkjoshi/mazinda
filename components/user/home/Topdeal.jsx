@@ -38,7 +38,7 @@ const Topdeal = () => {
                 <div className="flex items-center justify-center cursor-pointer">
                   <img
                     className="rounded-lg w-32 md:w-44"
-                    src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/${product.imageNames[0]}`}
+                    src={product.imagePaths[0]}
                     alt="product"
                   />
                 </div>
@@ -50,7 +50,7 @@ const Topdeal = () => {
 
                   <div className="flex flex-col ml-2">
                     <span className="font-bold self-end text-[15px]">
-                      ₹{product.pricing.costPrice}
+                      ₹{product.pricing.salesPrice}
                     </span>
                     <span className="text-[10px] line-through text-gray-500 self-end">
                       ₹{product.pricing.mrp}

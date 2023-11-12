@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export async function POST(req) {
 
-    const { userToken, total_mrp, total_costPrice, service_charge, delivery_fees, additional_discount } = await req.json();
+    const { userToken, total_mrp, total_salesPrice, total_costPrice, service_charge, delivery_fees, additional_discount } = await req.json();
 
     // Verify the user's token to get their email
     const userData = jwt.verify(userToken, 'this is jwt secret');
@@ -17,7 +17,7 @@ export async function POST(req) {
         let user = await User.findOne({ email: userData.email });
 
         if (user) {
-            user.pricing = { total_mrp, total_costPrice, service_charge, delivery_fees, additional_discount }
+            user.pricing = { total_mrp, total_salesPrice, total_costPrice, service_charge, delivery_fees, additional_discount }
 
             // Save the updated user data
             await user.save();
