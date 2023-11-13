@@ -129,7 +129,7 @@ const ShippingInfo = () => {
   }, []);
 
   return (
-    <div className="md:w-1/2 lg:w-1/3 mx-auto">
+    <div className="md:w-1/2 lg:w-1/3 mx-auto mb-12">
       <h1 className="text-center text-2xl">Shipping Info</h1>
       <div>
         {!pageLoading ? (
@@ -288,7 +288,6 @@ const ShippingInfo = () => {
               <div>
                 {savedAddresses && savedAddresses.length ? (
                   <div>
-                    <div className="min-h-[55vh]">
 
                     {savedAddresses.map((address) => {
                       const isSelected =
@@ -320,7 +319,6 @@ const ShippingInfo = () => {
                         </div>
                       );
                     })}
-                    </div>
 
                     {!expandedNewAddress && (
                       <div className="w-full flex items-center justify-center">
