@@ -26,14 +26,14 @@ const Topdeal = () => {
   return (
     <>
       <h1 className="ml-5 text-lg font-bold">Top Deals</h1>
-      <div className="flex overflow-y-scroll">
+      <div className="flex overflow-x-auto">
         {!pageLoading ? (
-          products.map((product) => {
-            return (
+          <div className="flex">
+            {products.map((product) => (
               <Link
                 key={product._id}
                 href={`/product/view-product?id=${product._id}`}
-                className="p-2 m-2 rounded-md border shadow w-2/5 md:w-fit"
+                className="p-2 m-2 rounded-md border shadow w-[150px] md:w-[200px]"
               >
                 <div className="flex items-center justify-center cursor-pointer">
                   <img
@@ -45,7 +45,7 @@ const Topdeal = () => {
 
                 <div className="flex mt-2 justify-between items-center">
                   <span className="cursor-pointer text-[12px] font-bold mx-1">
-                    {product.productName.slice(0, 24)}...
+                    {product.productName.slice(0, 20)}...
                   </span>
 
                   <div className="flex flex-col ml-2">
@@ -58,8 +58,8 @@ const Topdeal = () => {
                   </div>
                 </div>
               </Link>
-            );
-          })
+            ))}
+          </div>
         ) : (
           <div className="flex overflow-y-scroll">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
@@ -67,7 +67,7 @@ const Topdeal = () => {
                 <Image
                   src={homepage_image_loading}
                   key={num}
-                  className="mx-2 my-3"
+                  className="m-2"
                   alt="loading"
                   width={128}
                 />

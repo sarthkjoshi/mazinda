@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ProductsLoading from "@/components/user/loading/ProductsLoading";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const page = ({ params }) => {
   const categoryName = params.name;
@@ -33,48 +34,40 @@ const page = ({ params }) => {
             return (
               <div
                 key={product._id}
-                className="w-40 p-2 bg-gray-50 m-2 rounded-md"
+                className="w-40 md:w-52 md:p-2 border shadow m-2 rounded-md"
               >
-                <div
-                  className="h-44 flex items-center justify-center cursor-pointer"
-                  onClick={() => {
-                    router.push(`/product/view-product?id=${product._id}`);
-                  }}
-                >
+                <Link href={`/product/view-product?id=${product._id}`} className="px-2 py-1 flex items-center justify-center cursor-pointer">
                   <img
                     className="rounded-lg w-full"
-                    src={product.imageURI}
+                    src={product.imagePaths[0]}
                     alt="product"
                   />
-                </div>
+                </Link>
 
                 <div>
-                  <div className="mt-2">
-                    <span
-                      className="font-semibold cursor-pointer"
-                      onClick={() => {
-                        router.push(`/product/view-product?id=${product._id}`);
-                      }}
-                    >
-                      {product.productName.slice(0, 28)}...
+                  <Link href={`/product/view-product?id=${product._id}`} className="px-2 py-1 flex mt-2 justify-between">
+                    <span className="cursor-pointer text-sm mx-1">
+                      {product.productName.slice(0, 25)}...
                     </span>
-                  </div>
 
-                  <div className="flex flex-col mt-2">
-                    <span className="">₹{product.pricing.costPrice}</span>
-                    <span className="text-[10px] line-through text-gray-500">
-                      ₹{product.pricing.mrp}
-                    </span>
-                  </div>
+                    <div className="flex flex-col ml-2">
+                      <span className="font-bold self-end text-[15px]">
+                        ₹{product.pricing.costPrice}
+                      </span>
+                      <span className="text-[10px] line-through text-gray-500 self-end">
+                        ₹{product.pricing.mrp}
+                      </span>
+                    </div>
+                  </Link>
 
-                  <div className="flex mt-2 w-full">
-                    <div className="cursor-pointer font-semibold mx-1 text-[0.6em] border border-[#F17E13] px-2 py-1 rounded-full shadow flex items-center justify-center">
+                  {/* <div className="flex mt-2 md:mt-5 w-full justify-between p-1 mb-2">
+                    <div className="w-full cursor-pointer font-semibold text-[9px] md:text-[0.7em] border border-[#F17E13] p-1 rounded-full shadow flex items-center justify-center">
                       Add to Cart
                     </div>
-                    <div className="cursor-pointer font-semibold text-[0.6em] bg-[#F17E13] text-white px-2 py-1 rounded-full shadow flex items-center justify-center">
+                    <div className="w-full cursor-pointer font-semibold text-[9px] md:text-[0.7em] bg-[#F17E13] text-white p-1 rounded-full shadow flex items-center justify-center">
                       Buy Now
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             );

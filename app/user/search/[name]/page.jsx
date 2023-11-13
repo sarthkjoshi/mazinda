@@ -41,15 +41,15 @@ const SearchPage = ({ params }) => {
                   <Link href={`/product/view-product?id=${product._id}`} className="px-2 py-1 flex items-center justify-center cursor-pointer">
                     <img
                       className="rounded-lg w-full"
-                      src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/${product.imageNames[0]}`}
+                      src={product.imagePaths[0]}
                       alt="product"
                     />
                   </Link>
 
                   <div>
                     <Link href={`/product/view-product?id=${product._id}`} className="px-2 py-1 flex mt-2 justify-between">
-                      <span className="cursor-pointer text-[12px] font-bold mx-1">
-                        {product.productName.slice(0, 20)}...
+                      <span className="cursor-pointer text-sm mx-1">
+                        {product.productName.slice(0, 25)}...
                       </span>
 
                       <div className="flex flex-col ml-2">
@@ -62,14 +62,14 @@ const SearchPage = ({ params }) => {
                       </div>
                     </Link>
 
-                    <div className="flex mt-2 md:mt-5 w-full justify-between p-1 mb-2">
+                    {/* <div className="flex mt-2 md:mt-5 w-full justify-between p-1 mb-2">
                       <div className="w-full cursor-pointer font-semibold text-[9px] md:text-[0.7em] border border-[#F17E13] p-1 rounded-full shadow flex items-center justify-center">
                         Add to Cart
                       </div>
                       <div className="w-full cursor-pointer font-semibold text-[9px] md:text-[0.7em] bg-[#F17E13] text-white p-1 rounded-full shadow flex items-center justify-center">
                         Buy Now
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               );

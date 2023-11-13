@@ -26,14 +26,14 @@ const TrendingPage = () => {
   return (
     <>
       <h1 className="ml-5 text-lg font-bold">Trending Now</h1>
-      <div className="flex overflow-y-scroll">
+      <div className="flex overflow-x-auto">
         {!pageLoading ? (
-          products.map((product) => {
-            return (
+          <div className="flex">
+            {products.map((product) => (
               <Link
                 key={product._id}
                 href={`/product/view-product?id=${product._id}`}
-                className="p-2 m-2 rounded-md border shadow w-2/5 md:w-fit"
+                className="p-2 m-2 rounded-md border shadow w-[150px] md:w-[200px]"
               >
                 <div className="flex items-center justify-center cursor-pointer">
                   <img
@@ -58,8 +58,8 @@ const TrendingPage = () => {
                   </div>
                 </div>
               </Link>
-            );
-          })
+            ))}
+          </div>
         ) : (
           <div className="flex overflow-y-scroll">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
