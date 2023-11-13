@@ -61,7 +61,8 @@ const Navbar = () => {
         // Setting location info in cookies
         Cookies.set(
           "selectedLocation",
-          JSON.stringify(response.data.locations[0])
+          JSON.stringify(response.data.locations[0]),
+          { expires: 1000 }
         );
       }
 
@@ -231,7 +232,8 @@ const Navbar = () => {
                                         onClick={() => {
                                           Cookies.set(
                                             "selectedLocation",
-                                            JSON.stringify(location)
+                                            JSON.stringify(location),
+                                            { expires: 1000 }
                                           );
                                           setSelectedLocation(location.city);
                                           setShowLocationDropbox(false);
