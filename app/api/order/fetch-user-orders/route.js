@@ -22,11 +22,11 @@ export async function POST(req) {
         let orders;
 
         if (filter === 'delivered') {
-            orders = await Order.find({ isDelivered: true });
+            orders = await Order.find({ userId: user._id, isDelivered: true });
         } else if (filter === 'active') {
-            orders = await Order.find({ isDelivered: false });
+            orders = await Order.find({ userId: user._id, isDelivered: false });
         } else {
-            orders = await Order.find();
+            orders = await Order.find({ userId: user._id });
         }
 
         return NextResponse.json({ success: true, message: "Current orders fetched successfully", orders });
