@@ -195,11 +195,11 @@ const LoginPage = () => {
         <footer className="text-center text-gray-500">
           &copy; 20xx-20xx All Rights Reserved
           <div>
-            <Link className="font-bold text-black underline" href="#">
+            <Link className="font-bold text-black underline" href="/privacy-policy">
               privacy
             </Link>{" "}
             and{" "}
-            <Link className="font-bold text-black underline" href="#">
+            <Link className="font-bold text-black underline" href="/terms-and-conditions">
               terms
             </Link>
           </div>
