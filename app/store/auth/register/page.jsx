@@ -99,13 +99,13 @@ const RegisterStorePage = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="storeAddress" className="block font-bold mb-1">
+            <label htmlFor="address" className="block font-bold mb-1">
               Store Address
             </label>
             <input
               type="text"
-              id="storeAddress"
-              name="storeAddress"
+              id="address"
+              name="address"
               className="w-full px-5 py-1 border rounded-full"
               placeholder="Enter store address"
               value={formData.address}
