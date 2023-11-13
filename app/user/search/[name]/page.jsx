@@ -54,7 +54,7 @@ const SearchPage = ({ params }) => {
 
                       <div className="flex flex-col ml-2">
                         <span className="font-bold self-end text-[15px]">
-                          ₹{product.pricing.costPrice}
+                          ₹{product.pricing.salesPrice}
                         </span>
                         <span className="text-[10px] line-through text-gray-500 self-end">
                           ₹{product.pricing.mrp}
