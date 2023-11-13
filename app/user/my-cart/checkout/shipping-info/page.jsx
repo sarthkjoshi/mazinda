@@ -288,19 +288,21 @@ const ShippingInfo = () => {
               <div>
                 {savedAddresses && savedAddresses.length ? (
                   <div>
+                    <div className="min-h-[55vh]">
+
                     {savedAddresses.map((address) => {
                       const isSelected =
-                        selectedAddress && selectedAddress.id === address.id; // Perform null check
-
+                      selectedAddress && selectedAddress.id === address.id; // Perform null check
+                      
                       return (
                         <div
-                          className={`border my-2 rounded-2xl p-4 ${
-                            isSelected
-                              ? "border-[#FE6321] bg-[#FE6321] bg-opacity-10"
-                              : ""
-                          }`}
-                          key={address.id}
-                          onClick={() => handleAddressClick(address)}
+                        className={`border my-2 rounded-2xl p-4 ${
+                          isSelected
+                          ? "border-[#FE6321] bg-[#FE6321] bg-opacity-10"
+                          : ""
+                        }`}
+                        key={address.id}
+                        onClick={() => handleAddressClick(address)}
                         >
                           <h1 className="text-xl">{address.name}</h1>
                           <div className="text-sm text-gray-600">
@@ -318,12 +320,13 @@ const ShippingInfo = () => {
                         </div>
                       );
                     })}
+                    </div>
 
                     {!expandedNewAddress && (
                       <div className="w-full flex items-center justify-center">
                         <Link
                           href="/user/my-cart/checkout"
-                          className="absolute bottom-20 bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75"
+                          className="bg-[#FE6321] px-10 py-2 rounded-3xl text-white font-bold hover:opacity-75"
                         >
                           Continue to Checkout
                         </Link>
