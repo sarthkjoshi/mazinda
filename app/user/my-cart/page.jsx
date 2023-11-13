@@ -94,6 +94,7 @@ const MyCart = () => {
                 ) : (
                   cart.length > 0 &&
                   cart.map((item) => {
+                    console.log(item);
                     return (
                       <div
                         className="flex mt-3 border rounded-lg h-24 p-2 items-center shadow-md mx-2 relative"
@@ -139,7 +140,7 @@ const MyCart = () => {
                         />
                         <div className="flex flex-col ml-2">
                           <span className="text-sm font-semibold">
-                            {item.productName}
+                            {item.productName.slice(0,60)}...
                           </span>
                           <div className="text-gray-600">
                             Rs {item.salesPrice}/-

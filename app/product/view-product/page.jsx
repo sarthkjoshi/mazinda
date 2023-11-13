@@ -24,6 +24,7 @@ const ViewProduct = () => {
   const [cart, setCart] = useState([]);
   const [isProductInCart, setIsProductInCart] = useState(false);
   const [addingItemToCartLoading, setAddingItemToCartLoading] = useState(false);
+  const [buyItemLoading, setBuyItemLoading] = useState(false)
 
   const fetchProduct = async (id) => {
     const response = await axios.post("/api/product/fetch-product-by-id", {
@@ -77,6 +78,27 @@ const ViewProduct = () => {
     setAddingItemToCartLoading(false);
   };
 
+  const handleBuyNow = async (product) => {
+    setBuyItemLoading(true)
+    const userToken = Cookies.get("user_token");
+    if (userToken) {
+      try {
+        const response = await axios.post("/api/user/cart/buy-item", {
+          itemInfo: product,
+          userToken,
+        });
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+      router.push("/user/my-cart/checkout");
+      setBuyItemLoading(false)
+    } else {
+      toast.info("Log in to buy the product");
+      router.push("/user/auth/login");
+    }
+  };
+
   // Check if product and pricing are defined
   const isProductDefined = Object.keys(product).length > 0;
   const isPricingDefined = isProductDefined && product.pricing;
@@ -128,15 +150,12 @@ const ViewProduct = () => {
 
             {isProductDefined ? (
               <div className="mt-4 w-full flex justify-center">
-                <Link
-                  onClick={() => {
-                    handleAddToCart(product);
-                  }}
-                  href="/user/my-cart"
-                  className="bg-[#F17E13] px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold"
+                <button
+                  onClick={() => handleBuyNow(product)}
+                  className={`${!buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"} px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold transition-all duration-300`}
                 >
-                  Buy Now
-                </Link>
+                  {!buyItemLoading ? "Buy Now" : "Redirecting..."}
+                </button>
 
                 {!isProductInCart ? (
                   <button

@@ -129,7 +129,7 @@ const ShippingInfo = () => {
   }, []);
 
   return (
-    <div className="w-1/2 lg:w-1/3 mx-auto">
+    <div className="md:w-1/2 lg:w-1/3 mx-auto">
       <h1 className="text-center text-2xl">Shipping Info</h1>
       <div>
         {!pageLoading ? (

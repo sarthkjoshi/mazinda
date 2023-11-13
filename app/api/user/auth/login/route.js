@@ -22,6 +22,9 @@ export async function POST(req) {
         });
 
         if (user) {
+            if(!user.password) {
+                return NextResponse.json({ success: false, message: "Email already in use" });
+            }
             // Decrypting the password and matching it against the user's password
             const decryptedPassword = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8)
 
