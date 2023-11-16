@@ -11,39 +11,46 @@ import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 import AuthScreenPNG from "@/public/auth_screen.png";
 import { signIn, useSession } from "next-auth/react";
+import ThreeDotsLoader from "@/components/utility/ThreeDotsLoader";
 
 const LoginPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  useEffect(() => {
-    const token = Cookies.get("user_token");
+  const [loading, setLoading] = useState(true);
 
-    if (token) {
-      router.push("/");
-    } else if (session?.status === "authenticated" && !token) {
-      const handleContinueWithGoogle = async () => {
-        try {
-          const response = await axios.post("/api/auth/continue-with-google", {
-            name: session.user.name,
-            email: session.user.email,
-          });
+  const handleContinueWithGoogle = async () => {
+    try {
+      const response = await axios.post("/api/auth/continue-with-google", {
+        name: session.user.name,
+        email: session.user.email,
+      });
 
-          const { success, token: userToken, message } = response.data;
+      const { success, token: userToken, message } = response.data;
 
-          if (success) {
-            Cookies.set("user_token", userToken, { expires: 1000 });
-            router.push("/");
-          } else {
-            toast.warn(message, { autoClose: 3000 });
-          }
-        } catch (error) {
-          console.error("An error occurred during Continue with Google:", error);
-        }
-      };
-
-      handleContinueWithGoogle();
+      if (success) {
+        Cookies.set("user_token", userToken, { expires: 1000 });
+        router.push("/");
+      } else {
+        toast.warn(message, { autoClose: 3000 });
+      }
+    } catch (error) {
+      console.error("An error occurred during Continue with Google:", error);
     }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      const token = Cookies.get("user_token");
+      if (token) {
+        router.push("/");
+      } else if (session && !token) {
+        await handleContinueWithGoogle();
+      }
+      setLoading(false);
+    };
+
+    loadData();
   }, [session]);
 
   const [submitting, setSubmitting] = useState(false);
@@ -65,12 +72,14 @@ const LoginPage = () => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post("/api/user/auth/login", { credentials });
+      const response = await axios.post("/api/user/auth/login", {
+        credentials,
+      });
 
       if (response.data.success) {
         const { user_token } = response.data;
         Cookies.set("user_token", user_token, { expires: 1000 });
-        router.push("/");
+        await router.push("/");
       } else {
         toast.warn(response.data.message, { autoClose: 3000 });
       }
@@ -81,10 +90,18 @@ const LoginPage = () => {
     setSubmitting(false);
   };
 
-
   return (
     <div className="lg:flex">
-      <div className="flex flex-col items-center pt-6 min-h-screen lg:justify-center border lg:w-full">
+      {loading && (
+        <div className="absolute w-full h-full z-50 bg-gray-700 bg-opacity-50 flex items-center justify-center">
+          <ThreeDotsLoader />
+        </div>
+      )}
+      <div
+        className={`flex flex-col items-center pt-6 min-h-screen lg:justify-center border lg:w-full ${
+          loading ? "pointer-events-none" : null
+        }`}
+      >
         <Image
           className="lg:hidden"
           src={MazindaLogoFull}
@@ -194,12 +211,20 @@ const LoginPage = () => {
         </div>
         <footer className="text-center text-gray-500">
           &copy; 20xx-20xx All Rights Reserved
+          <br />
+          Mazinda Commerce Private Limited
           <div>
-            <Link className="font-bold text-black underline" href="/privacy-policy">
+            <Link
+              className="font-bold text-black underline"
+              href="/privacy-policy"
+            >
               privacy
             </Link>{" "}
             and{" "}
-            <Link className="font-bold text-black underline" href="/terms-and-conditions">
+            <Link
+              className="font-bold text-black underline"
+              href="/terms-and-conditions"
+            >
               terms
             </Link>
           </div>

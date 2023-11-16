@@ -48,7 +48,7 @@ const RegisterPage = () => {
       Cookies.set("user_token", token, { expires: 1000 });
       router.push("/");
     } else {
-      toast.error(response.data.message, {autoClose: 3000});
+      toast.error(response.data.message, { autoClose: 3000 });
     }
     setSubmitting(false);
   };
@@ -186,12 +186,20 @@ const RegisterPage = () => {
         </div>
         <footer className="text-center text-gray-500">
           &copy; 20xx-20xx All Rights Reserved
+          <br />
+          Mazinda Commerce Private Limited
           <div>
-            <Link className="font-bold text-black underline" href="/privacy-policy">
+            <Link
+              className="font-bold text-black underline"
+              href="/privacy-policy"
+            >
               privacy
             </Link>{" "}
             and{" "}
-            <Link className="font-bold text-black underline" href="/terms-and-conditions">
+            <Link
+              className="font-bold text-black underline"
+              href="/terms-and-conditions"
+            >
               terms
             </Link>
           </div>

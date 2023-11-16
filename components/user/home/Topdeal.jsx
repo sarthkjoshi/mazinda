@@ -14,10 +14,11 @@ const Topdeal = () => {
 
   const fetchData = async () => {
     let selectedLocation = Cookies.get('selectedLocation')
-    selectedLocation = JSON.parse(selectedLocation)
+    if (selectedLocation) {
+      selectedLocation = JSON.parse(selectedLocation)
+    }
 
     const availablePincodes = selectedLocation.pincodes;
-    console.log(availablePincodes)
 
     const response = await axios.post("/api/product/fetch-top-deal-products", { availablePincodes });
     if (response.data.success) {
