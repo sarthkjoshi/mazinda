@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 import Image from "next/image";
 import homepage_image_loading from "@/public/loading/homepage_image_loading.png";
@@ -12,7 +13,13 @@ const TrendingPage = () => {
   const [pageLoading, setPageLoading] = useState(true);
 
   const fetchData = async () => {
-    const response = await axios.post("/api/product/fetch-trending-products");
+    let selectedLocation = Cookies.get('selectedLocation')
+    selectedLocation = JSON.parse(selectedLocation)
+
+    const availablePincodes = selectedLocation.pincodes;
+    console.log(availablePincodes)
+
+    const response = await axios.post("/api/product/fetch-trending-products", { availablePincodes });
     if (response.data.success) {
       setProducts(response.data.products);
     }

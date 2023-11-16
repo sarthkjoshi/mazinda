@@ -2,26 +2,30 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import ProductsLoading from "@/components/user/loading/ProductsLoading";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const SearchPage = ({ params }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const product_name = decodeURIComponent(params.name);
   const [products, setProducts] = useState([]);
-  const router = useRouter();
+
+  const fetchData = async (searchQuery) => {
+    let selectedLocation = Cookies.get('selectedLocation')
+    selectedLocation = JSON.parse(selectedLocation)
+
+    const availablePincodes = selectedLocation.pincodes;
+
+    const response = await axios.post("/api/product/fetch-search-products", {
+      searchQuery, availablePincodes
+    });
+    setProducts(response.data.products);
+    setPageLoading(false);
+  };
 
   useEffect(() => {
-    const fetchProducts = async (searchQuery) => {
-      const response = await axios.post("/api/product/fetch-search-products", {
-        searchQuery,
-      });
-      setProducts(response.data.products);
-      setPageLoading(false);
-    };
-
-    fetchProducts(product_name);
+    fetchData(product_name);
   }, []);
 
   return (

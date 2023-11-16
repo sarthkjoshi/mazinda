@@ -1,16 +1,30 @@
 import Product from "@/models/Product";
+import Store from "@/models/Store";
 import connectDB from "@/libs/mongoose";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-    const { searchQuery } = await req.json();
+    const { searchQuery, availablePincodes } = await req.json();
 
     try {
         await connectDB();
 
+        // Find stores with matching pincodes
+        const stores = await Store.find({ 'storeAddress.pincode': { $in: availablePincodes } });
+
+        // Extract storeIds from the matching stores
+        const storeIds = stores.map(store => store._id);
+
+        // Fetch products based on approvalStatus and storeIds
+        const products = await Product.find({
+            approvalStatus: true,
+            storeId: { $in: storeIds },
+        }).exec();
+
+
         const lowercaseSearchQuery = searchQuery.toLowerCase();
 
-        const products = await Product.find({ approvalStatus: true }).exec();
+        // const products = await Product.find({ approvalStatus: true }).exec();
 
         // Create two arrays to store products matching in 'productName' and 'description'
         const matchingName = [];

@@ -6,13 +6,20 @@ import Link from "next/link";
 
 import Image from "next/image";
 import homepage_image_loading from "@/public/loading/homepage_image_loading.png";
+import Cookies from "js-cookie";
 
 const Topdeal = () => {
   const [products, setProducts] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
 
   const fetchData = async () => {
-    const response = await axios.post("/api/product/fetch-top-deal-products");
+    let selectedLocation = Cookies.get('selectedLocation')
+    selectedLocation = JSON.parse(selectedLocation)
+
+    const availablePincodes = selectedLocation.pincodes;
+    console.log(availablePincodes)
+
+    const response = await axios.post("/api/product/fetch-top-deal-products", { availablePincodes });
     if (response.data.success) {
       setProducts(response.data.products);
     }
