@@ -2,7 +2,7 @@ import Location from "@/models/Location";
 import connectDB from "@/libs/mongoose";
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export async function GET() {
     try {
         await connectDB()
 
