@@ -98,7 +98,7 @@ const Navbar = () => {
   return (
     <>
       {!pathname.includes("/store") && !pathname.includes("auth") && (
-        <nav className="bg-white border-gray-200 py-2">
+        <nav className="bg-white border-gray-200 py-2 rounded-b-lg">
           {showSearchBox && (
             <div className="fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-10" />
           )}
@@ -115,9 +115,8 @@ const Navbar = () => {
               />
             </Link>
 
-
             <div className="flex flex-col mx-1 md:relative items-center w-full">
-            {/* <Link href="/user/my-cart" className="hidden md:flex items-center mx-7 scale-90">
+              {/* <Link href="/user/my-cart" className="hidden md:flex items-center mx-7 scale-90">
               <span className="text-gray-600">Categories</span>
             </Link> */}
               <input

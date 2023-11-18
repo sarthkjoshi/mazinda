@@ -41,7 +41,7 @@ const Topdeal = () => {
               <Link
                 key={product._id}
                 href={`/product/view-product?id=${product._id}`}
-                className="p-2 m-2 rounded-md border shadow w-[150px] md:w-[200px]"
+                className="p-2 m-2 rounded-md border shadow w-[150px] md:w-[200px] bg-white"
               >
                 <div className="flex items-center justify-center cursor-pointer">
                   <img
