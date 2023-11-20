@@ -17,6 +17,16 @@ import SearchSVG from "@/public/svg/Search";
 import LocationSVG from "@/public/svg/Location";
 import { useLocation, useUpdateLocation } from "@/contexts/LocationContext";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 const Navbar = () => {
   const pathname = usePathname();
 
@@ -182,8 +192,7 @@ const Navbar = () => {
                 <span className="text-gray-600 text-[9px] md:text-sm">
                   Deliver to
                 </span>
-                <span className="text-gray-600 text-sm md:text-lg">
-                  <span className="">
+                {/* <div className="text-gray-600 text-sm md:text-lg">
                     <span
                       className="flex items-center cursor-pointer"
                       onClick={() =>
@@ -239,8 +248,61 @@ const Navbar = () => {
                         </div>
                       </div>
                     )}
-                  </span>
-                </span>
+                </div> */}
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <span
+                      className="flex items-center cursor-pointer text-gray-600"
+                      onClick={() =>
+                        setShowLocationDropbox(!showLocationDropbox)
+                      }
+                    >
+                      {selectedLocation.city
+                        ? selectedLocation.city
+                        : "Fetching..."}
+                      <svg
+                        className="w-2 h-2 text-gray-800 dark:text-white ml-1"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 8"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+                        />
+                      </svg>
+                    </span>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="min-w-44 p-0 rounded-xl">
+                    <DropdownMenuLabel className="bg-[#f17e13] rounded-t-lg text-center text-white py-2 px-4">
+                      Select Your City
+                    </DropdownMenuLabel>
+                    <DropdownMenuRadioGroup value={selectedLocation.city}>
+                      {!locationLoading ? (
+                        locations.map((location) => {
+                          return (
+                            <DropdownMenuRadioItem
+                              key={location._id}
+                              value={location.city}
+                              onClick={() => handleCityClick(location)}
+                            >
+                              {location.city}
+                            </DropdownMenuRadioItem>
+                          );
+                        })
+                      ) : (
+                        <div className="bg-white py-2 rounded-b-lg">
+                          <OvalLoader />
+                        </div>
+                      )}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>
