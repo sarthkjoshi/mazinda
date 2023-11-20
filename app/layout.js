@@ -8,6 +8,7 @@ import Navbar from '@/components/user/Navbar'
 import BottomNavigationBar from '@/components/user/BottomNavigationBar'
 import NextTopLoader from 'nextjs-toploader';
 import Authprovider from '@/components/Authprovider/Authprovider';
+import LocationProvider from '@/contexts/LocationContext';
 
 const quicksand = Quicksand({
   weight: '500',
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </Head>
       <body>
+
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -41,13 +43,19 @@ export default function RootLayout({ children }) {
           theme="light"
         />
 
-        <Authprovider>
-          <Navbar />
-          <NextTopLoader color="#F17E13" showSpinner={false} />
-          {children}
+        <LocationProvider>
 
-          <BottomNavigationBar />
-        </Authprovider>
+          <Authprovider>
+
+            <Navbar />
+            <NextTopLoader color="#F17E13" showSpinner={false} />
+            {children}
+
+            <BottomNavigationBar />
+            
+          </Authprovider>
+
+        </LocationProvider>
       </body>
     </html>
   )

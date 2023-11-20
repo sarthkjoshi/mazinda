@@ -10,12 +10,15 @@ import phonepesvg from "@/public/phonepe-1.svg";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import OvalLoader from "@/components/utility/OvalLoader";
+import { useLocation } from "@/contexts/LocationContext";
 
-const Checkout = () => {
+const CheckoutPage = () => {
   const router = useRouter();
 
   const [cartLoading, setCartLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  const selectedLocation = useLocation();
 
   const [user, setUser] = useState({});
   const [cart, setCart] = useState([]);
@@ -31,24 +34,14 @@ const Checkout = () => {
     const cart = user.cart;
     const pricing = user.pricing;
     const currentAddress = user.currentAddress;
-
     setUser(user);
-
-    let selectedLocation;
-
-    try {
-      selectedLocation = JSON.parse(Cookies.get("selectedLocation"));
-    } catch (err) {
-      console.log(err);
-    }
 
     if (cart.length) {
       setCart(cart);
       setPricing(pricing);
       setCartLoading(false);
-      console.log(selectedLocation);
       if (currentAddress && Object.keys(currentAddress).length > 0) {
-        if (selectedLocation.pincodes.includes(currentAddress.pincode)) {
+        if (selectedLocation && selectedLocation.pincodes && selectedLocation.pincodes.includes(currentAddress.pincode)) {
           setShippingAddress(currentAddress);
         } else {
           router.push("/user/my-cart/checkout/shipping-info");
@@ -307,4 +300,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default CheckoutPage;

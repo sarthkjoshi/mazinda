@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
     const { availablePincodes } = await req.json();
+    
     try {
         await connectDB();
 

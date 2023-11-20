@@ -10,10 +10,12 @@ import OvalLoader from "../utility/OvalLoader";
 import Cookies from "js-cookie";
 
 import Image from "next/image";
+
 import CartSVG from "@/public/svg/Cart";
 import ProfileSVG from "@/public/svg/Profile";
 import SearchSVG from "@/public/svg/Search";
 import LocationSVG from "@/public/svg/Location";
+import { useLocation, useUpdateLocation } from "@/contexts/LocationContext";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -25,9 +27,11 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [locationLoading, setLocationLoading] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState("");
   const [locations, setLocations] = useState([]);
   const [showLocationDropbox, setShowLocationDropbox] = useState(false);
+
+  const selectedLocation = useLocation();
+  const updateLocation = useUpdateLocation();
 
   const fetchProducts = async (searchQuery) => {
     let selectedLocation = Cookies.get("selectedLocation");
@@ -47,30 +51,6 @@ const Navbar = () => {
     try {
       const response = await axios.get("/api/location/fetch-locations");
       setLocations(response.data.locations);
-
-      let selectedLocation;
-
-      try {
-        selectedLocation = Cookies.get("selectedLocation");
-        selectedLocation = JSON.parse(selectedLocation);
-      } catch (e) {
-        console.log(e);
-      }
-
-      if (selectedLocation) {
-        setSelectedLocation(selectedLocation.city);
-      } else {
-        // If no selected location in cookies, set the first location as default
-        setSelectedLocation(response.data.locations[0].city);
-
-        // Setting location info in cookies
-        Cookies.set(
-          "selectedLocation",
-          JSON.stringify(response.data.locations[0]),
-          { expires: 1000 }
-        );
-      }
-
       setLocationLoading(false);
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -79,12 +59,8 @@ const Navbar = () => {
   };
 
   const handleCityClick = (locationInfo) => {
-    Cookies.set("selectedLocation", JSON.stringify(locationInfo), {
-      expires: 1000,
-    });
-    setSelectedLocation(locationInfo.city);
+    updateLocation(locationInfo);
     setShowLocationDropbox(false);
-    location.reload();
   };
 
   useEffect(() => {
@@ -202,44 +178,46 @@ const Navbar = () => {
             <div className="flex md:scale-95">
               <LocationSVG />
 
-              <div className="flex flex-col min-w-[100px]">
+              <div className="flex flex-col w-[120px]">
                 <span className="text-gray-600 text-[9px] md:text-sm">
                   Deliver to
                 </span>
                 <span className="text-gray-600 text-sm md:text-lg">
-                  {!locationLoading ? (
-                    <span className="">
-                      <span
-                        className="flex items-center cursor-pointer"
-                        onClick={() =>
-                          setShowLocationDropbox(!showLocationDropbox)
-                        }
+                  <span className="">
+                    <span
+                      className="flex items-center cursor-pointer"
+                      onClick={() =>
+                        setShowLocationDropbox(!showLocationDropbox)
+                      }
+                    >
+                      {selectedLocation.city
+                        ? selectedLocation.city
+                        : "Fetching..."}
+                      <svg
+                        className="w-2 h-2 text-gray-800 dark:text-white ml-1"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 8"
                       >
-                        {selectedLocation}
-                        <svg
-                          className="w-2 h-2 text-gray-800 dark:text-white ml-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 14 8"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
-                          />
-                        </svg>
-                      </span>
-                      {showLocationDropbox && (
-                        <div className="absolute mt-2 right-2 z-50">
-                          <div className="border shadow rounded-xl flex flex-col items-center md:w-40">
-                            <span className="bg-[#f17e13] text-white w-full text-center rounded-t-lg p-2 px-5 md:text-[0.8em]">
-                              Select Your City
-                            </span>
-                            <ul className="w-full">
-                              {locations.map((location) => {
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+                        />
+                      </svg>
+                    </span>
+                    {showLocationDropbox && (
+                      <div className="absolute mt-2 right-2 z-50">
+                        <div className="border shadow rounded-xl flex flex-col items-center md:w-40">
+                          <span className="bg-[#f17e13] text-white w-full text-center rounded-t-lg p-2 px-5 md:text-[0.8em]">
+                            Select Your City
+                          </span>
+                          <ul className="w-full">
+                            {!locationLoading ? (
+                              locations.map((location) => {
                                 return (
                                   <React.Fragment key={location._id}>
                                     <li
@@ -251,17 +229,17 @@ const Navbar = () => {
                                     <hr />
                                   </React.Fragment>
                                 );
-                              })}
-                            </ul>
-                          </div>
+                              })
+                            ) : (
+                              <div className="bg-white py-2 rounded-b-lg">
+                                <OvalLoader />
+                              </div>
+                            )}
+                          </ul>
                         </div>
-                      )}
-                    </span>
-                  ) : (
-                    <div className="scale-50 md:scale-90">
-                      <OvalLoader />
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </span>
                 </span>
               </div>
             </div>
