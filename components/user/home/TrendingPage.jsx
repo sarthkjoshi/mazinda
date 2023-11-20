@@ -37,7 +37,7 @@ const TrendingPage = () => {
   if (pageLoading) {
     return (
       <>
-        <h1 className="ml-5 text-lg font-bold">Trending Now</h1>
+        <h1 className="ml-5 text-lg font-semibold">Trending Now</h1>
         <div className="flex overflow-y-scroll">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
             return (
@@ -53,7 +53,7 @@ const TrendingPage = () => {
 
   return (
     <>
-      <h1 className="ml-5 text-lg font-bold">Trending Now</h1>
+      <h1 className="ml-5 text-lg font-semibold">Trending Now</h1>
       <div className="flex overflow-x-auto">
         <div className="flex">
           {products.map((product) => (

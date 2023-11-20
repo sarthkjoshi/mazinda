@@ -36,7 +36,7 @@ const Topdeal = () => {
   if (pageLoading) {
     return (
       <>
-      <h1 className="ml-5 text-lg font-bold">Top Deals</h1>
+      <h1 className="ml-5 text-lg font-semibold">Top Deals</h1>
       <div className="flex overflow-y-scroll">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
           return (
@@ -52,7 +52,7 @@ const Topdeal = () => {
 
   return (
     <>
-      <h1 className="ml-5 text-lg font-bold">Top Deals</h1>
+      <h1 className="ml-5 text-lg font-semibold">Top Deals</h1>
       <div className="flex overflow-x-auto">
         <div className="flex">
           {products.map((product) => (
