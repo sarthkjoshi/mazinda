@@ -18,6 +18,7 @@ const LoginPage = () => {
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(true);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleContinueWithGoogle = async () => {
     try {
@@ -178,8 +179,13 @@ const LoginPage = () => {
 
             <div>
               <button
-                className="mt-2 w-full justify-center px-4 py-2 border flex gap-2 border-slate-200 rounded-full text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
-                onClick={() => signIn("google")}
+                className={`mt-2 w-full justify-center px-4 py-2 border flex gap-2 border-slate-200 rounded-full text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150 ${
+                  googleLoading ? "filter grayscale" : null
+                }`}
+                onClick={() => {
+                  setGoogleLoading(true);
+                  signIn("google");
+                }}
               >
                 <img
                   className="w-6 h-6"
@@ -187,13 +193,12 @@ const LoginPage = () => {
                   loading="lazy"
                   alt="google logo"
                 />
-                <span>Continue with Google</span>
+                <span>{googleLoading ? "Redirecting Securely ..." : "Continue with Google"}</span>
               </button>
 
               <Link
                 href="/"
-                className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
-                onClick={() => {}}
+                className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
               >
                 <svg
                   className="w-6 h-6 text-white"

@@ -5,17 +5,23 @@ import Cookies from "js-cookie";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import Link from "next/link";
 
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
+
+import { Skeleton } from "@/components/ui/skeleton";
+
 import Image from "next/image";
-import ImageLoading from "@/public/loading/ImageLoading.png";
 import PriceLoading from "@/public/loading/PricingLoading.png";
 import ButtonLoading from "@/public/loading/ButtonLoading.png";
 import SmallRectangleLoading from "@/public/loading/SmallRectangleLoading.png";
 import Carousel from "@/components/utils/Carousel";
 
 const ViewProduct = () => {
+  const { toast } = useToast()
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const product_id = searchParams.get("id");
@@ -72,8 +78,13 @@ const ViewProduct = () => {
         console.log("An error occurred", err);
       }
     } else {
-      toast.info("Log in to customize your cart.");
-      router.push("/user/auth/login");
+      // toast.info("Log in to customize your cart.");
+      toast({
+        title: "New to Mazinda?",
+        description: "Login now to customize your cart and experience shopping like never before!",
+        action: <ToastAction altText="Try again" onClick={() => router.push("/user/auth/login")}>Login</ToastAction>,
+      })
+      // router.push("/user/auth/login");
     }
     setAddingItemToCartLoading(false);
   };
@@ -118,7 +129,7 @@ const ViewProduct = () => {
             </div>
           ) : (
             <div className="w-full flex justify-center">
-              <Image src={ImageLoading} alt="" />
+              <Skeleton className="w-full h-[40vh] md:h-[54vh] mt-10 mb-2 mx-5 md:m-2 rounded-lg" />
             </div>
           )}
         </div>
@@ -173,7 +184,7 @@ const ViewProduct = () => {
                     href="/user/my-cart"
                     className="cursor-pointer bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
                   >
-                    ✔ Added to Cart
+                    Added to Cart
                   </Link>
                 )}
               </div>

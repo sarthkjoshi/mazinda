@@ -9,6 +9,7 @@ import BottomNavigationBar from '@/components/user/BottomNavigationBar'
 import NextTopLoader from 'nextjs-toploader';
 import Authprovider from '@/components/Authprovider/Authprovider';
 import LocationProvider from '@/contexts/LocationContext';
+import { Toaster } from "@/components/ui/toaster"
 
 const quicksand = Quicksand({
   weight: '500',
@@ -56,6 +57,8 @@ export default function RootLayout({ children }) {
           </Authprovider>
 
         </LocationProvider>
+
+        <Toaster />
       </body>
     </html>
   )
