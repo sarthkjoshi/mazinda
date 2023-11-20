@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-import Image from "next/image";
-import homepage_image_loading from "@/public/loading/homepage_image_loading.png";
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 
@@ -36,26 +35,24 @@ const Topdeal = () => {
 
   if (pageLoading) {
     return (
+      <>
+      <h1 className="ml-5 text-lg font-bold">Top Deals</h1>
       <div className="flex overflow-y-scroll">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
           return (
-            <Image
-              src={homepage_image_loading}
-              key={num}
-              className="m-2"
-              alt="loading"
-              width={128}
-              aria-label="Loading"
-            />
+            <div key={num}>
+              <Skeleton className="w-[150px] h-[208px] md:w-[200px] md:h-[240px] m-2 rounded-lg" />
+            </div>
           );
         })}
       </div>
+        </>
     );
   }
 
   return (
     <>
-      <h1 className="ml-5 text-lg font-bold">Trending Now</h1>
+      <h1 className="ml-5 text-lg font-bold">Top Deals</h1>
       <div className="flex overflow-x-auto">
         <div className="flex">
           {products.map((product) => (

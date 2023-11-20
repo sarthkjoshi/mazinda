@@ -17,7 +17,7 @@ const Home = () => {
       <div className="my-5">
         <TrendingPage />
       </div>
-      <Link href="/store">
+      <Link href="https://store.mazinda.com">
         <img src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/banner_end.JPG`} alt="" />
       </Link>
     </div>

@@ -13,10 +13,13 @@ import { fetchUserCart, removeItemFromCart } from "@/utils/cart";
 import FallingLinesLoader from "@/components/utility/FallingLinesLoader";
 import axios from "axios";
 
+import { Skeleton } from "@/components/ui/skeleton"
+
 const MyCart = () => {
   const [cart, setCart] = useState([]);
   const [userToken, setUserToken] = useState(null);
   const [cartLoading, setCartLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
 
   const [pricing, setPricing] = useState({
     total_mrp: 0,
@@ -76,9 +79,23 @@ const MyCart = () => {
       setCart(cart);
       setCartLoading(false);
       fetchPricing(cart);
+      setPageLoading(false);
     };
     fetchData();
   }, []);
+
+  if (pageLoading) {
+    return (
+      <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
+        <h1 className="text-center text-2xl md:mb-10">Your Shopping Cart</h1>
+        <div className="px-5 py-3">
+
+        <Skeleton className="w-full my-3 h-[96px] md:w-[488px] md:h-[96px] md:my-2 rounded-lg" />
+        <Skeleton className="w-full my-3 h-[178px] md:w-[488px] md:h-[178px] md:my-2 rounded-lg" />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="md:w-1/2 lg:w-1/3 md:mx-auto">

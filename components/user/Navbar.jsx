@@ -178,7 +178,7 @@ const Navbar = () => {
             <div className="flex md:scale-95">
               <LocationSVG />
 
-              <div className="flex flex-col w-[120px]">
+              <div className="flex flex-col w-[90px] md:w-[120px]">
                 <span className="text-gray-600 text-[9px] md:text-sm">
                   Deliver to
                 </span>
