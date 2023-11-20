@@ -102,7 +102,7 @@ const MyAccount = () => {
       <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
         <h1 className="text-center text-2xl md:mb-7">My Account</h1>
 
-        <Accordion type="single" collapsible>
+        <Accordion type="single" className="mx-7" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>
               {userLoading ? (
@@ -111,7 +111,7 @@ const MyAccount = () => {
                 </div>
               ) : (
                 <div className="flex w-full flex-col">
-                  <span className="font-bold text-lg text-left">{user.name}</span>
+                  <span className="font-semibold text-lg text-left">{user.name}</span>
                   {user.phoneNumber && (
                     <span className="text-gray-500 text-sm flex">
                       <svg
