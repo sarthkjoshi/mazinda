@@ -192,75 +192,18 @@ const Navbar = () => {
                 <span className="text-gray-600 text-[9px] md:text-sm">
                   Deliver to
                 </span>
-                {/* <div className="text-gray-600 text-sm md:text-lg">
-                    <span
-                      className="flex items-center cursor-pointer"
-                      onClick={() =>
-                        setShowLocationDropbox(!showLocationDropbox)
-                      }
-                    >
-                      {selectedLocation.city
-                        ? selectedLocation.city
-                        : "Fetching..."}
-                      <svg
-                        className="w-2 h-2 text-gray-800 dark:text-white ml-1"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 8"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
-                        />
-                      </svg>
-                    </span>
-                    {showLocationDropbox && (
-                      <div className="absolute mt-2 right-2 z-50">
-                        <div className="border shadow rounded-xl flex flex-col items-center md:w-40">
-                          <span className="bg-[#f17e13] text-white w-full text-center rounded-t-lg p-2 px-5 md:text-[0.8em]">
-                            Select Your City
-                          </span>
-                          <ul className="w-full">
-                            {!locationLoading ? (
-                              locations.map((location) => {
-                                return (
-                                  <React.Fragment key={location._id}>
-                                    <li
-                                      className="cursor-pointer px-3 py-2 hover:bg-gray-100 text-center bg-white"
-                                      onClick={() => handleCityClick(location)}
-                                    >
-                                      {location.city}
-                                    </li>
-                                    <hr />
-                                  </React.Fragment>
-                                );
-                              })
-                            ) : (
-                              <div className="bg-white py-2 rounded-b-lg">
-                                <OvalLoader />
-                              </div>
-                            )}
-                          </ul>
-                        </div>
-                      </div>
-                    )}
-                </div> */}
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <span
-                      className="flex items-center cursor-pointer text-gray-600"
+                      className="flex items-center cursor-pointer text-gray-600 text-sm"
                       onClick={() =>
                         setShowLocationDropbox(!showLocationDropbox)
                       }
                     >
                       {selectedLocation.city
                         ? selectedLocation.city
-                        : "Fetching..."}
+                        : "Fetching.."}
                       <svg
                         className="w-2 h-2 text-gray-800 dark:text-white ml-1"
                         aria-hidden="true"
@@ -286,13 +229,17 @@ const Navbar = () => {
                       {!locationLoading ? (
                         locations.map((location) => {
                           return (
+                            <>
                             <DropdownMenuRadioItem
                               key={location._id}
                               value={location.city}
+                              className="py-2"
                               onClick={() => handleCityClick(location)}
-                            >
+                              >
                               {location.city}
                             </DropdownMenuRadioItem>
+                            <DropdownMenuSeparator className='m-0' />
+                              </>
                           );
                         })
                       ) : (
