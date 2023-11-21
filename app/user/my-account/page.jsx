@@ -16,53 +16,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const RightArrorSvg = () => {
-  return (
-    <svg
-      className="w-3 h-3 text-gray-800 dark:text-white"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 8 14"
-    >
-      <path
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
-      />
-    </svg>
-  );
-};
-
-const DownArrorSvg = () => {
-  return (
-    <svg
-      className="w-3 h-3 text-gray-800 dark:text-white"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 14 8"
-    >
-      <path
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
-      />
-    </svg>
-  );
-};
-
 const MyAccount = () => {
   const router = useRouter();
 
   const [userLoading, setUserLoading] = useState(true);
   const [user, setUser] = useState({});
-  const [userToken, setUserToken] = useState({});
-  const [currentOpenBox, setCurrentOpenBox] = useState("");
 
   const fetchData = async (userToken) => {
     try {
@@ -93,7 +51,6 @@ const MyAccount = () => {
       router.push("/user/auth/login");
       return;
     }
-    setUserToken(userToken);
     fetchData(userToken);
   }, []);
 
@@ -104,7 +61,7 @@ const MyAccount = () => {
 
         <Accordion type="single" className="mx-7" collapsible>
           <AccordionItem value="item-1">
-            <AccordionTrigger>
+            <AccordionTrigger className="hover:no-underline">
               {userLoading ? (
                 <div className="w-full flex items-center justify-center">
                   <OvalLoader />
@@ -164,7 +121,7 @@ const MyAccount = () => {
           </AccordionItem>
 
           <AccordionItem value="item-2">
-            <AccordionTrigger>
+            <AccordionTrigger className="hover:no-underline">
               <div className="flex flex-col">
                 <span className="text-lg text-left">Get Help</span>
                 <span className="text-gray-500 text-sm">
@@ -192,7 +149,7 @@ const MyAccount = () => {
           </AccordionItem>
 
           <AccordionItem value="item-3">
-            <AccordionTrigger>
+            <AccordionTrigger className="hover:no-underline">
               <div className="flex flex-col">
                 <span className="text-lg text-left">Current Orders</span>
                 <span className="text-gray-500 text-sm">
@@ -206,7 +163,7 @@ const MyAccount = () => {
           </AccordionItem>
 
           <AccordionItem value="item-4">
-            <AccordionTrigger>
+            <AccordionTrigger className="hover:no-underline">
               <div className="flex flex-col">
                 <span className="text-lg text-left">Order History</span>
                 <span className="text-gray-500 text-sm">

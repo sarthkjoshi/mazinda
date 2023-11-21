@@ -10,6 +10,7 @@ import OvalLoader from "../utility/OvalLoader";
 import Cookies from "js-cookie";
 
 import Image from "next/image";
+import LoadingCategoryImage from "@/public/LoadingCategory.png";
 
 import CartSVG from "@/public/svg/Cart";
 import ProfileSVG from "@/public/svg/Profile";
@@ -27,6 +28,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 const Navbar = () => {
   const pathname = usePathname();
 
@@ -39,6 +46,9 @@ const Navbar = () => {
   const [locationLoading, setLocationLoading] = useState(true);
   const [locations, setLocations] = useState([]);
   const [showLocationDropbox, setShowLocationDropbox] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   const selectedLocation = useLocation();
   const updateLocation = useUpdateLocation();
@@ -73,17 +83,29 @@ const Navbar = () => {
     setShowLocationDropbox(false);
   };
 
+  const fetchCategories = async () => {
+    const response = await axios.post("/api/category/fetch-categories");
+    if (response.data.success) {
+      const categories = response.data.categories;
+      setCategories(categories);
+    } else {
+      return <>Oops... Something Went Wrong !</>;
+    }
+    setCategoriesLoading(false);
+  };
+
   useEffect(() => {
     fetchLocations();
+    fetchCategories();
     const user_token = Cookies.get("user_token");
     if (user_token) {
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [pathname]);
 
   return (
     <>
-      {!pathname.includes("/store") && !pathname.includes("auth") && (
+      {!pathname.includes("auth") && (
         <nav className="bg-white border-gray-200 py-2 rounded-b-lg">
           {showSearchBox && (
             <div className="fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-10" />
@@ -101,10 +123,88 @@ const Navbar = () => {
               />
             </Link>
 
-            <div className="flex flex-col mx-1 md:relative items-center w-full">
-              {/* <Link href="/user/my-cart" className="hidden md:flex items-center mx-7 scale-90">
-              <span className="text-gray-600">Categories</span>
-            </Link> */}
+            <div className="flex mx-1 md:relative items-center w-full justify-evenly">
+              <div className="hidden md:block scale-90">
+                <Popover>
+                  <PopoverTrigger className="text-gray-600">
+                    Categories
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[100vw] mx-3 my-2 rounded-2xl">
+                    {!categoriesLoading ? (
+                      <div className="flex flex-wrap justify-center">
+                        {categories.map((category) => {
+                          return (
+                            <Link
+                              key={category._id}
+                              href={`/user/browse-categories/${category.categoryName}`}
+                              className="m-2 p-2 flex flex-col items-center cursor-pointer"
+                            >
+                              <img
+                                style={{ maxWidth: "60px", minWidth: "60px" }}
+                                src={category.categoryImage}
+                                alt={category.categoryName}
+                              />
+                              <span className="text-gray-600 font-bold">
+                                {category.categoryName}
+                              </span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex flex-wrap justify-center">
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                          <Image
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                        </div>
+                      </>
+                    )}
+                  </PopoverContent>
+                </Popover>
+              </div>
               <input
                 className="text-md rounded-full px-3 pr-6 py-[0.2em] md:py-[0.3em] md:px-6 w-full md:w-5/6 border-none bg-gray-100 md:bg-gray-50 text-gray-500 outline-[#f17e13] z-20"
                 type="text"
@@ -181,7 +281,7 @@ const Navbar = () => {
             >
               <ProfileSVG />
               <span className="text-gray-600">
-                {isLoggedIn ? "Profile" : "Login"}
+                {isLoggedIn ? "Account" : "Login"}
               </span>
             </Link>
 
@@ -229,17 +329,16 @@ const Navbar = () => {
                       {!locationLoading ? (
                         locations.map((location) => {
                           return (
-                            <>
-                            <DropdownMenuRadioItem
-                              key={location._id}
-                              value={location.city}
-                              className="py-2"
-                              onClick={() => handleCityClick(location)}
+                            <React.Fragment key={location._id}>
+                              <DropdownMenuRadioItem
+                                value={location.city}
+                                className="py-2"
+                                onClick={() => handleCityClick(location)}
                               >
-                              {location.city}
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuSeparator className='m-0' />
-                              </>
+                                {location.city}
+                              </DropdownMenuRadioItem>
+                              <DropdownMenuSeparator className="m-0" />
+                            </React.Fragment>
                           );
                         })
                       ) : (
@@ -258,8 +357,6 @@ const Navbar = () => {
 
       {pathname !== "/" && !pathname.includes("auth") && (
         <button
-          id="backBtn"
-          type="button"
           className="text-gray-600 rounded-md ml-2 hover:text-gray-700 focus:outline-none absolute md:hidden z-50"
           onClick={() => window.history.back()}
         >

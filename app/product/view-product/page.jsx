@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import { toast } from "react-toastify";
 import Link from "next/link";
 
 import { ToastAction } from "@/components/ui/toast"
@@ -78,13 +77,11 @@ const ViewProduct = () => {
         console.log("An error occurred", err);
       }
     } else {
-      // toast.info("Log in to customize your cart.");
       toast({
         title: "New to Mazinda?",
-        description: "Login now to customize your cart and experience shopping like never before!",
+        description: "Signup/Login now to customize your cart and experience shopping like never before!",
         action: <ToastAction altText="Try again" onClick={() => router.push("/user/auth/login")}>Login</ToastAction>,
       })
-      // router.push("/user/auth/login");
     }
     setAddingItemToCartLoading(false);
   };
@@ -103,7 +100,6 @@ const ViewProduct = () => {
         console.log(err);
       }
       router.push("/user/my-cart/checkout");
-      setBuyItemLoading(false)
     } else {
       toast.info("Log in to buy the product");
       router.push("/user/auth/login");

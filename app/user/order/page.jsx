@@ -1,6 +1,7 @@
 "use client";
 
 import MagnifyingLoader from "@/components/utility/MagnifyingLoader";
+import Link from 'next/link';
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -33,7 +34,7 @@ const Order = () => {
     fetchData();
   }, []);
   return (
-    <div className="w-1/2 lg:w-1/3 mx-auto">
+    <div className="md:w-1/2 lg:w-1/3 mx-auto px-2">
       <h1 className="text-center text-2xl md:mb-10">Your Order</h1>
       {!loading ? (
         <>
@@ -41,7 +42,7 @@ const Order = () => {
             {order.cart.length > 0 &&
               order.cart.map((item) => {
                 return (
-                  <div key={item.productID}>
+                  <Link href={`/product/view-product?id=${item.productID}`} key={item.productID}>
                     <div className="flex rounded-lg px-2 py-1 items-center mx-2 relative">
                       <img
                         className="w-14 h-auto"
@@ -58,7 +59,7 @@ const Order = () => {
                       </div>
                     </div>
                     <hr />
-                  </div>
+                  </Link>
                 );
               })}
           </div>

@@ -41,7 +41,11 @@ const CheckoutPage = () => {
       setPricing(pricing);
       setCartLoading(false);
       if (currentAddress && Object.keys(currentAddress).length > 0) {
-        if (selectedLocation && selectedLocation.pincodes && selectedLocation.pincodes.includes(currentAddress.pincode)) {
+        if (
+          selectedLocation &&
+          selectedLocation.pincodes &&
+          selectedLocation.pincodes.includes(currentAddress.pincode)
+        ) {
           setShippingAddress(currentAddress);
         } else {
           router.push("/user/my-cart/checkout/shipping-info");
@@ -69,9 +73,10 @@ const CheckoutPage = () => {
       return;
     }
     try {
+      const userToken = Cookies.get("user_token");
       setSubmitting(true);
       const response = await axios.post("/api/order/create-order", {
-        userToken: Cookies.get("user_token"),
+        userToken,
         storeId: cart[0]["storeID"],
         userCart: cart,
         pricing: user.pricing,
@@ -80,6 +85,11 @@ const CheckoutPage = () => {
       });
 
       if (response.data.success) {
+        // Clear the cart after placing the order
+        const response = await axios.post("/api/user/cart/clear-cart", {
+          userToken,
+        });
+        console.log(response);
         router.push("/user/my-cart/checkout/success");
       } else {
         toast.warn(response.data.message);
@@ -87,8 +97,6 @@ const CheckoutPage = () => {
     } catch (err) {
       console.log(err);
       toast.warn("Oops.. A network error occurred while placing the order");
-    } finally {
-      setSubmitting(false);
     }
   };
 

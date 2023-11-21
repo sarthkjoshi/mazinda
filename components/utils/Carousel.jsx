@@ -13,9 +13,10 @@ const Carousel = ({ arr }) => {
 
   return (
     <Slider {...settings}>
-      {arr.map((path) => {
+      {arr.map((path, index) => {
         return (
           <img
+            key={index}
             src={path}
             alt=""
             className="object-cover w-full h-full"

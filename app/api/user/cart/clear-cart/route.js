@@ -20,6 +20,7 @@ export async function POST(req) {
 
         if (user) {
             user.cart = [];
+            await user.save();
             return NextResponse.json({ success: true, message: "Cart cleared successfully" });
         } else {
             return NextResponse.json({ success: false, error: "User doesn't exist" });
