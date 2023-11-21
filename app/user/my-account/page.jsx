@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import OvalLoader from "@/components/utility/OvalLoader";
 import OrdersList from "@/components/user/OrdersList";
 import { signOut } from "next-auth/react";
+import { useToast } from "@/components/ui/use-toast"
 
 import {
   Accordion,
@@ -18,9 +19,17 @@ import {
 
 const MyAccount = () => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const [userLoading, setUserLoading] = useState(true);
   const [user, setUser] = useState({});
+
+  const [message, setMessage] = useState("");
+  const [messageSending, setMessageSending] = useState(false);
+
+  const onChange = (e) => {
+    setMessage(e.target.value);
+  }
 
   const fetchData = async (userToken) => {
     try {
@@ -130,21 +139,44 @@ const MyAccount = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <div
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setMessageSending(true);
+                  try {
+                    const { data } = await axios.post('/api/email/get-help', { message })
+                    console.log(data);
+                    if (data.success) {
+                      toast({
+                        description: "Your message has been sent.",
+                      })
+                    } else {
+                      toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: "There was a problem sending your message.",
+                      })
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  }
+                  setMessageSending(false);
+                }}
                 className="flex justify-center flex-col items-center"
                 onClick={(e) => e.stopPropagation()}
               >
                 <textarea
-                  className="rounded-md w-full border border-gray-300"
+                  className="rounded-md w-full border border-gray-300 p-2"
                   name="gethelpinput"
-                  id=""
-                  cols="30"
+                  value={message}
+                  onChange={onChange}
+                  cols="50"
                   rows="5"
-                ></textarea>
-                <button className="bg-[#F17E13] px-5 py-1 w-fit my-1 rounded-full font-bold text-white md:rounded-lg">
-                  Submit
+                 />
+                <button className={`px-5 py-1 w-fit my-1 rounded-full font-bold text-white md:rounded-lg transition-all duration-300 ${messageSending ? "bg-gray-400" : "bg-[#F17E13]"}`} type="submit">
+                  {!messageSending ? "Submit" : "Sending..."}
                 </button>
-              </div>
+              </form>
             </AccordionContent>
           </AccordionItem>
 

@@ -16,7 +16,7 @@ import Image from "next/image";
 import PriceLoading from "@/public/loading/PricingLoading.png";
 import ButtonLoading from "@/public/loading/ButtonLoading.png";
 import SmallRectangleLoading from "@/public/loading/SmallRectangleLoading.png";
-import Carousel from "@/components/utils/Carousel";
+import Carousel from "@/components/utility/Carousel";
 
 const ViewProduct = () => {
   const { toast } = useToast()
