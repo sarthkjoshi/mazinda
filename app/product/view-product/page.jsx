@@ -131,13 +131,13 @@ const ViewProduct = () => {
         </div>
 
         <div className="bg-gray-50 h-full p-4 rounded-3xl mt-5 flex flex-col items-center">
-          <span className="text-lg font-semibold">
+          <span className="text-2xl ">
             {isProductDefined ? product.productName : ""}
           </span>
           <div>
             <span className="text-[12px] text-gray-700">
               {isProductDefined ? (
-                "Price"
+                "Price:"
               ) : (
                 <Image className="mb-3" src={SmallRectangleLoading} alt="" />
               )}

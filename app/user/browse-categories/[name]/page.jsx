@@ -27,7 +27,7 @@ const page = ({ params }) => {
     return (
       <>
         <h1 className="text-center text-2xl">
-          Browse Category <br />{" "}
+          Browsing{" "}
           <span className="font-semibold">"{categoryName}"</span>
         </h1>
         <ProductsLoading />
@@ -38,7 +38,7 @@ const page = ({ params }) => {
   return (
     <div className="mb-20">
       <h1 className="text-center text-2xl">
-        Browse Category <br />{" "}
+        Browsing{" "}
         <span className="font-semibold">"{categoryName}"</span>
       </h1>
       <div className="flex flex-wrap mt-4 justify-center">

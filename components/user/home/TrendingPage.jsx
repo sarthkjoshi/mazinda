@@ -71,7 +71,7 @@ const TrendingPage = () => {
               </div>
 
               <div className="flex mt-2 justify-between items-center">
-                <span className="cursor-pointer text-[12px] font-bold mx-1">
+              <span className="cursor-pointer text-sm mx-1">
                   {product.productName.slice(0, 20)}...
                 </span>
 
