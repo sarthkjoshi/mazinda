@@ -185,7 +185,7 @@ const RegisterPage = () => {
           </div>
         </div>
         <footer className="text-center text-gray-500">
-          &copy; 20xx-20xx All Rights Reserved
+          &copy; 2023 All Rights Reserved
           <br />
           Mazinda Commerce Private Limited
           <div>
