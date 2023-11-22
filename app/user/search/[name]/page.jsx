@@ -4,29 +4,32 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductsLoading from "@/components/user/loading/ProductsLoading";
 import Link from "next/link";
-import Cookies from "js-cookie";
+import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 
 const SearchPage = ({ params }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const product_name = decodeURIComponent(params.name);
   const [products, setProducts] = useState([]);
 
+  const selectedLocation = useLocation();
+  const locationLoading = useLocationLoading();
+
   const fetchData = async (searchQuery) => {
-    let selectedLocation = Cookies.get('selectedLocation')
-    selectedLocation = JSON.parse(selectedLocation)
-
     const availablePincodes = selectedLocation.pincodes;
-
+    
     const response = await axios.post("/api/product/fetch-search-products", {
       searchQuery, availablePincodes
     });
     setProducts(response.data.products);
     setPageLoading(false);
   };
-
+  
   useEffect(() => {
-    fetchData(product_name);
-  }, []);
+    setPageLoading(true);
+    if (Object.keys(selectedLocation).length){
+      fetchData(product_name);
+    }
+  }, [locationLoading, selectedLocation]);
 
   return (
     <>
@@ -35,12 +38,12 @@ const SearchPage = ({ params }) => {
           <div className="text-center font-bold px-10">
             Search Results for "{product_name}"
           </div>
-          <div className="flex flex-wrap mt-4 justify-center">
+          <div className="flex flex-wrap mt-4 justify-evenly">
             {products.map((product) => {
               return (
                 <div
                   key={product._id}
-                  className="w-40 md:w-52 md:p-2 border shadow m-2 rounded-md"
+                  className="w-44 md:w-52 md:p-2 border shadow my-2 rounded-md"
                 >
                   <Link href={`/product/view-product?id=${product._id}`} className="px-2 py-1 flex items-center justify-center cursor-pointer">
                     <img

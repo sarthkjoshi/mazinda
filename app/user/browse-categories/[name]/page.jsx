@@ -41,13 +41,13 @@ const page = ({ params }) => {
         Browsing{" "}
         <span className="font-semibold">"{categoryName}"</span>
       </h1>
-      <div className="flex flex-wrap mt-4 justify-center">
+      <div className="flex flex-wrap mt-4 justify-evenly">
         {products.length ? (
           products.map((product) => {
             return (
               <div
                 key={product._id}
-                className="w-40 md:w-52 md:p-2 border shadow m-2 rounded-md"
+                className="w-44 md:w-52 md:p-2 border shadow my-2 rounded-md"
               >
                 <Link
                   href={`/product/view-product?id=${product._id}`}
