@@ -20,6 +20,7 @@ const SearchPage = ({ params }) => {
     const response = await axios.post("/api/product/fetch-search-products", {
       searchQuery, availablePincodes
     });
+    console.log(response.data);
     setProducts(response.data.products);
     setPageLoading(false);
   };
@@ -39,7 +40,7 @@ const SearchPage = ({ params }) => {
             Search Results for "{product_name}"
           </div>
           <div className="flex flex-wrap mt-4 justify-evenly">
-            {products.map((product) => {
+            {products && products.map((product) => {
               return (
                 <div
                   key={product._id}

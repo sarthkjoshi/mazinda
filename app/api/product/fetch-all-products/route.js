@@ -6,9 +6,9 @@ export async function POST() {
     try {
         await connectDB()
 
-        let products = await Product.find()
+        let products = await Product.find();
         return NextResponse.json({ success: true, products });
     } catch (error) {
-        return NextResponse.json({ success: false, error: "An error occurred while creating the Product : " + error });
+        return NextResponse.json({ success: false, error: "An error occurred while fetching the products : " + error });
     }
 }

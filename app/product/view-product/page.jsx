@@ -7,8 +7,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -19,7 +19,7 @@ import SmallRectangleLoading from "@/public/loading/SmallRectangleLoading.png";
 import Carousel from "@/components/utility/Carousel";
 
 const ViewProduct = () => {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -29,12 +29,14 @@ const ViewProduct = () => {
   const [cart, setCart] = useState([]);
   const [isProductInCart, setIsProductInCart] = useState(false);
   const [addingItemToCartLoading, setAddingItemToCartLoading] = useState(false);
-  const [buyItemLoading, setBuyItemLoading] = useState(false)
+  const [buyItemLoading, setBuyItemLoading] = useState(false);
 
   const fetchProduct = async (id) => {
     const response = await axios.post("/api/product/fetch-product-by-id", {
       id,
     });
+
+    console.log(response.data);
     setProduct(response.data.product);
   };
 
@@ -79,15 +81,23 @@ const ViewProduct = () => {
     } else {
       toast({
         title: "New to Mazinda?",
-        description: "Signup/Login now to customize your cart and experience shopping like never before!",
-        action: <ToastAction altText="Try again" onClick={() => router.push("/user/auth/login")}>Login</ToastAction>,
-      })
+        description:
+          "Signup/Login now to customize your cart and experience shopping like never before!",
+        action: (
+          <ToastAction
+            altText="Try again"
+            onClick={() => router.push("/user/auth/login")}
+          >
+            Login
+          </ToastAction>
+        ),
+      });
     }
     setAddingItemToCartLoading(false);
   };
 
   const handleBuyNow = async (product) => {
-    setBuyItemLoading(true)
+    setBuyItemLoading(true);
     const userToken = Cookies.get("user_token");
     if (userToken) {
       try {
@@ -159,7 +169,9 @@ const ViewProduct = () => {
               <div className="mt-4 w-full flex justify-center">
                 <button
                   onClick={() => handleBuyNow(product)}
-                  className={`${!buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"} px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold transition-all duration-300`}
+                  className={`${
+                    !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
+                  } px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold transition-all duration-300`}
                 >
                   {!buyItemLoading ? "Buy Now" : "Redirecting..."}
                 </button>
@@ -193,12 +205,12 @@ const ViewProduct = () => {
 
             {isProductDefined ? (
               <div className="mt-4 mb-12">
-                <div className="text-[#F17E13] text-center text-lg">
-                  Description
-                </div>
-                <p className="text-sm">
-                  {isProductDefined ? product.description : ""}
-                </p>
+                {product.description.map((item, index) => (
+                  <div key={index} className="text-sm">
+                    <h1 className="text-xl font-semibold">{item.heading}</h1>
+                    <p className="text-base">{item.description}</p>
+                  </div>
+                ))}
               </div>
             ) : (
               <Image src={PriceLoading} alt="" />

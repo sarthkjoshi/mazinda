@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
-import Image from "next/image";
-import homepage_image_loading from "@/public/loading/homepage_image_loading.png";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -23,6 +21,7 @@ const TrendingPage = () => {
       availablePincodes,
     });
     if (response.data.success) {
+      console.log(response.data.products);
       setProducts(response.data.products);
     }
     setPageLoading(false);
