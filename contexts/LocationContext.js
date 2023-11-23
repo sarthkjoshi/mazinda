@@ -47,7 +47,7 @@ export default function LocationProvider({ children }) {
                     setSelectedLocation(selectedLocation);
                 } else {
                     // If no selected location in cookies, set the first location as default
-                    setSelectedLocation(response.data.locations[0]);
+                    setSelectedLocation(response.data.locations[2]);
 
                     // Setting location info in cookies
                     Cookies.set(
