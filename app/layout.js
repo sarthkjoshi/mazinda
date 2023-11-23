@@ -10,6 +10,7 @@ import NextTopLoader from 'nextjs-toploader';
 import Authprovider from '@/components/Authprovider/Authprovider';
 import LocationProvider from '@/contexts/LocationContext';
 import { Toaster } from "@/components/ui/toaster"
+import Footer from '@/components/user/Footer';
 
 const quicksand = Quicksand({
   weight: '500',
@@ -59,6 +60,8 @@ export default function RootLayout({ children }) {
         </LocationProvider>
 
         <Toaster />
+
+        <Footer />
       </body>
     </html>
   )
