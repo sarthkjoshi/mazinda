@@ -4,7 +4,7 @@ const TermsAndConditions = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 mt-2 mb-12">
       <Head>
-        <title>Terms and Conditions - Citikartt</title>
+        <title>Terms and Conditions - Mazinda</title>
       </Head>
       <div className="text-center">
         <h1 className="text-3xl font-bold">Terms and Conditions</h1>
@@ -15,10 +15,10 @@ const TermsAndConditions = () => {
           By accepting our ‘Terms and Conditions’, and proceeding from the sign-up page, the signee (hereby defined as the person who accepts our ‘Terms and Conditions’ or tries to proceed from the sign-up page) agrees to the below terms and conditions with no exceptions:
         </p>
         <ul className="list-disc list-inside pl-4">
-          <li>Company i.e. Citikartt is not liable for any of the services provided.</li>
+          <li>Company i.e. Mazinda is not liable for any of the services provided.</li>
           <li>All the disputes are subjected to mandi jurisdiction only between the signee and the Vendor (hereby defined as the shop owner selling his/her products).</li>
-          <li>Citikartt is a marketplace for shopping. It does not sell any products of its own. In order to provide a comprehensive choice of products across various categories, Citikartt has invited various vendors who have listed their products for sale. The product type or anything related to the product is the sole responsibility of the vendor and no interference of the citikartt company.</li>
-          <li>Citikartt assures that the items which are not for sale in INDIA will not be listed by any vendor.</li>
+          <li>Mazinda is a marketplace for shopping. It does not sell any products of its own. In order to provide a comprehensive choice of products across various categories, Mazinda has invited various vendors who have listed their products for sale. The product type or anything related to the product is the sole responsibility of the vendor and no interference of the Mazinda company.</li>
+          <li>Mazinda assures that the items which are not for sale in INDIA will not be listed by any vendor.</li>
         </ul>
       </div>
       <div className="mt-8">
@@ -26,7 +26,7 @@ const TermsAndConditions = () => {
         <ul className="list-disc list-inside pl-4">
           <li>Order once placed cannot be cancelled.</li>
           <li>Orders not been able to get delivered due to natural calamities are not liable for any refund.</li>
-          <li>Citikartt do not offer any guaranteed time delivery.</li>
+          <li>Mazinda do not offer any guaranteed time delivery.</li>
           <li>The refund request can only be raised if and only if all of the below mentioned criterias are met:</li>
           <li>The delivery personal does not contact through any means for the update of the order.</li>
           <li>The vendor has cancelled the order.</li>
