@@ -8,8 +8,8 @@ const ProductCard = ({ product }) => {
       href={`/product/view-product?id=${product._id}`}
       className="p-2 m-2 rounded-md border shadow w-40 md:w-[200px] bg-white"
     >
-      <AspectRatio ratio={1 / 1}>
-        <img className="rounded-lg" src={product.imagePaths[0]} alt="product" />
+      <AspectRatio className="flex justify-center items-center" ratio={1 / 1}>
+        <img className="rounded-lg h-[142px] md:h-[182px]" src={product.imagePaths[0]} alt="product" />
       </AspectRatio>
 
       <div className="flex mt-2 justify-between items-center">
