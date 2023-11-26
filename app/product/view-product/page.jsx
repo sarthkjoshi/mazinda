@@ -10,7 +10,6 @@ import Link from "next/link";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import Image from "next/image";
 import PriceLoading from "@/public/loading/PricingLoading.png";
@@ -123,7 +122,7 @@ const ViewProduct = () => {
 
   return (
     <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
-      <AspectRatio className="my-4 mx-2" ratio={1 / 1}>
+      
         {isProductDefined ? (
           <div className="p-2">
             <Carousel arr={product.imagePaths} />
@@ -133,7 +132,6 @@ const ViewProduct = () => {
             <Skeleton className="w-full h-[40vh] md:h-[54vh] mt-10 mb-2 mx-5 md:m-2 rounded-lg" />
           </div>
         )}
-      </AspectRatio>
 
       <div className="bg-gray-50 h-full p-4 rounded-3xl mt-5 flex flex-col items-center">
         <span className="text-md text-gray-600 mb-5">

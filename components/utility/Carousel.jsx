@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const Carousel = ({ arr }) => {
   const settings = {
@@ -13,16 +14,18 @@ const Carousel = ({ arr }) => {
 
   return (
     <Slider {...settings}>
+      <AspectRatio className="mx-2 flex items-center justify-center" ratio={1 / 1}>
       {arr.map((path, index) => {
         return (
           <img
             key={index}
             src={path}
             alt=""
-            className="object-cover w-full h-full"
+            className="h-[350px] mx-auto my-auto"
           />
         );
       })}
+      </AspectRatio>
     </Slider>
   );
 };
