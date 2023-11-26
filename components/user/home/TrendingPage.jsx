@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
+import ProductCard from "@/components/ProductCard";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -17,9 +17,12 @@ const TrendingPage = () => {
   const fetchData = async () => {
     const availablePincodes = selectedLocation.pincodes;
 
-    const response = await axios.post("/api/product/fetch-trending-products", {
-      availablePincodes,
-    });
+    const response = await axios.post(
+      "/api/product/fetch-products?filter=trending",
+      {
+        availablePincodes,
+      }
+    );
     if (response.data.success) {
       console.log(response.data.products);
       setProducts(response.data.products);
@@ -56,34 +59,7 @@ const TrendingPage = () => {
       <div className="flex overflow-x-auto">
         <div className="flex">
           {products.map((product) => (
-            <Link
-              key={product._id}
-              href={`/product/view-product?id=${product._id}`}
-              className="p-2 m-2 rounded-md border shadow w-40 md:w-[200px] bg-white"
-            >
-              <div className="flex items-center justify-center cursor-pointer">
-                <img
-                  className="rounded-lg w-32 md:w-44"
-                  src={product.imagePaths[0]}
-                  alt="product"
-                />
-              </div>
-
-              <div className="flex mt-2 justify-between items-center">
-              <span className="cursor-pointer text-sm mx-1">
-                  {product.productName.slice(0, 20)}...
-                </span>
-
-                <div className="flex flex-col ml-2">
-                  <span className="font-bold self-end text-[15px]">
-                    ₹{product.pricing.salesPrice}
-                  </span>
-                  <span className="text-[10px] line-through text-gray-500 self-end">
-                    ₹{product.pricing.mrp}
-                  </span>
-                </div>
-              </div>
-            </Link>
+            <ProductCard product={product} />
           ))}
         </div>
       </div>

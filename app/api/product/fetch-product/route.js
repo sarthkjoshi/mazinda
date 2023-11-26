@@ -2,12 +2,12 @@ import connectDB from "@/libs/mongoose";
 import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
-    const { id } = await req.json()
+export async function POST(request) {
+    const searchParams = request.nextUrl.searchParams
+    const id = searchParams.get('id');
     try {
         await connectDB()
         const product = await Product.findById(id);
-        console.log(product);
         if (!product) {
             return NextResponse.json({ success: false, error: "Product doesn't exist" + error });
         }

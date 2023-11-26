@@ -9,8 +9,8 @@ import Link from "next/link";
 
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-
 import { Skeleton } from "@/components/ui/skeleton";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import Image from "next/image";
 import PriceLoading from "@/public/loading/PricingLoading.png";
@@ -32,11 +32,7 @@ const ViewProduct = () => {
   const [buyItemLoading, setBuyItemLoading] = useState(false);
 
   const fetchProduct = async (id) => {
-    const response = await axios.post("/api/product/fetch-product-by-id", {
-      id,
-    });
-
-    console.log(response.data);
+    const response = await axios.post(`/api/product/fetch-product?id=${id}`);
     setProduct(response.data.product);
   };
 
@@ -126,99 +122,95 @@ const ViewProduct = () => {
   }, [cart, product]);
 
   return (
-    <>
-      <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
+    <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
+      <AspectRatio className="my-4 mx-2" ratio={1 / 1}>
+        {isProductDefined ? (
+          <div className="p-2">
+            <Carousel arr={product.imagePaths} />
+          </div>
+        ) : (
+          <div className="w-full flex justify-center">
+            <Skeleton className="w-full h-[40vh] md:h-[54vh] mt-10 mb-2 mx-5 md:m-2 rounded-lg" />
+          </div>
+        )}
+      </AspectRatio>
+
+      <div className="bg-gray-50 h-full p-4 rounded-3xl mt-5 flex flex-col items-center">
+        <span className="text-md text-gray-600 mb-5">
+          {isProductDefined ? product.productName : ""}
+        </span>
         <div>
-          {isProductDefined ? (
-            <div className="p-2">
-              <Carousel arr={product.imagePaths} />
+          <span className="text-[12px] text-gray-700">
+            {isProductDefined ? (
+              "Price:"
+            ) : (
+              <Image className="mb-3" src={SmallRectangleLoading} alt="" />
+            )}
+          </span>
+          {isPricingDefined ? (
+            <div>
+              <span className="text-xl">Rs {product.pricing.salesPrice}/-</span>
+              <span className="ml-4 text-[12px] text-gray-500">
+                <s>Rs {product.pricing.mrp}/-</s>
+              </span>
             </div>
           ) : (
-            <div className="w-full flex justify-center">
-              <Skeleton className="w-full h-[40vh] md:h-[54vh] mt-10 mb-2 mx-5 md:m-2 rounded-lg" />
+            <Image src={PriceLoading} alt="" />
+          )}
+
+          {isProductDefined ? (
+            <div className="mt-4 w-full flex justify-center">
+              <button
+                onClick={() => handleBuyNow(product)}
+                className={`px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold transition-all duration-300 ${
+                  !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
+                }`}
+              >
+                {!buyItemLoading ? "Buy Now" : "Redirecting..."}
+              </button>
+
+              {!isProductInCart ? (
+                <button
+                  onClick={() => {
+                    handleAddToCart(product);
+                  }}
+                  className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
+                >
+                  {addingItemToCartLoading
+                    ? "Adding to Cart..."
+                    : "Add to Cart"}
+                </button>
+              ) : (
+                <Link
+                  href="/user/my-cart"
+                  className="cursor-pointer bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
+                >
+                  Added to Cart
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center my-5">
+              <Image className="mx-2" src={ButtonLoading} alt="" />
+              <Image className="mx-2" src={ButtonLoading} alt="" />
             </div>
           )}
-        </div>
 
-        <div className="bg-gray-50 h-full p-4 rounded-3xl mt-5 flex flex-col items-center">
-          <span className="text-2xl ">
-            {isProductDefined ? product.productName : ""}
-          </span>
-          <div>
-            <span className="text-[12px] text-gray-700">
-              {isProductDefined ? (
-                "Price:"
-              ) : (
-                <Image className="mb-3" src={SmallRectangleLoading} alt="" />
-              )}
-            </span>
-            {isPricingDefined ? (
-              <div>
-                <span className="text-xl">
-                  Rs {product.pricing.salesPrice}/-
-                </span>
-                <span className="ml-4 text-[12px] text-gray-500">
-                  <s>Rs {product.pricing.mrp}/-</s>
-                </span>
-              </div>
-            ) : (
-              <Image src={PriceLoading} alt="" />
-            )}
-
-            {isProductDefined ? (
-              <div className="mt-4 w-full flex justify-center">
-                <button
-                  onClick={() => handleBuyNow(product)}
-                  className={`${
-                    !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
-                  } px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold transition-all duration-300`}
-                >
-                  {!buyItemLoading ? "Buy Now" : "Redirecting..."}
-                </button>
-
-                {!isProductInCart ? (
-                  <button
-                    onClick={() => {
-                      handleAddToCart(product);
-                    }}
-                    className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
-                  >
-                    {addingItemToCartLoading
-                      ? "Adding to Cart..."
-                      : "Add to Cart"}
-                  </button>
-                ) : (
-                  <Link
-                    href="/user/my-cart"
-                    className="cursor-pointer bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
-                  >
-                    Added to Cart
-                  </Link>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center justify-center my-5">
-                <Image className="mx-2" src={ButtonLoading} alt="" />
-                <Image className="mx-2" src={ButtonLoading} alt="" />
-              </div>
-            )}
-
-            {isProductDefined ? (
-              <div className="mt-4 mb-12">
-                {product.description.map((item, index) => (
-                  <div key={index} className="text-sm">
-                    <h1 className="text-xl font-semibold">{item.heading}</h1>
-                    <p className="text-base">{item.description}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <Image src={PriceLoading} alt="" />
-            )}
-          </div>
+          {isProductDefined ? (
+            <div className="mt-4 mb-12">
+              {product.description.map((item, index) => (
+                <div key={index} className="text-sm">
+                  <h1 className="text-xl font-semibold">{item.heading}</h1>
+                  <p className="text-base">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Image src={PriceLoading} alt="" />
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
