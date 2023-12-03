@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
-import ProductCard from "@/components/ProductCard";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-const TrendingPage = () => {
+import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
+import ProductCard from "@/components/ProductCard";
+
+const ProductCollection = ({filter}) => {
   const [products, setProducts] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -18,13 +19,12 @@ const TrendingPage = () => {
     const availablePincodes = selectedLocation.pincodes;
 
     const response = await axios.post(
-      "/api/product/fetch-products?filter=trending",
+      `/api/product/fetch-products?filter=${filter}`,
       {
         availablePincodes,
       }
     );
     if (response.data.success) {
-      console.log(response.data.products);
       setProducts(response.data.products);
     }
     setPageLoading(false);
@@ -39,7 +39,7 @@ const TrendingPage = () => {
   if (pageLoading) {
     return (
       <>
-        <h1 className="ml-5 text-lg font-semibold">Trending Now</h1>
+        <h1 className="ml-5 text-lg font-semibold">{filter}</h1>
         <div className="flex overflow-y-scroll">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
             return (
@@ -55,7 +55,7 @@ const TrendingPage = () => {
 
   return (
     <>
-      <h1 className="ml-5 text-lg font-semibold">Trending Now</h1>
+      <h1 className="ml-5 text-lg font-semibold">{filter}</h1>
       <div className="flex overflow-x-auto">
         <div className="flex">
           {products.map((product) => (
@@ -67,4 +67,4 @@ const TrendingPage = () => {
   );
 };
 
-export default TrendingPage;
+export default ProductCollection;

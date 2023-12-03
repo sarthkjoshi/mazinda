@@ -137,7 +137,7 @@ const ViewProduct = () => {
         <span className="text-md text-gray-600 mb-5">
           {isProductDefined ? product.productName : ""}
         </span>
-        <div>
+        <div className="w-full">
           <span className="text-[12px] text-gray-700">
             {isProductDefined ? (
               "Price:"
