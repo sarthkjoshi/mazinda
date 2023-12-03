@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import success_tick from "@/public/Success_tick.png";
 import Link from "next/link";
-import Topdeal from "@/components/user/home/Topdeal";
+import ProductCollection from "@/components/user/product-collection/page";
 
 const SuccessPage = () => {
   return (
@@ -22,7 +22,7 @@ const SuccessPage = () => {
       </div>
 
       <div className="my-3">
-        <Topdeal />
+      <ProductCollection filter={'top-deal'} /> 
       </div>
 
       <div className="w-full flex justify-center">
