@@ -5,6 +5,8 @@ import axios from "axios";
 import ProductsLoading from "@/components/user/loading/ProductsLoading";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 import ProductCard from "@/components/ProductCard";
+import NoResultImage from "@/public/no-result-vector.png";
+import Image from "next/image";
 
 const SearchPage = ({ params }) => {
   const [pageLoading, setPageLoading] = useState(true);
@@ -46,18 +48,24 @@ const SearchPage = ({ params }) => {
   }
 
   return (
-      <>
-        <div className="text-center font-bold px-10">
-          Search Results for "{product_name}"
-        </div>
-        <div className="flex flex-wrap mt-4 justify-evenly mb-20">
-          {products && products.map((product) => {
-              return (
-                <ProductCard key={product._id} product={product} />
-              );
-            })}
-        </div>
-      </>
+    <>
+      <div className="text-center font-bold px-10">
+        Search Results for "{product_name}"
+      </div>
+      <div className="flex flex-wrap mt-4 justify-evenly mb-20">
+        {products.length ? (
+          products.map((product) => {
+            return <ProductCard key={product._id} product={product} />;
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <Image src={NoResultImage} alt="No Result" />
+            <p className="text-xl mb-5">No result found for "{product_name}"</p>
+            <p className="px-3">Please check the spelling or try searching for something else</p>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -27,13 +27,16 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [showChoosePaymentMethod, setShowChoosePaymentMethod] = useState(false);
 
-  const fetchData = async (userToken) => {
-    const response = await axios.post("/api/user/fetch-user", { userToken });
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-    const user = response.data.user;
+  const fetchData = async (userToken) => {
+    const { data } = await axios.post("/api/user/fetch-user", { userToken });
+
+    const user = data.user;
     const cart = user.cart;
     const pricing = user.pricing;
     const currentAddress = user.currentAddress;
+
     setUser(user);
 
     if (cart.length) {
@@ -68,6 +71,7 @@ const CheckoutPage = () => {
   }, []);
 
   const handlePlaceOrder = async () => {
+    console.log("here");
     if (!paymentMethod) {
       setShowChoosePaymentMethod(true);
       return;
@@ -75,28 +79,55 @@ const CheckoutPage = () => {
     try {
       const userToken = Cookies.get("user_token");
       setSubmitting(true);
-      const response = await axios.post("/api/order/create-order", {
+      const { data } = await axios.post("/api/order/create-order", {
         userToken,
-        storeId: cart[0]["storeID"],
         userCart: cart,
         pricing: user.pricing,
         address: shippingAddress,
         paymentMethod,
       });
 
-      if (response.data.success) {
+      if (data.success) {
         // Clear the cart after placing the order
-        const response = await axios.post("/api/user/cart/clear-cart", {
+        await axios.post("/api/user/cart/clear-cart", {
           userToken,
         });
-        console.log(response);
+
+        try {
+          await axios.post("/api/whatsapp/msg-to-group");
+        } catch (err) {
+          console.log(err);
+        }
+
         router.push("/user/my-cart/checkout/success");
+
+        const storeIDs = cart.map((item) => item.storeID);
+        let storeMobileNumbers = [];
+
+        for (let store_id of storeIDs) {
+          const { data } = await axios.post("/api/store/fetch-store-number", {
+            id: store_id,
+          });
+          storeMobileNumbers.push(data.storeMobileNumber);
+        }
+
+        for (let store_mobile_number of storeMobileNumbers) {
+          try {
+            await axios.post("/api/whatsapp/msg-to-store", {
+              store_mobile_number,
+            });
+            await delay(2000); // 2000 milliseconds = 2 seconds
+          } catch (err) {
+            console.log(err);
+          }
+        }
       } else {
         toast.warn(response.data.message);
       }
     } catch (err) {
       console.log(err);
       toast.warn("Oops.. A network error occurred while placing the order");
+      setSubmitting(false);
     }
   };
 
@@ -120,16 +151,28 @@ const CheckoutPage = () => {
                 <div key={item.productID}>
                   <div className="flex rounded-lg px-2 py-1 items-center mx-2 relative">
                     <img
-                      className="w-14 h-auto"
+                      className="w-10 h-auto mr-3"
                       src={item.imagePaths[0]}
                       alt="img"
                     />
                     <div className="flex flex-col ml-2">
-                      <span className="text-sm font-semibold">
-                        {item.productName}
+                      <span className="text-md">
+                        {item.productName.slice(0,40)}...
                       </span>
-                      <div className="text-gray-600">
-                        Rs {item.salesPrice}/-
+                      <div>
+                        <span className="text-xl">₹ {item.salesPrice}/-</span>
+                        <span className="ml-2 text-md text-gray-500">
+                          <s>₹ {item.mrp}/-</s>
+                        </span>
+                        <span className="ml-4 text-lg text-green-600 font-bold">
+                          {String(
+                            ((item.mrp - item.salesPrice) / item.mrp) * 100
+                          ).slice(0, 4)}
+                          % off
+                        </span>
+                        <span className="text-gray-800 font-bold text-lg ml-5">
+                          x {item.quantity}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -159,7 +202,7 @@ const CheckoutPage = () => {
                 </div>
               </div>
               <svg
-                className="w-3 h-3 text-gray-800 dark:text-white"
+                className="w-3 h-3 text-gray-800 dark:text-white ml-4"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -287,7 +330,7 @@ const CheckoutPage = () => {
               }`}
               onClick={handlePlaceOrder}
             >
-              Place Order
+              {submitting ? "Placing Your Order..." : "Place Order"}
             </Link>
           </div>
 

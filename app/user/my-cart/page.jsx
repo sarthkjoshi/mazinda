@@ -13,7 +13,7 @@ import { fetchUserCart, removeItemFromCart } from "@/utils/cart";
 import FallingLinesLoader from "@/components/utility/FallingLinesLoader";
 import axios from "axios";
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton";
 
 const MyCart = () => {
   const [cart, setCart] = useState([]);
@@ -29,6 +29,45 @@ const MyCart = () => {
     delivery_fees: 0,
     additional_discount: 0,
   });
+
+  const UpdateItemInCart = async (item, filter) => {
+    const userToken = Cookies.get("user_token");
+
+    if (userToken) {
+      try {
+        const { data } = await axios.post(
+          `/api/user/cart/add-update-item?filter=${filter}`,
+          {
+            itemInfo: {
+              productID: item.productID,
+            },
+            userToken,
+          }
+        );
+        if (data.success) {
+          setCart(data.cart);
+          // Recalculate pricing based on the updated cart
+          fetchPricing(data.cart);
+        }
+      } catch (err) {
+        console.log("An error occurred", err);
+      }
+    } else {
+      toast({
+        title: "New to Mazinda?",
+        description:
+          "Signup/Login now to customize your cart and experience shopping like never before!",
+        action: (
+          <ToastAction
+            altText="Try again"
+            onClick={() => router.push("/user/auth/login")}
+          >
+            Login
+          </ToastAction>
+        ),
+      });
+    }
+  };
 
   const fetchPricing = (cart) => {
     let total_mrp = 0;
@@ -53,7 +92,7 @@ const MyCart = () => {
 
   useEffect(() => {
     const setPricing = async () => {
-      const response = await axios.post("/api/user/cart/set-pricing", {
+      await axios.post("/api/user/cart/set-pricing", {
         userToken,
         total_mrp: pricing.total_mrp,
         total_salesPrice: pricing.total_salesPrice,
@@ -62,8 +101,6 @@ const MyCart = () => {
         delivery_fees: pricing.delivery_fees,
         additional_discount: pricing.additional_discount,
       });
-
-      console.log(response.data);
     };
     if (userToken) {
       setPricing();
@@ -83,18 +120,18 @@ const MyCart = () => {
     };
     fetchData();
   }, []);
+  
 
   if (pageLoading) {
     return (
       <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
         <h1 className="text-center text-2xl md:mb-10">Your Shopping Cart</h1>
         <div className="px-5 py-3">
-
-        <Skeleton className="w-full my-3 h-[96px] md:w-[488px] md:h-[96px] md:my-2 rounded-lg" />
-        <Skeleton className="w-full my-3 h-[178px] md:w-[488px] md:h-[178px] md:my-2 rounded-lg" />
+          <Skeleton className="w-full my-3 h-[96px] md:w-[488px] md:h-[96px] md:my-2 rounded-lg" />
+          <Skeleton className="w-full my-3 h-[178px] md:w-[488px] md:h-[178px] md:my-2 rounded-lg" />
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -111,12 +148,12 @@ const MyCart = () => {
                 ) : (
                   cart.length > 0 &&
                   cart.map((item) => {
-                    console.log(item);
                     return (
                       <div
                         className="flex mt-3 border rounded-lg h-24 p-2 items-center shadow-md mx-2 relative"
                         key={item.productID}
                       >
+                        {/* Remove From Cart Button */}
                         <div
                           className="border px-2 rounded-full font-bold absolute top-0 right-0 translate-x-2 -translate-y-2 bg-white hover:bg-gray-200"
                           onClick={async () => {
@@ -150,17 +187,48 @@ const MyCart = () => {
                             />
                           </svg>
                         </div>
+
                         <img
-                          className="w-14 h-auto"
+                          className="w-14 h-auto mr-2"
                           src={item.imagePaths[0]}
                           alt="img"
                         />
-                        <div className="flex flex-col ml-2">
+
+                        <div className="flex flex-col ml-2 w-full">
                           <span className="text-sm font-semibold">
-                            {item.productName.slice(0,60)}...
+                            {item.productName.slice(0, 60)}...
                           </span>
-                          <div className="text-gray-600">
-                            Rs {item.salesPrice}/-
+
+                          <div className="flex justify-between">
+                            <div className="text-gray-600">
+                              Rs {item.salesPrice}/-
+                            </div>
+                            <div className="flex items-center bg-white rounded-3xl mx-1 border border-[#F17E13]">
+                              <button
+                                onClick={() => {
+                                  UpdateItemInCart(item, "decrement");
+                                }}
+                                className="bg-[#f17e13] text-white px-2 rounded-l-full"
+                              >
+                                -
+                              </button>
+                              <span className="px-2">
+                                {
+                                  cart.find(
+                                    (product) =>
+                                      product.productID === item.productID
+                                  )?.quantity
+                                }
+                              </span>
+                              <button
+                                onClick={() => {
+                                  UpdateItemInCart(item, "increment");
+                                }}
+                                className="bg-[#f17e13] text-white rounded-r-3xl px-2"
+                              >
+                                +
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>

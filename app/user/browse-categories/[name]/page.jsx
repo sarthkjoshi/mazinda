@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ProductsLoading from "@/components/user/loading/ProductsLoading";
 import axios from "axios";
 import ProductCard from "@/components/ProductCard";
+import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 
 const page = ({ params }) => {
   const categoryName = params.name;
@@ -11,17 +12,24 @@ const page = ({ params }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const [products, setProducts] = useState([]);
 
+  const selectedLocation = useLocation();
+  const locationLoading = useLocationLoading();
+
   const fetchData = async () => {
+    const availablePincodes = selectedLocation.pincodes;
     const { data } = await axios.post(
-      `/api/product/fetch-products?category=${categoryName}`
+      `/api/product/fetch-products?category=${categoryName}`,
+      { availablePincodes }
     );
     setProducts(data.products);
     setPageLoading(false);
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (Object.keys(selectedLocation).length !== 0) {
+      fetchData();
+    }
+  }, [selectedLocation, locationLoading]);
 
   if (pageLoading) {
     return (

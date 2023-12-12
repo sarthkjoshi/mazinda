@@ -43,7 +43,12 @@ export async function POST(request) {
         }
 
         else if (category) {
-            products = await Product.find({ category, approvalStatus: true })
+            const { availablePincodes } = await request.json();
+
+            const stores = await Store.find({ 'storeAddress.pincode': { $in: availablePincodes } });
+            
+            const storeIds = stores.map(store => store._id);
+            products = await Product.find({ category, approvalStatus: true, storeId: { $in: storeIds }, })
         }
 
         else if (searchQuery) {

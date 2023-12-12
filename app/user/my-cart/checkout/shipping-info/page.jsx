@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { useLocation } from "@/contexts/LocationContext";
+import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "next-auth/react";
 
@@ -22,6 +22,7 @@ const ShippingInfo = () => {
   const [pincodeError, setPincodeError] = useState(false);
 
   const selectedLocation = useLocation();
+  const selectedLocationLoading = useLocationLoading();
 
   const [newAddress, setNewAddress] = useState({
     name: "",
@@ -66,13 +67,14 @@ const ShippingInfo = () => {
     if (
       !newAddress.name ||
       !newAddress.phone ||
+      newAddress.phone.length !== 10 ||
       !newAddress.email ||
       !newAddress.subaddress ||
       !newAddress.pincode ||
       !newAddress.state ||
       pincodeError
     ) {
-      toast.warn("Please provide all the required information.");
+      toast.warn("One or more information is missing or incorrect");
       return;
     }
 
@@ -110,18 +112,21 @@ const ShippingInfo = () => {
   };
 
   const fetchData = async (userToken) => {
-    const response = await axios.post("/api/user/fetch-user", { userToken });
+    const { data } = await axios.post("/api/user/fetch-user", { userToken });
 
-    const user = response.data.user;
+    const user = data.user;
     const currentAddress = user.currentAddress;
     const savedAddresses = user.savedAddresses;
 
+    // console.log(selectedLocation);
     const pincodeResponse = await axios.post("/api/location/fetch-pincodes", {
       id: selectedLocation._id,
     });
     setSelectedAddress(currentAddress);
     setSavedAddresses(savedAddresses);
     setPincodes(pincodeResponse.data.pincodes);
+
+    // console.log(pincodeResponse.data);
 
     setSavedAddressLoading(false);
   };
@@ -135,11 +140,11 @@ const ShippingInfo = () => {
     }
     fetchData(userToken);
     setPageLoading(false);
-  }, []);
+  }, [selectedLocationLoading]);
 
   if (pageLoading) {
     return (
-      <>
+      <div className="md:w-1/2 lg:w-1/3 mx-auto mb-12">
         <h1 className="text-center text-2xl">Shipping Info</h1>
         <div className="p-3">
           <Skeleton className="w-[full] h-[40px] rounded-full" />
@@ -147,7 +152,7 @@ const ShippingInfo = () => {
           <Skeleton className="w-[full] h-[120px] rounded-lg my-4" />
           <Skeleton className="w-[full] h-[120px] rounded-lg my-4" />
         </div>
-      </>
+      </div>
     );
   }
 
@@ -232,7 +237,7 @@ const ShippingInfo = () => {
                       value={newAddress.pincode}
                       name="pincode"
                       className={`p-1 rounded-full text-sm px-4 border border-gray-200 ${
-                        pincodeError ? "border-red-500" : ""
+                        pincodeError ? "border-yellow-400" : ""
                       }`}
                       type="text"
                     />

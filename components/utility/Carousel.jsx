@@ -13,7 +13,7 @@ const Carousel = ({ arr }) => {
   };
 
   return (
-    <Slider {...settings}>
+    <Slider {...settings} className="p-4 border rounded-md">
       {arr.map((path, index) => {
         return (
           <AspectRatio className="mx-2" ratio={1 / 1}>
@@ -21,7 +21,7 @@ const Carousel = ({ arr }) => {
               key={index}
               src={path}
               alt=""
-              className="h-[350px] mx-auto my-auto"
+              className="mx-auto my-auto"
             />
           </AspectRatio>
         );

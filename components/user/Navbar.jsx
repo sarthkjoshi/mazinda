@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import OvalLoader from "../utility/OvalLoader";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 import LoadingCategoryImage from "@/public/LoadingCategory.png";
@@ -36,10 +37,12 @@ import {
 
 const Navbar = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [products, setProducts] = useState([]);
+  const [showCityBox, setShowCityBox] = useState(true);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -69,8 +72,8 @@ const Navbar = () => {
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get("/api/location/fetch-locations");
-      setLocations(response.data.locations);
+      const { data } = await axios.get("/api/location/fetch-locations");
+      setLocations(data.locations);
       setLocationLoading(false);
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -103,15 +106,30 @@ const Navbar = () => {
     }
   }, [pathname]);
 
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setShowCityBox(false);
+    }, 4000);
+
+    return () => {
+      // Clear the timer when the component unmounts or when the pathname changes
+      clearTimeout(timerId);
+    };
+  }, []);
+
   return (
     <>
       {!pathname.includes("auth") && (
-        <nav className="bg-white border-gray-200 py-2 rounded-b-lg">
+        <nav className="bg-white border-gray-200 py-2 rounded-b-lg fixed top-0 left-0 w-full z-50 mb-10">
           {showSearchBox && (
             <div className="fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-10" />
           )}
-          <div className="flex items-center justify-between mx-auto p-4">
-            <Link href="/" className="md:hidden mr-1">
+          <div className="flex items-center mx-auto p-4">
+            <Link
+              href="/"
+              className="md:hidden mr-1"
+              onClick={() => setSearchQuery("")}
+            >
               <Image width={90} src={MazindaLogo} alt="Mazinda Logo" />
             </Link>
             <Link href="/" className="hidden md:block self-start">
@@ -123,93 +141,64 @@ const Navbar = () => {
               />
             </Link>
 
-            <div className="flex mx-1 md:relative items-center w-full justify-evenly">
-              <div className="hidden md:block scale-90">
-                <Popover>
-                  <PopoverTrigger className="text-gray-600">
-                    Categories
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[100vw] mx-3 my-2 rounded-2xl">
-                    {!categoriesLoading ? (
+            <div className="hidden md:block scale-90 ml-5">
+              <Popover>
+                <PopoverTrigger className="text-gray-600">
+                  Categories
+                </PopoverTrigger>
+                <PopoverContent className="w-[100vw] mx-3 my-2 rounded-2xl bg-white">
+                  {!categoriesLoading ? (
+                    <div className="flex flex-wrap justify-center">
+                      {categories.map((category) => {
+                        return (
+                          <Link
+                            key={category._id}
+                            href={`/user/browse-categories/${category.categoryName}`}
+                            className="m-2 p-2 flex flex-col items-center cursor-pointer"
+                          >
+                            <img
+                              style={{ maxWidth: "60px", minWidth: "60px" }}
+                              src={category.categoryImage}
+                              alt={category.categoryName}
+                            />
+                            <span className="text-gray-600 font-bold">
+                              {category.categoryName}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <>
                       <div className="flex flex-wrap justify-center">
-                        {categories.map((category) => {
-                          return (
-                            <Link
-                              key={category._id}
-                              href={`/user/browse-categories/${category.categoryName}`}
-                              className="m-2 p-2 flex flex-col items-center cursor-pointer"
-                            >
-                              <img
-                                style={{ maxWidth: "60px", minWidth: "60px" }}
-                                src={category.categoryImage}
-                                alt={category.categoryName}
-                              />
-                              <span className="text-gray-600 font-bold">
-                                {category.categoryName}
-                              </span>
-                            </Link>
-                          );
-                        })}
+                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+                          <Image
+                            key={i}
+                            className="m-2 p-2"
+                            src={LoadingCategoryImage}
+                            alt="Loading"
+                          />
+                        ))}
                       </div>
-                    ) : (
-                      <>
-                        <div className="flex flex-wrap justify-center">
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                          <Image
-                            className="m-2 p-2"
-                            src={LoadingCategoryImage}
-                            alt="Loading"
-                          />
-                        </div>
-                      </>
-                    )}
-                  </PopoverContent>
-                </Popover>
-              </div>
+                    </>
+                  )}
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex mx-1 md:relative items-center w-full md:mx-5">
               <input
-                className="text-md rounded-full px-3 pr-6 py-[0.2em] md:py-[0.3em] md:px-6 w-full md:w-5/6 border-none bg-gray-100 md:bg-gray-50 text-gray-500 outline-[#f17e13] z-20"
+                className="bg-[#f5f5f5] text-md rounded-lg py-[0.2em] md:py-[0.5em] px-3 md:px-6 w-full  border border-gray-400 text-gray-500 z-20"
                 type="text"
                 placeholder="Search Anything ..."
                 value={searchQuery}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    if (searchQuery !== "") {
+                      router.push(`/user/search/${searchQuery}`);
+                    }
+                    setShowSearchBox(false);
+                  }
+                }}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setShowSearchBox(true);
@@ -275,17 +264,26 @@ const Navbar = () => {
               <span className="text-gray-600">Cart</span>
             </Link>
 
-            <Link
-              href="/user/my-account"
-              className="hidden md:flex items-center mr-5 scale-90"
-            >
-              <ProfileSVG />
-              <span className="text-gray-600">
-                {isLoggedIn ? "Account" : "Login"}
-              </span>
-            </Link>
+            <div className="relative">
+              <Link
+                href="/user/my-account"
+                className="hidden md:flex items-center mr-5 scale-90"
+              >
+                <ProfileSVG />
+                <span className="text-gray-600">
+                  {isLoggedIn ? "Account" : "Login"}
+                </span>
+              </Link>
 
-            <div className="flex md:scale-95">
+              {/* <div className="absolute bg-white border border-gray-300 p-3 rounded-lg flex flex-col justify-center items-center mt-3">
+                <span className="block whitespace-nowrap text-gray-600">
+                  New Customer?
+                  </span>
+                <Link href={"/user/auth/login"} className="bg-orange-500 w-fit text-white font-bold px-2 py-1 text-sm rounded-md mt-2">Login</Link>
+              </div> */}
+            </div>
+
+            <div className="flex md:scale-95 relative">
               <LocationSVG />
 
               <div className="flex flex-col w-[90px] md:w-[120px]">
@@ -349,6 +347,16 @@ const Navbar = () => {
                     </DropdownMenuRadioGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </div>
+
+              <div
+                className={`font-bold absolute bg-[#f17e13] text-white p-3 rounded-lg flex flex-col justify-center items-center mt-14 overflow-x-scroll right-3 ${
+                  showCityBox ? "" : "hidden"
+                }`}
+              >
+                <span className="block whitespace-nowrap">
+                  Showing You Items in "{selectedLocation.city}"
+                </span>
               </div>
             </div>
           </div>

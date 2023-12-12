@@ -9,7 +9,6 @@ import axios from "axios";
 import OvalLoader from "@/components/utility/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
-import AuthScreenPNG from "@/public/auth_screen.png";
 import { signIn, useSession } from "next-auth/react";
 import ThreeDotsLoader from "@/components/utility/ThreeDotsLoader";
 
@@ -99,18 +98,17 @@ const LoginPage = () => {
         </div>
       )}
       <div
-        className={`flex flex-col items-center pt-6 min-h-screen lg:justify-center border lg:w-full ${
+        className={`scale-90 flex flex-col items-center pt-2 min-h-screen  lg:w-full ${
           loading ? "pointer-events-none" : null
         }`}
       >
         <Image
-          className="lg:hidden"
           src={MazindaLogoFull}
           alt="Mazinda Logo"
           width={150}
         />
 
-        <div className="max-w-md w-full px-10 py-6 bg-white rounded-lg mt-5">
+        <div className="max-w-md w-full px-10 lg:py-6 bg-white rounded-md mt-5 lg:border my-3">
           <h1 className="mb-1 text-center font-extrabold text-4xl">Log In</h1>
           <div className="flex items-center justify-center">
             <p className="inline text-center text-gray-600">
@@ -236,9 +234,9 @@ const LoginPage = () => {
         </footer>
       </div>
 
-      <div className="w-full hidden lg:block">
+      {/* <div className="w-full hidden lg:block">
         <Image src={AuthScreenPNG} className="h-screen w-full" alt="mazinda" />
-      </div>
+      </div> */}
     </div>
   );
 };

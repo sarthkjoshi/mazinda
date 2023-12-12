@@ -6,7 +6,7 @@ export async function GET() {
     try {
         await connectDB()
 
-        let locations = await Location.find()
+        let locations = await Location.find();
         return NextResponse.json({ success: true, locations });
     } catch (error) {
         return NextResponse.json({ success: false, error: "An error occurred while fetching the Locations : " + error });

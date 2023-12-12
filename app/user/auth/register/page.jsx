@@ -9,7 +9,6 @@ import axios from "axios";
 import OvalLoader from "@/components/utility/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
-import AuthScreenPNG from "@/public/auth_screen.png";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -55,9 +54,13 @@ const RegisterPage = () => {
 
   return (
     <div className="lg:flex">
-      <div className="flex flex-col items-center pt-6 min-h-screen lg:justify-center border lg:w-full">
-        <Image className="lg:hidden" src={MazindaLogoFull} alt="Mazinda Logo" />
-        <div className="max-w-md w-full px-10 py-6 bg-white rounded-lg">
+      <div className="scale-90 flex flex-col items-center pt-2 min-h-screen lg:justify-center lg:w-full">
+      <Image
+          src={MazindaLogoFull}
+          alt="Mazinda Logo"
+          width={150}
+        />
+        <div className="max-w-md w-full px-10 lg:py-6 bg-white rounded-md lg:border my-4">
           <h1 className="mb-1 text-center font-extrabold text-4xl">Sign Up</h1>
           <div className="flex items-center justify-center">
             <p className="inline text-center text-gray-600">
@@ -167,8 +170,10 @@ const RegisterPage = () => {
               </button>
 
               <button
-                className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
-                onClick={() => {}}
+                className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full hover:border-slate-400 hover:opacity-70 hover:shadow transition duration-150"
+                onClick={() => {
+                  router.push('/')
+                }}
               >
                 <svg
                   className="w-6 h-6 text-white"
@@ -204,10 +209,6 @@ const RegisterPage = () => {
             </Link>
           </div>
         </footer>
-      </div>
-
-      <div className="w-full hidden lg:block">
-        <Image src={AuthScreenPNG} className="h-screen w-full" alt="mazinda" />
       </div>
     </div>
   );
