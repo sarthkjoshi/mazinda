@@ -6,9 +6,9 @@ import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/utility/ProductCard";
 
-const ProductCollection = ({filter}) => {
+const ProductCollection = ({ filter }) => {
   const [products, setProducts] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
 

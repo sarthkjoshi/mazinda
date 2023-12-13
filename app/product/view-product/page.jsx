@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import React from "react";
 
 import { ToastAction } from "@/components/ui/toast";
@@ -72,7 +71,6 @@ const ViewProduct = () => {
         );
         console.log(data);
         if (data.success) {
-          // Updated code
           setCart(data.cart);
         }
       } catch (err) {
@@ -125,7 +123,6 @@ const ViewProduct = () => {
         ),
       });
     }
-    setBuyItemLoading(false);
   };
 
   // Check if product and pricing are defined
@@ -139,6 +136,7 @@ const ViewProduct = () => {
 
   return (
     <>
+    {/* Mobile Version */}
       <div className="md:w-1/2 lg:w-1/3 md:mx-auto md:hidden">
         {isProductDefined ? (
           <div className="p-2">
@@ -179,7 +177,7 @@ const ViewProduct = () => {
               <div className="mt-4 w-full flex justify-center">
                 <button
                   onClick={() => handleBuyNow(product)}
-                  className={`px-5 py-2 rounded-3xl text-white mx-1 text-sm font-bold transition-all duration-300 ${
+                  className={`px-5 py-2 rounded-3xl text-white mx-1 text-md font-bold transition-all duration-300 ${
                     !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
                   }`}
                 >
@@ -187,43 +185,42 @@ const ViewProduct = () => {
                 </button>
 
                 {!isProductInCart ? (
-                  <button
-                    onClick={() => {
-                      UpdateItemInCart(product);
-                    }}
-                    className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
-                  >
-                    {addingItemToCartLoading
-                      ? "Adding to Cart..."
-                      : "Add to Cart"}
-                  </button>
-                ) : (
-                  // (
-                  //   <Link
-                  //     href="/user/my-cart"
-                  //     className="cursor-pointer bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
-                  //   >
-                  //     Added to Cart
-                  //   </Link>
-                  // )
-                  <div className="flex items-center">
-                    <span className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]">
-                      Quantity:{" "}
-                      {cart.find((item) => item.productID === product._id)
-                        ?.quantity || 0}
-                    </span>
                     <button
                       onClick={() => {
                         UpdateItemInCart(product);
                       }}
-                      className="bg-white px-3 py-2 rounded-3xl text-[#F17E13] mx-1 text-sm border border-[#F17E13]"
+                      className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-md border border-[#F17E13] transition-all duration-300"
                     >
                       {addingItemToCartLoading
                         ? "Adding to Cart..."
-                        : "Add more"}
+                        : "Add to Cart"}
                     </button>
-                  </div>
-                )}
+                  ) : (
+                    <div className="flex items-center bg-white rounded-3xl mx-1 text-lg">
+                      <button
+                        onClick={() => {
+                          UpdateItemInCart(product, "decrement");
+                        }}
+                        className="bg-[#f17e13] text-white px-3 py-1 rounded-l-full"
+                      >
+                        -
+                      </button>
+                      <span className="px-3">
+                        {
+                          cart.find((item) => item.productID === product._id)
+                            ?.quantity
+                        }
+                      </span>
+                      <button
+                        onClick={() => {
+                          UpdateItemInCart(product, "increment");
+                        }}
+                        className="bg-[#f17e13] text-white rounded-r-3xl px-3 py-1"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
               </div>
             ) : (
               <div className="flex items-center justify-center my-5">
@@ -256,6 +253,8 @@ const ViewProduct = () => {
         </div>
       </div>
 
+
+      {/* Desktop Version */}
       <div className="hidden md:flex">
         <div className="w-1/3 h-screen bg-white fixed top-auto left-0 overflow-y-auto overflow-x-hidden">
           <div className="p-2 w-full">
@@ -284,7 +283,7 @@ const ViewProduct = () => {
                         : "Add to Cart"}
                     </button>
                   ) : (
-                    <div className="flex items-center bg-white rounded-3xl mx-1 border border-[#F17E13] text-2xl">
+                    <div className="flex items-center bg-white rounded-3xl mx-1 text-2xl">
                       <button
                         onClick={() => {
                           UpdateItemInCart(product, "decrement");

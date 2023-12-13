@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AspectRatio } from "./ui/aspect-ratio";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 const ProductCard = ({ product }) => {
   return (
@@ -9,7 +9,11 @@ const ProductCard = ({ product }) => {
       className="p-2 m-2 rounded-md border shadow w-40 md:w-[200px] bg-white"
     >
       <AspectRatio className="flex justify-center items-center" ratio={1 / 1}>
-        <img className="rounded-lg h-[142px] md:h-[182px]" src={product.imagePaths[0]} alt="product" />
+        <img
+          className="rounded-lg h-[142px] md:h-[182px]"
+          src={product.imagePaths[0]}
+          alt="product"
+        />
       </AspectRatio>
 
       <div className="flex mt-2 justify-between items-center">

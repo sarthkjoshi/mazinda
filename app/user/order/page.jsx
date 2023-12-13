@@ -1,7 +1,7 @@
 "use client";
 
-import MagnifyingLoader from "@/components/utility/MagnifyingLoader";
-import Link from 'next/link';
+import MagnifyingLoader from "@/components/Loading-Spinners/MagnifyingLoader";
+import Link from "next/link";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -42,7 +42,10 @@ const Order = () => {
             {order.cart.length > 0 &&
               order.cart.map((item) => {
                 return (
-                  <Link href={`/product/view-product?id=${item.productID}`} key={item.productID}>
+                  <Link
+                    href={`/product/view-product?id=${item.productID}`}
+                    key={item.productID}
+                  >
                     <div className="flex rounded-lg px-2 py-1 items-center mx-2 relative">
                       <img
                         className="w-14 h-auto"
@@ -105,7 +108,13 @@ const Order = () => {
               </div>
               <div className="flex justify-between text-green-500">
                 <span>Discount</span>
-                <span>- ₹{parseFloat(order.pricing.total_mrp - order.pricing.total_salesPrice)} /-</span>
+                <span>
+                  - ₹
+                  {parseFloat(
+                    order.pricing.total_mrp - order.pricing.total_salesPrice
+                  )}{" "}
+                  /-
+                </span>
               </div>
               <div className="flex justify-between">
                 <span>Service Charge</span>

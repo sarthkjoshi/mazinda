@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 export async function GET() {
     try {
         await connectDB()
-
         let locations = await Location.find();
         return NextResponse.json({ success: true, locations });
     } catch (error) {

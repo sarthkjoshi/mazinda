@@ -5,10 +5,10 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import OvalLoader from "@/components/utility/OvalLoader";
-import OrdersList from "@/components/user/OrdersList";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
+import OrdersList from "@/components/utility/OrdersList";
 import { signOut } from "next-auth/react";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 
 import {
   Accordion,
@@ -29,7 +29,7 @@ const MyAccount = () => {
 
   const onChange = (e) => {
     setMessage(e.target.value);
-  }
+  };
 
   const fetchData = async (userToken) => {
     try {
@@ -77,7 +77,9 @@ const MyAccount = () => {
                 </div>
               ) : (
                 <div className="flex w-full flex-col">
-                  <span className="font-semibold text-lg text-left">{user.name}</span>
+                  <span className="font-semibold text-lg text-left">
+                    {user.name}
+                  </span>
                   {user.phoneNumber && (
                     <span className="text-gray-500 text-sm flex">
                       <svg
@@ -144,18 +146,21 @@ const MyAccount = () => {
                   e.preventDefault();
                   setMessageSending(true);
                   try {
-                    const { data } = await axios.post('/api/email/get-help', { message })
+                    const { data } = await axios.post("/api/email/get-help", {
+                      message,
+                    });
                     console.log(data);
                     if (data.success) {
                       toast({
                         description: "Your message has been sent.",
-                      })
+                      });
                     } else {
                       toast({
                         variant: "destructive",
                         title: "Uh oh! Something went wrong.",
-                        description: "There was a problem sending your message.",
-                      })
+                        description:
+                          "There was a problem sending your message.",
+                      });
                     }
                   } catch (err) {
                     console.log(err);
@@ -172,8 +177,13 @@ const MyAccount = () => {
                   onChange={onChange}
                   cols="50"
                   rows="5"
-                 />
-                <button className={`px-5 py-1 w-fit my-1 rounded-full font-bold text-white md:rounded-lg transition-all duration-300 ${messageSending ? "bg-gray-400" : "bg-[#F17E13]"}`} type="submit">
+                />
+                <button
+                  className={`px-5 py-1 w-fit my-1 rounded-full font-bold text-white md:rounded-lg transition-all duration-300 ${
+                    messageSending ? "bg-gray-400" : "bg-[#F17E13]"
+                  }`}
+                  type="submit"
+                >
                   {!messageSending ? "Submit" : "Sending..."}
                 </button>
               </form>

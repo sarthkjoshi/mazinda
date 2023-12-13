@@ -6,11 +6,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import OvalLoader from "@/components/utility/OvalLoader";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
-import ThreeDotsLoader from "@/components/utility/ThreeDotsLoader";
+import ThreeDotsLoader from "@/components/Loading-Spinners/ThreeDotsLoader";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -102,11 +102,7 @@ const LoginPage = () => {
           loading ? "pointer-events-none" : null
         }`}
       >
-        <Image
-          src={MazindaLogoFull}
-          alt="Mazinda Logo"
-          width={150}
-        />
+        <Image src={MazindaLogoFull} alt="Mazinda Logo" width={150} />
 
         <div className="max-w-md w-full px-10 lg:py-6 bg-white rounded-md mt-5 lg:border my-3">
           <h1 className="mb-1 text-center font-extrabold text-4xl">Log In</h1>
@@ -191,7 +187,11 @@ const LoginPage = () => {
                   loading="lazy"
                   alt="google logo"
                 />
-                <span>{googleLoading ? "Redirecting Securely ..." : "Continue with Google"}</span>
+                <span>
+                  {googleLoading
+                    ? "Redirecting Securely ..."
+                    : "Continue with Google"}
+                </span>
               </button>
 
               <Link

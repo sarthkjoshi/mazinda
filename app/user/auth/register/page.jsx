@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import OvalLoader from "@/components/utility/OvalLoader";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 
@@ -55,11 +55,7 @@ const RegisterPage = () => {
   return (
     <div className="lg:flex">
       <div className="scale-90 flex flex-col items-center pt-2 min-h-screen lg:justify-center lg:w-full">
-      <Image
-          src={MazindaLogoFull}
-          alt="Mazinda Logo"
-          width={150}
-        />
+        <Image src={MazindaLogoFull} alt="Mazinda Logo" width={150} />
         <div className="max-w-md w-full px-10 lg:py-6 bg-white rounded-md lg:border my-4">
           <h1 className="mb-1 text-center font-extrabold text-4xl">Sign Up</h1>
           <div className="flex items-center justify-center">
@@ -172,7 +168,7 @@ const RegisterPage = () => {
               <button
                 className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full hover:border-slate-400 hover:opacity-70 hover:shadow transition duration-150"
                 onClick={() => {
-                  router.push('/')
+                  router.push("/");
                 }}
               >
                 <svg

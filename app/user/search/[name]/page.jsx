@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ProductsLoading from "@/components/user/loading/ProductsLoading";
+import ProductsLoading from "@/components/loading/ProductsLoading";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/utility/ProductCard";
 import NoResultImage from "@/public/no-result-vector.png";
 import Image from "next/image";
 
@@ -61,7 +61,9 @@ const SearchPage = ({ params }) => {
           <div className="flex flex-col items-center justify-center">
             <Image src={NoResultImage} alt="No Result" />
             <p className="text-xl mb-5">No result found for "{product_name}"</p>
-            <p className="px-3">Please check the spelling or try searching for something else</p>
+            <p className="px-3">
+              Please check the spelling or try searching for something else
+            </p>
           </div>
         )}
       </div>

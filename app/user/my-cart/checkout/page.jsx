@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
-import FallingLinesLoader from "@/components/utility/FallingLinesLoader";
+import FallingLinesLoader from "@/components/Loading-Spinners/FallingLinesLoader";
 import Link from "next/link";
 import phonepesvg from "@/public/phonepe-1.svg";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import OvalLoader from "@/components/utility/OvalLoader";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import { useLocation } from "@/contexts/LocationContext";
 
 const CheckoutPage = () => {
@@ -22,7 +22,14 @@ const CheckoutPage = () => {
 
   const [user, setUser] = useState({});
   const [cart, setCart] = useState([]);
-  const [pricing, setPricing] = useState({});
+  const [pricing, setPricing] = useState({
+    total_mrp: 0,
+    total_salesPrice: 0,
+    total_costPrice: 0,
+    service_charge: 0,
+    delivery_fees: 0,
+    additional_discount: 0,
+  });
   const [shippingAddress, setShippingAddress] = useState({});
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [showChoosePaymentMethod, setShowChoosePaymentMethod] = useState(false);
@@ -34,14 +41,13 @@ const CheckoutPage = () => {
 
     const user = data.user;
     const cart = user.cart;
-    const pricing = user.pricing;
     const currentAddress = user.currentAddress;
 
     setUser(user);
 
     if (cart.length) {
       setCart(cart);
-      setPricing(pricing);
+      fetchPricing(cart);
       setCartLoading(false);
       if (currentAddress && Object.keys(currentAddress).length > 0) {
         if (
@@ -59,6 +65,27 @@ const CheckoutPage = () => {
     } else {
       router.push("/user/my-cart");
     }
+  };
+
+  const fetchPricing = (cart) => {
+    let total_mrp = 0;
+    let total_salesPrice = 0;
+    let total_costPrice = 0;
+
+    if (cart) {
+      cart.forEach((item) => {
+        total_mrp += parseFloat(item.mrp) * item.quantity;
+        total_salesPrice += parseFloat(item.salesPrice) * item.quantity;
+        total_costPrice += parseFloat(item.costPrice) * item.quantity;
+      });
+    }
+
+    setPricing({
+      ...pricing,
+      total_mrp,
+      total_salesPrice,
+      total_costPrice,
+    });
   };
 
   useEffect(() => {
@@ -157,7 +184,7 @@ const CheckoutPage = () => {
                     />
                     <div className="flex flex-col ml-2">
                       <span className="text-md">
-                        {item.productName.slice(0,40)}...
+                        {item.productName.slice(0, 40)}...
                       </span>
                       <div>
                         <span className="text-xl">₹ {item.salesPrice}/-</span>

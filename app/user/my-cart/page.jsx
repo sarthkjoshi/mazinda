@@ -10,7 +10,7 @@ import empty_cart_img from "@/public/empty_cart.png";
 
 import { fetchUserCart, removeItemFromCart } from "@/utils/cart";
 
-import FallingLinesLoader from "@/components/utility/FallingLinesLoader";
+import FallingLinesLoader from "@/components/Loading-Spinners/FallingLinesLoader";
 import axios from "axios";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -46,8 +46,6 @@ const MyCart = () => {
         );
         if (data.success) {
           setCart(data.cart);
-          // Recalculate pricing based on the updated cart
-          fetchPricing(data.cart);
         }
       } catch (err) {
         console.log("An error occurred", err);
@@ -91,23 +89,6 @@ const MyCart = () => {
   };
 
   useEffect(() => {
-    const setPricing = async () => {
-      await axios.post("/api/user/cart/set-pricing", {
-        userToken,
-        total_mrp: pricing.total_mrp,
-        total_salesPrice: pricing.total_salesPrice,
-        total_costPrice: pricing.total_costPrice,
-        service_charge: pricing.service_charge,
-        delivery_fees: pricing.delivery_fees,
-        additional_discount: pricing.additional_discount,
-      });
-    };
-    if (userToken) {
-      setPricing();
-    }
-  }, [pricing]);
-
-  useEffect(() => {
     const fetchedUserToken = Cookies.get("user_token");
     setUserToken(fetchedUserToken);
 
@@ -120,7 +101,6 @@ const MyCart = () => {
     };
     fetchData();
   }, []);
-  
 
   if (pageLoading) {
     return (

@@ -4,13 +4,13 @@ import { Quicksand } from 'next/font/google'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide } from 'react-toastify';
-import Navbar from '@/components/user/Navbar'
-import BottomNavigationBar from '@/components/user/BottomNavigationBar'
+import Navbar from '@/components/Navbar'
+import BottomNavigationBar from '@/components/BottomNavigationBar'
 import NextTopLoader from 'nextjs-toploader';
 import Authprovider from '@/components/Authprovider/Authprovider';
 import LocationProvider from '@/contexts/LocationContext';
 import { Toaster } from "@/components/ui/toaster"
-import Footer from '@/components/user/Footer';
+import Footer from '@/components/Footer';
 
 const quicksand = Quicksand({
   weight: '500',

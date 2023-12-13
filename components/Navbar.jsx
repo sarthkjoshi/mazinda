@@ -6,7 +6,7 @@ import MazindaLogoFull from "@/public/logo_mazinda_full.png";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import OvalLoader from "../utility/OvalLoader";
+import OvalLoader from "./Loading-Spinners/OvalLoader";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
@@ -73,7 +73,9 @@ const Navbar = () => {
   const fetchLocations = async () => {
     try {
       const { data } = await axios.get("/api/location/fetch-locations");
-      setLocations(data.locations);
+      if (data.success) {
+        setLocations(data.locations);
+      }
       setLocationLoading(false);
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -365,7 +367,7 @@ const Navbar = () => {
 
       {pathname !== "/" && !pathname.includes("auth") && (
         <button
-          className="text-gray-600 rounded-md ml-2 hover:text-gray-700 focus:outline-none absolute md:hidden z-50"
+          className="text-gray-600 rounded-md ml-2 hover:text-gray-700 focus:outline-none absolute md:hidden z-40 bg-white"
           onClick={() => window.history.back()}
         >
           <svg

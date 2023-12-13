@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProductsLoading from "@/components/user/loading/ProductsLoading";
+import ProductsLoading from "@/components/loading/ProductsLoading";
 import axios from "axios";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/utility/ProductCard";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 
 const page = ({ params }) => {
