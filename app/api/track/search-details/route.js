@@ -1,13 +1,15 @@
-import Category from "@/models/Category";
 import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
+import SearchTrack from "@/models/SearchTrack";
 
 export async function POST(req) {
-    const { id } = await req.json();
     try {
+        const { userToken, searchQuery } = await req.json();
+
         await connectDB()
-        let category = await Category.findById(id);
-        return NextResponse.json({ success: true, message: "Category fetched successfully", category });
+
+        await SearchTrack.create({ userToken, searchQuery });
+        return NextResponse.json({ success: true, message: "Order placed successfully" });
     } catch (error) {
         return NextResponse.json({ success: false, error: "An error occurred while creating the Category : " + error });
     }

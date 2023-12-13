@@ -38,7 +38,7 @@ const RegisterPage = () => {
     e.preventDefault();
     setSubmitting(true);
 
-    const response = await axios.post("/api/user/auth/register", {
+    const response = await axios.post("/api/auth/register", {
       credentials,
     });
 

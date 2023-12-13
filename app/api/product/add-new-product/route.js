@@ -1,5 +1,5 @@
 import Product from "@/models/Product";
-import connectDB from "@/libs/mongoose";
+import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 

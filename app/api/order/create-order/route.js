@@ -1,5 +1,5 @@
 import Order from "@/models/Order";
-import connectDB from "@/libs/mongoose";
+import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import User from "@/models/User";
@@ -16,7 +16,7 @@ export async function POST(req) {
         if (!user) {
             return NextResponse.json({ success: false, error: "User doesn't exists" });
         }
-        
+
         await Order.create({ userId: user._id, cart: userCart, address, pricing, paymentMethod });
         return NextResponse.json({ success: true, message: "Order placed successfully" });
     } catch (error) {

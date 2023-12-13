@@ -1,5 +1,5 @@
 import Store from "@/models/Store";
-import connectDB from "@/libs/mongoose";
+import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import Order from "@/models/Order";
@@ -24,13 +24,13 @@ export async function POST(req) {
 
             // Adding store specific items only in the cart of storeOrder
             order.cart.map(product => {
-                if(product.storeID === storeData.id) {
+                if (product.storeID === storeData.id) {
                     newCart.push(product);
                 }
             })
-            
+
             order.cart = newCart;
-            if(newCart.length){
+            if (newCart.length) {
                 storeOrders.push(order); // This order now contains the filtered cart.
             }
             newCart = [];

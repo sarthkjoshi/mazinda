@@ -1,6 +1,6 @@
 import Product from "@/models/Product";
 import Store from "@/models/Store";
-import connectDB from "@/libs/mongoose";
+import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -46,7 +46,7 @@ export async function POST(request) {
             const { availablePincodes } = await request.json();
 
             const stores = await Store.find({ 'storeAddress.pincode': { $in: availablePincodes } });
-            
+
             const storeIds = stores.map(store => store._id);
             products = await Product.find({ category, approvalStatus: true, storeId: { $in: storeIds }, })
         }

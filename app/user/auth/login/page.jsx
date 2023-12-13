@@ -72,7 +72,7 @@ const LoginPage = () => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post("/api/user/auth/login", {
+      const response = await axios.post("/api/auth/login", {
         credentials,
       });
 

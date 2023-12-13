@@ -1,5 +1,5 @@
 import User from "@/models/User";
-import connectDB from "@/libs/mongoose";
+import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 
 import CryptoJS from "crypto-js";
@@ -22,7 +22,7 @@ export async function POST(req) {
         });
 
         if (user) {
-            if(!user.password) {
+            if (!user.password) {
                 return NextResponse.json({ success: false, message: "Email already in use" });
             }
             // Decrypting the password and matching it against the user's password
