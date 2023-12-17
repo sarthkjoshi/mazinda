@@ -251,7 +251,7 @@ const ViewProduct = () => {
                   alt={""}
                 />
                 <span className="text-center text-sm mt-2 text-orange-500">
-                  Instant Refund
+                  Instant Return
                 </span>
               </div>
               <div className="flex flex-col items-center justify-center">
