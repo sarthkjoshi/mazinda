@@ -269,7 +269,7 @@ const ViewProduct = () => {
               <div className="flex flex-col items-center justify-center">
                 <Image height={30} width={30} src={pay_on_delivery} alt={""} />
                 <span className="text-center text-sm mt-2 text-orange-500">
-                  COD Avaiable
+                  COD Available
                 </span>
               </div>
             </div>
