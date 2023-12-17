@@ -17,6 +17,11 @@ import ButtonLoading from "@/public/loading/ButtonLoading.png";
 import SmallRectangleLoading from "@/public/loading/SmallRectangleLoading.png";
 import Carousel from "@/components/utility/Carousel";
 
+import delivery_30_min from "@/public/item_desc_icons/delivery_30_min.png";
+import instant_refund from "@/public/item_desc_icons/instant_refund.png";
+import mazinda_delivered from "@/public/item_desc_icons/mazinda_delivered.png";
+import pay_on_delivery from "@/public/item_desc_icons/pay_on_delivery.png";
+
 const ViewProduct = () => {
   const { toast } = useToast();
 
@@ -136,7 +141,7 @@ const ViewProduct = () => {
 
   return (
     <>
-    {/* Mobile Version */}
+      {/* Mobile Version */}
       <div className="md:w-1/2 lg:w-1/3 md:mx-auto md:hidden">
         {isProductDefined ? (
           <div className="p-2">
@@ -185,42 +190,42 @@ const ViewProduct = () => {
                 </button>
 
                 {!isProductInCart ? (
+                  <button
+                    onClick={() => {
+                      UpdateItemInCart(product);
+                    }}
+                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-md border border-[#F17E13] transition-all duration-300"
+                  >
+                    {addingItemToCartLoading
+                      ? "Adding to Cart..."
+                      : "Add to Cart"}
+                  </button>
+                ) : (
+                  <div className="flex items-center bg-white rounded-3xl mx-1 text-lg">
                     <button
                       onClick={() => {
-                        UpdateItemInCart(product);
+                        UpdateItemInCart(product, "decrement");
                       }}
-                      className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-md border border-[#F17E13] transition-all duration-300"
+                      className="bg-[#f17e13] text-white px-3 py-1 rounded-l-full"
                     >
-                      {addingItemToCartLoading
-                        ? "Adding to Cart..."
-                        : "Add to Cart"}
+                      -
                     </button>
-                  ) : (
-                    <div className="flex items-center bg-white rounded-3xl mx-1 text-lg">
-                      <button
-                        onClick={() => {
-                          UpdateItemInCart(product, "decrement");
-                        }}
-                        className="bg-[#f17e13] text-white px-3 py-1 rounded-l-full"
-                      >
-                        -
-                      </button>
-                      <span className="px-3">
-                        {
-                          cart.find((item) => item.productID === product._id)
-                            ?.quantity
-                        }
-                      </span>
-                      <button
-                        onClick={() => {
-                          UpdateItemInCart(product, "increment");
-                        }}
-                        className="bg-[#f17e13] text-white rounded-r-3xl px-3 py-1"
-                      >
-                        +
-                      </button>
-                    </div>
-                  )}
+                    <span className="px-3">
+                      {
+                        cart.find((item) => item.productID === product._id)
+                          ?.quantity
+                      }
+                    </span>
+                    <button
+                      onClick={() => {
+                        UpdateItemInCart(product, "increment");
+                      }}
+                      className="bg-[#f17e13] text-white rounded-r-3xl px-3 py-1"
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center justify-center my-5">
@@ -228,6 +233,48 @@ const ViewProduct = () => {
                 <Image className="mx-2" src={ButtonLoading} alt="" />
               </div>
             )}
+
+            <hr className="my-5" />
+            <div className="flex gap-x-5">
+              <div className="flex flex-col items-center justify-center">
+                <Image height={30} width={30} src={delivery_30_min} alt={""} />
+                <span className="text-center text-sm mt-2 text-orange-500">
+                  30 min Delivery
+                </span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <Image
+                  className="scale-105"
+                  height={30}
+                  width={30}
+                  src={instant_refund}
+                  alt={""}
+                />
+                <span className="text-center text-sm mt-2 text-orange-500">
+                  Instant Refund
+                </span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <Image
+                  height={30}
+                  width={30}
+                  src={mazinda_delivered}
+                  alt={""}
+                  className="scale-150"
+                />
+                <span className="text-center text-sm text-orange-500 mt-2">
+                  Mazinda Delivered
+                </span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <Image height={30} width={30} src={pay_on_delivery} alt={""} />
+                <span className="text-center text-sm mt-2 text-orange-500">
+                  COD Avaiable
+                </span>
+              </div>
+            </div>
+
+            <hr className="my-5" />
 
             {isProductDefined ? (
               <div className="mt-4 mb-12">
@@ -252,7 +299,6 @@ const ViewProduct = () => {
           </div>
         </div>
       </div>
-
 
       {/* Desktop Version */}
       <div className="hidden md:flex">
@@ -335,6 +381,57 @@ const ViewProduct = () => {
                   % off
                 </span>
               </div>
+              <hr className="my-5" />
+              <div className="flex gap-x-5">
+                <div className="flex flex-col items-center justify-center">
+                  <Image
+                    height={30}
+                    width={30}
+                    src={delivery_30_min}
+                    alt={""}
+                  />
+                  <span className="text-sm mt-2 text-orange-500">
+                    30 min Delivery
+                  </span>
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  <Image
+                    className="scale-105"
+                    height={30}
+                    width={30}
+                    src={instant_refund}
+                    alt={""}
+                  />
+                  <span className="text-sm mt-2 text-orange-500">
+                    Instant Refund
+                  </span>
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  <Image
+                    height={30}
+                    width={30}
+                    src={mazinda_delivered}
+                    alt={""}
+                    className="scale-150"
+                  />
+                  <span className="text-sm text-orange-500 mt-2">
+                    Mazinda Delivered
+                  </span>
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  <Image
+                    height={30}
+                    width={30}
+                    src={pay_on_delivery}
+                    alt={""}
+                  />
+                  <span className="text-sm mt-2 text-orange-500">
+                    COD Avaiable
+                  </span>
+                </div>
+              </div>
+
+              <hr className="my-5" />
 
               <div>
                 {product.description.map((item, index) => {

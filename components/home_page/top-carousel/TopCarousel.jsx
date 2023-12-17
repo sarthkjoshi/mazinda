@@ -18,7 +18,8 @@ const TopCarousel = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 4000,
+    // dots: false,
   };
 
   const img_path_arr = [FirstImage, SecondImage, ThirdImage, FourthImage];
