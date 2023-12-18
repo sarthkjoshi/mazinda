@@ -279,8 +279,8 @@ const ViewProduct = () => {
             {isProductDefined ? (
               <div className="mt-4 mb-12">
                 {product.description.map((item, index) => (
-                  <div key={index} className="text-sm">
-                    <h1 className="text-xl font-semibold">{item.heading}</h1>
+                  <div key={index} className="text-sm my-4 text-gray-600">
+                    <h1 className="text-lg font-semibold">{item.heading}</h1>
                     <p className="mx-5 text-gray-800">
                       {item.description.split("\n").map((line, lineIndex) => (
                         <React.Fragment key={lineIndex}>
@@ -437,7 +437,7 @@ const ViewProduct = () => {
                 {product.description.map((item, index) => {
                   return (
                     <div key={index} className="flex p-2 my-3">
-                      <span className="font-semibold text-gray-500">
+                      <span className="font-semibold text-gray-500 min-w-[60px]">
                         {item.heading}
                       </span>
                       <p className="mx-5 text-gray-800">

@@ -79,7 +79,7 @@ const LoginPage = () => {
       if (response.data.success) {
         const { user_token } = response.data;
         Cookies.set("user_token", user_token, { expires: 1000 });
-        await router.push("/");
+        router.push("/");
       } else {
         toast.warn(response.data.message, { autoClose: 3000 });
       }
