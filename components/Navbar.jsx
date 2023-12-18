@@ -57,17 +57,14 @@ const Navbar = () => {
   const updateLocation = useUpdateLocation();
 
   const fetchProducts = async (searchQuery) => {
-    let selectedLocation = Cookies.get("selectedLocation");
-    selectedLocation = JSON.parse(selectedLocation);
-
-    const response = await axios.post(
+    const { data } = await axios.post(
       "/api/product/fetch-search-products-name",
       {
         searchQuery,
         availablePincodes: selectedLocation.pincodes,
       }
     );
-    setProducts(response.data.products);
+    setProducts(data.products);
   };
 
   const fetchLocations = async () => {

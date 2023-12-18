@@ -43,9 +43,9 @@ const SearchPage = ({ params }) => {
     setPageLoading(false);
 
     // If products are available with this search query, then add them to the SearchQueryTrack for service improvements
-    // if (Object.keys(data.products).length) {
-    //   await axios.post('/api/track/search-details', { userToken: Cookies.get('user_token'), searchQuery: product_name });
-    // }
+    if (Object.keys(data.products).length) {
+      await axios.post('/api/track/search-details', { userToken: Cookies.get('user_token'), searchQuery: product_name });
+    }
   };
 
   const handleReportSearch = async () => {
