@@ -60,7 +60,8 @@ export default function RootLayout({ children }) {
 
           <Authprovider>
 
-            <Navbar />
+              <Navbar />
+
             <NextTopLoader color="#F17E13" showSpinner={false} />
             {children}
 

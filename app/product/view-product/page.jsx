@@ -104,11 +104,10 @@ const ViewProduct = () => {
     const userToken = Cookies.get("user_token");
     if (userToken) {
       try {
-        const response = await axios.post("/api/user/cart/buy-item", {
+        await axios.post("/api/user/cart/buy-item", {
           itemInfo: product,
           userToken,
         });
-        console.log(response.data);
       } catch (err) {
         console.log(err);
       }

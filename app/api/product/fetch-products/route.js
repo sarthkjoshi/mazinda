@@ -9,6 +9,7 @@ export async function POST(request) {
     const category = searchParams.get('category');
     const searchQuery = searchParams.get('searchQuery');
 
+
     try {
         await connectDB();
 
@@ -53,6 +54,7 @@ export async function POST(request) {
 
         else if (searchQuery) {
             const { availablePincodes } = await request.json();
+            
             const stores = await Store.find({ 'storeAddress.pincode': { $in: availablePincodes } });
 
             // Extract storeIds from the matching stores

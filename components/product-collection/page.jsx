@@ -18,14 +18,14 @@ const ProductCollection = ({ filter }) => {
   const fetchData = async () => {
     const availablePincodes = selectedLocation.pincodes;
 
-    const response = await axios.post(
+    const { data } = await axios.post(
       `/api/product/fetch-products?filter=${filter}`,
       {
         availablePincodes,
       }
     );
-    if (response.data.success) {
-      setProducts(response.data.products);
+    if (data.success) {
+      setProducts(data.products);
     }
     setPageLoading(false);
   };
@@ -38,28 +38,24 @@ const ProductCollection = ({ filter }) => {
 
   if (pageLoading) {
     return (
-      <>
-        <h1 className="ml-5 text-lg font-semibold">{filter}</h1>
-        <div className="flex overflow-y-scroll">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
-            return (
-              <div key={num}>
-                <Skeleton className="w-[150px] h-[208px] md:w-[200px] md:h-[240px] m-2 rounded-lg" />
-              </div>
-            );
-          })}
-        </div>
-      </>
+      <div className="flex overflow-y-scroll">
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
+          return (
+            <div key={num}>
+              <Skeleton className="w-[150px] h-[208px] md:w-[200px] md:h-[240px] m-2 rounded-lg" />
+            </div>
+          );
+        })}
+      </div>
     );
   }
 
   return (
     <>
-      <h1 className="ml-5 text-lg font-semibold">{filter}</h1>
       <div className="flex overflow-x-auto">
         <div className="flex">
-          {products.map((product) => (
-            <ProductCard product={product} />
+          {products.map((product, index) => (
+            <ProductCard key={index} product={product} />
           ))}
         </div>
       </div>
