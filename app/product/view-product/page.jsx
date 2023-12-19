@@ -13,15 +13,16 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import PriceLoading from "@/public/loading/PricingLoading.png";
-import ButtonLoading from "@/public/loading/ButtonLoading.png";
-import SmallRectangleLoading from "@/public/loading/SmallRectangleLoading.png";
 import Carousel from "@/components/utility/Carousel";
 
 import delivery_30_min from "@/public/item_desc_icons/delivery_30_min.png";
 import instant_refund from "@/public/item_desc_icons/instant_refund.png";
 import mazinda_delivered from "@/public/item_desc_icons/mazinda_delivered.png";
 import pay_on_delivery from "@/public/item_desc_icons/pay_on_delivery.png";
+
+import CartSVG from "@/public/svg/Cart";
+import NextSVG from "@/public/svg/Next";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 
 const ViewProduct = () => {
   const { toast } = useToast();
@@ -31,14 +32,16 @@ const ViewProduct = () => {
   const product_id = searchParams.get("id");
 
   const [product, setProduct] = useState({});
+  const [pageLoading, setPageLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [isProductInCart, setIsProductInCart] = useState(false);
   const [addingItemToCartLoading, setAddingItemToCartLoading] = useState(false);
   const [buyItemLoading, setBuyItemLoading] = useState(false);
 
   const fetchProduct = async (id) => {
-    const response = await axios.post(`/api/product/fetch-product?id=${id}`);
-    setProduct(response.data.product);
+    const { data } = await axios.post(`/api/product/fetch-product?id=${id}`);
+    setProduct(data.product);
+    setPageLoading(false);
   };
 
   const fetchUserCart = async () => {
@@ -75,7 +78,6 @@ const ViewProduct = () => {
             userToken,
           }
         );
-        console.log(data);
         if (data.success) {
           setCart(data.cart);
         }
@@ -130,32 +132,26 @@ const ViewProduct = () => {
     }
   };
 
-  // Check if product and pricing are defined
-  const isProductDefined = Object.keys(product).length > 0;
-  const isPricingDefined = isProductDefined && product.pricing;
-
   // Check if the product is in the cart
   useEffect(() => {
     setIsProductInCart(cart.some((item) => item.productID === product._id));
   }, [cart, product]);
 
+  if (pageLoading) {
+    return (
+      <div className="flex items-center justify-center h-[75vh]">
+        <OvalLoader />
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Mobile Version */}
       <div className="md:w-1/2 lg:w-1/3 md:mx-auto md:hidden">
-        {/* {isProductDefined ? (
-          <div className="p-2">
-            <Carousel arr={product.imagePaths} />
-          </div>
-        ) : (
-          <div className="w-full flex justify-center">
-            <Skeleton className="w-full h-[40vh] md:h-[54vh] mt-10 mb-2 mx-5 md:m-2 rounded-lg" />
-          </div>
-        )} */}
-
-        {isProductDefined ? (
+        <div className="relative">
           <div className="px-3 mb-20">
-            <div>
+            <div className="mb-8">
               <Carousel arr={product.imagePaths} />
             </div>
 
@@ -174,6 +170,66 @@ const ViewProduct = () => {
                 ).slice(0, 4)}
                 % <br /> off
               </div> */}
+            </div>
+
+            <div className="mt-10 w-full flex justify-center bottom-0">
+              <button
+                onClick={() => handleBuyNow(product)}
+                className={`px-5 py-2 rounded-md text-white mx-1 text-lg font-bold transition-all duration-300 ${
+                  !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
+                }`}
+              >
+                {!buyItemLoading ? (
+                  <span className="flex items-center gap-1">
+                    <NextSVG />
+                    Buy Now
+                  </span>
+                ) : (
+                  "Redirecting..."
+                )}
+              </button>
+
+              {!isProductInCart ? (
+                <button
+                  onClick={() => {
+                    UpdateItemInCart(product);
+                  }}
+                  className="bg-white px-4 py-2 rounded-md text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
+                >
+                  {addingItemToCartLoading ? (
+                    "Adding to Cart..."
+                  ) : (
+                    <span className="flex">
+                      <CartSVG color="#F17E13" /> Add to Cart
+                    </span>
+                  )}
+                </button>
+              ) : (
+                <div className="flex items-center bg-white mx-1 text-2xl border rounded-md border-[#f17e13] overflow-hidden">
+                  <button
+                    onClick={() => {
+                      UpdateItemInCart(product, "decrement");
+                    }}
+                    className="bg-[#f17e13] text-white px-4 py-2"
+                  >
+                    -
+                  </button>
+                  <span className="px-4 py-2">
+                    {
+                      cart.find((item) => item.productID === product._id)
+                        ?.quantity
+                    }
+                  </span>
+                  <button
+                    onClick={() => {
+                      UpdateItemInCart(product, "increment");
+                    }}
+                    className="bg-[#f17e13] text-white px-4 py-2"
+                  >
+                    +
+                  </button>
+                </div>
+              )}
             </div>
 
             <hr className="my-5" />
@@ -245,12 +301,15 @@ const ViewProduct = () => {
             </div>
 
             {product.description.map((item, index) => (
-                <div key={index} className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg my-3">
-                  <span className="text-lg text-gray-500">{item.heading}</span>
-                  <hr />
+              <div
+                key={index}
+                className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg my-3"
+              >
+                <span className="text-lg text-gray-500">{item.heading}</span>
+                <hr />
 
-                  <div className="flex justify-between items-center mt-3">
-                    <p className="mx-5 text-gray-800">
+                <div className="flex justify-between items-center mt-3">
+                  <p className="mx-5 text-gray-800">
                     {item.description.split("\n").map((line, lineIndex) => (
                       <React.Fragment key={lineIndex}>
                         {line}
@@ -259,172 +318,144 @@ const ViewProduct = () => {
                       </React.Fragment>
                     ))}
                   </p>
-                  </div>
                 </div>
+              </div>
             ))}
           </div>
-        ) : (
-          "loading"
-        )}
+        </div>
       </div>
 
       {/* Desktop Version */}
       <div className="hidden md:flex">
         <div className="w-1/3 h-screen bg-white fixed top-auto left-0 overflow-y-auto overflow-x-hidden">
           <div className="p-2 w-full">
-            {isProductDefined ? (
-              <>
-                <Carousel arr={product.imagePaths} />
-                <div className="mt-10 w-full flex justify-center">
-                  <button
-                    onClick={() => handleBuyNow(product)}
-                    className={`px-5 py-2 rounded-3xl text-white mx-1 text-lg font-bold transition-all duration-300 ${
-                      !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
-                    }`}
-                  >
-                    {!buyItemLoading ? "Buy Now" : "Redirecting..."}
-                  </button>
+            <Carousel arr={product.imagePaths} />
+            <div className="mt-10 w-full flex justify-center">
+              <button
+                onClick={() => handleBuyNow(product)}
+                className={`px-5 py-2 rounded-3xl text-white mx-1 text-lg font-bold transition-all duration-300 ${
+                  !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
+                }`}
+              >
+                {!buyItemLoading ? "Buy Now" : "Redirecting..."}
+              </button>
 
-                  {!isProductInCart ? (
-                    <button
-                      onClick={() => {
-                        UpdateItemInCart(product);
-                      }}
-                      className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
-                    >
-                      {addingItemToCartLoading
-                        ? "Adding to Cart..."
-                        : "Add to Cart"}
-                    </button>
-                  ) : (
-                    <div className="flex items-center bg-white rounded-3xl mx-1 text-2xl">
-                      <button
-                        onClick={() => {
-                          UpdateItemInCart(product, "decrement");
-                        }}
-                        className="bg-[#f17e13] text-white px-4 rounded-l-full py-2"
-                      >
-                        -
-                      </button>
-                      <span className="px-4">
-                        {
-                          cart.find((item) => item.productID === product._id)
-                            ?.quantity
-                        }
-                      </span>
-                      <button
-                        onClick={() => {
-                          UpdateItemInCart(product, "increment");
-                        }}
-                        className="bg-[#f17e13] text-white rounded-r-3xl px-4 py-2"
-                      >
-                        +
-                      </button>
-                    </div>
-                  )}
+              {!isProductInCart ? (
+                <button
+                  onClick={() => {
+                    UpdateItemInCart(product);
+                  }}
+                  className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
+                >
+                  {addingItemToCartLoading
+                    ? "Adding to Cart..."
+                    : "Add to Cart"}
+                </button>
+              ) : (
+                <div className="flex items-center bg-white rounded-3xl mx-1 text-2xl">
+                  <button
+                    onClick={() => {
+                      UpdateItemInCart(product, "decrement");
+                    }}
+                    className="bg-[#f17e13] text-white px-4 rounded-l-full py-2"
+                  >
+                    -
+                  </button>
+                  <span className="px-4">
+                    {
+                      cart.find((item) => item.productID === product._id)
+                        ?.quantity
+                    }
+                  </span>
+                  <button
+                    onClick={() => {
+                      UpdateItemInCart(product, "increment");
+                    }}
+                    className="bg-[#f17e13] text-white rounded-r-3xl px-4 py-2"
+                  >
+                    +
+                  </button>
                 </div>
-              </>
-            ) : (
-              "Loading"
-            )}
+              )}
+            </div>
           </div>
         </div>
         <div className="w-2/3 h-screen ml-[33.33333333%] p-5">
-          {isProductDefined ? (
-            <>
-              <span className="text-xl">{product.productName}</span>
-              <div className="mt-3">
-                <span className="text-3xl">
-                  ₹ {product.pricing.salesPrice}/-
-                </span>
-                <span className="ml-4 text-lg text-gray-500">
-                  <s>₹ {product.pricing.mrp}/-</s>
-                </span>
-                <span className="ml-4 text-lg text-green-600 font-bold">
-                  {String(
-                    ((product.pricing.mrp - product.pricing.salesPrice) /
-                      product.pricing.mrp) *
-                      100
-                  ).slice(0, 4)}
-                  % off
-                </span>
-              </div>
-              <hr className="my-5" />
-              <div className="flex gap-x-5">
-                <div className="flex flex-col items-center justify-center">
-                  <Image
-                    height={30}
-                    width={30}
-                    src={delivery_30_min}
-                    alt={""}
-                  />
-                  <span className="text-sm mt-2 text-orange-500">
-                    30 min Delivery
-                  </span>
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <Image
-                    className="scale-105"
-                    height={30}
-                    width={30}
-                    src={instant_refund}
-                    alt={""}
-                  />
-                  <span className="text-sm mt-2 text-orange-500">
-                    Instant Refund
-                  </span>
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <Image
-                    height={30}
-                    width={30}
-                    src={mazinda_delivered}
-                    alt={""}
-                    className="scale-150"
-                  />
-                  <span className="text-sm text-orange-500 mt-2">
-                    Mazinda Delivered
-                  </span>
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <Image
-                    height={30}
-                    width={30}
-                    src={pay_on_delivery}
-                    alt={""}
-                  />
-                  <span className="text-sm mt-2 text-orange-500">
-                    COD Avaiable
-                  </span>
-                </div>
-              </div>
+          <span className="text-xl">{product.productName}</span>
+          <div className="mt-3">
+            <span className="text-3xl">₹ {product.pricing.salesPrice}/-</span>
+            <span className="ml-4 text-lg text-gray-500">
+              <s>₹ {product.pricing.mrp}/-</s>
+            </span>
+            <span className="ml-4 text-lg text-green-600 font-bold">
+              {String(
+                ((product.pricing.mrp - product.pricing.salesPrice) /
+                  product.pricing.mrp) *
+                  100
+              ).slice(0, 4)}
+              % off
+            </span>
+          </div>
+          <hr className="my-5" />
+          <div className="flex gap-x-5">
+            <div className="flex flex-col items-center justify-center">
+              <Image height={30} width={30} src={delivery_30_min} alt={""} />
+              <span className="text-sm mt-2 text-orange-500">
+                30 min Delivery
+              </span>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <Image
+                className="scale-105"
+                height={30}
+                width={30}
+                src={instant_refund}
+                alt={""}
+              />
+              <span className="text-sm mt-2 text-orange-500">
+                Instant Refund
+              </span>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <Image
+                height={30}
+                width={30}
+                src={mazinda_delivered}
+                alt={""}
+                className="scale-150"
+              />
+              <span className="text-sm text-orange-500 mt-2">
+                Mazinda Delivered
+              </span>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <Image height={30} width={30} src={pay_on_delivery} alt={""} />
+              <span className="text-sm mt-2 text-orange-500">COD Avaiable</span>
+            </div>
+          </div>
 
-              <hr className="my-5" />
+          <hr className="my-5" />
 
-              <div>
-                {product.description.map((item, index) => {
-                  return (
-                    <div key={index} className="flex p-2 my-3">
-                      <span className="font-semibold text-gray-500 min-w-[60px]">
-                        {item.heading}
-                      </span>
-                      <p className="mx-5 text-gray-800">
-                        {item.description.split("\n").map((line, lineIndex) => (
-                          <React.Fragment key={lineIndex}>
-                            {line}
-                            {lineIndex <
-                              item.description.split("\n").length - 1 && <br />}
-                          </React.Fragment>
-                        ))}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          ) : (
-            "Loading"
-          )}
+          <div>
+            {product.description.map((item, index) => {
+              return (
+                <div key={index} className="flex p-2 my-3">
+                  <span className="font-semibold text-gray-500 min-w-[60px]">
+                    {item.heading}
+                  </span>
+                  <p className="mx-5 text-gray-800">
+                    {item.description.split("\n").map((line, lineIndex) => (
+                      <React.Fragment key={lineIndex}>
+                        {line}
+                        {lineIndex <
+                          item.description.split("\n").length - 1 && <br />}
+                      </React.Fragment>
+                    ))}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </>

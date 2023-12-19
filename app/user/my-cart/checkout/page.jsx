@@ -20,7 +20,6 @@ const CheckoutPage = () => {
 
   const selectedLocation = useLocation();
 
-  const [user, setUser] = useState({});
   const [cart, setCart] = useState([]);
   const [pricing, setPricing] = useState({
     total_mrp: 0,
@@ -39,11 +38,8 @@ const CheckoutPage = () => {
   const fetchData = async (userToken) => {
     const { data } = await axios.post("/api/user/fetch-user", { userToken });
 
-    const user = data.user;
-    const cart = user.cart;
-    const currentAddress = user.currentAddress;
-
-    setUser(user);
+    const cart = data.user.cart;
+    const currentAddress = data.user.currentAddress;
 
     if (cart.length) {
       setCart(cart);
@@ -98,7 +94,6 @@ const CheckoutPage = () => {
   }, []);
 
   const handlePlaceOrder = async () => {
-    console.log("here");
     if (!paymentMethod) {
       setShowChoosePaymentMethod(true);
       return;
@@ -109,7 +104,7 @@ const CheckoutPage = () => {
       const { data } = await axios.post("/api/order/create-order", {
         userToken,
         userCart: cart,
-        pricing: user.pricing,
+        pricing: pricing,
         address: shippingAddress,
         paymentMethod,
       });
@@ -164,7 +159,7 @@ const CheckoutPage = () => {
   };
 
   return (
-    <div className="md:w-1/2 lg:w-1/3 md:mx-auto">
+    <div className="md:w-1/2 lg:w-1/3 md:mx-auto mt-3">
       <h1 className="text-center text-2xl mb-3">Checkout</h1>
 
       <div className="md:mt-10">

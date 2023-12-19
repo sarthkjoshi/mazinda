@@ -11,9 +11,9 @@ import SellOnMazindaImage from "@/public/sellonmazinda.png";
 const Home = () => {
   return (
     <div className="mb-12 md:px-5">
-      <div className="my-3">
+      {/* <div className="my-3">
         <Story />
-      </div>
+      </div> */}
       <div className="mt-2 mb-7">
         <TopCarousel />
       </div>
