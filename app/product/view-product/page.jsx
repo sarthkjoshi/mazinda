@@ -23,6 +23,8 @@ import pay_on_delivery from "@/public/item_desc_icons/pay_on_delivery.png";
 import CartSVG from "@/public/svg/Cart";
 import NextSVG from "@/public/svg/Next";
 import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
+import SearchPage from "@/app/user/search/[name]/page";
+import CategoryPage from "@/app/user/browse-categories/[name]/page";
 
 const ViewProduct = () => {
   const { toast } = useToast();
@@ -148,21 +150,20 @@ const ViewProduct = () => {
   return (
     <>
       {/* Mobile Version */}
-      <div className="md:w-1/2 lg:w-1/3 md:mx-auto md:hidden">
-        <div className="relative">
-          <div className="px-3 mb-20">
-            <div className="mb-8">
-              <Carousel arr={product.imagePaths} />
-            </div>
+      <div className="md:w-1/2 lg:w-1/3 md:mx-auto md:hidden px-3 mb-20">
+        {/* <div className=""> */}
+        <div className="mb-8">
+          <Carousel arr={product.imagePaths} />
+        </div>
 
-            <div className="text-lg mb-5 mt-2">{product.productName}</div>
+        <div className="text-lg mb-5 mt-2">{product.productName}</div>
 
-            <div className="flex gap-3 items-center">
-              <span className="text-2xl">₹{product.pricing.costPrice}</span>
-              <span className="text-gray-500 line-through text-sm self-end mb-2">
-                ₹{product.pricing.mrp}
-              </span>
-              {/* <div className="text-center bg-orange-500 rounded-full px-2 py-1 text-white font-bold text-[12px]">
+        <div className="flex gap-3 items-center">
+          <span className="text-2xl">₹{product.pricing.costPrice}</span>
+          <span className="text-gray-500 line-through text-sm self-end mb-2">
+            ₹{product.pricing.mrp}
+          </span>
+          {/* <div className="text-center bg-orange-500 rounded-full px-2 py-1 text-white font-bold text-[12px]">
                 {String(
                   ((product.pricing.mrp - product.pricing.salesPrice) /
                     product.pricing.mrp) *
@@ -170,112 +171,109 @@ const ViewProduct = () => {
                 ).slice(0, 4)}
                 % <br /> off
               </div> */}
-            </div>
+        </div>
 
-            <div className="mt-10 w-full flex justify-center bottom-0">
-              <button
-                onClick={() => handleBuyNow(product)}
-                className={`px-5 py-2 rounded-md text-white mx-1 text-lg font-bold transition-all duration-300 ${
-                  !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
-                }`}
-              >
-                {!buyItemLoading ? (
-                  <span className="flex items-center gap-1">
-                    <NextSVG />
-                    Buy Now
-                  </span>
-                ) : (
-                  "Redirecting..."
-                )}
-              </button>
+        <div className="mt-10 w-full flex justify-center bottom-0">
+          <button
+            onClick={() => handleBuyNow(product)}
+            className={`px-5 py-2 rounded-md text-white mx-1 text-lg font-bold transition-all duration-300 ${
+              !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
+            }`}
+          >
+            {!buyItemLoading ? (
+              <span className="flex items-center gap-1">
+                <NextSVG />
+                Buy Now
+              </span>
+            ) : (
+              "Redirecting..."
+            )}
+          </button>
 
-              {!isProductInCart ? (
-                <button
-                  onClick={() => {
-                    UpdateItemInCart(product);
-                  }}
-                  className="bg-white px-4 py-2 rounded-md text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
-                >
-                  {addingItemToCartLoading ? (
-                    "Adding to Cart..."
-                  ) : (
-                    <span className="flex">
-                      <CartSVG color="#F17E13" /> Add to Cart
-                    </span>
-                  )}
-                </button>
+          {!isProductInCart ? (
+            <button
+              onClick={() => {
+                UpdateItemInCart(product);
+              }}
+              className="bg-white px-4 py-2 rounded-md text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
+            >
+              {addingItemToCartLoading ? (
+                "Adding to Cart..."
               ) : (
-                <div className="flex items-center bg-white mx-1 text-2xl border rounded-md border-[#f17e13] overflow-hidden">
-                  <button
-                    onClick={() => {
-                      UpdateItemInCart(product, "decrement");
-                    }}
-                    className="bg-[#f17e13] text-white px-4 py-2"
-                  >
-                    -
-                  </button>
-                  <span className="px-4 py-2">
-                    {
-                      cart.find((item) => item.productID === product._id)
-                        ?.quantity
-                    }
-                  </span>
-                  <button
-                    onClick={() => {
-                      UpdateItemInCart(product, "increment");
-                    }}
-                    className="bg-[#f17e13] text-white px-4 py-2"
-                  >
-                    +
-                  </button>
-                </div>
+                <span className="flex">
+                  <CartSVG color="#F17E13" /> Add to Cart
+                </span>
               )}
+            </button>
+          ) : (
+            <div className="flex items-center bg-white mx-1 text-2xl border rounded-md border-[#f17e13] overflow-hidden">
+              <button
+                onClick={() => {
+                  UpdateItemInCart(product, "decrement");
+                }}
+                className="bg-[#f17e13] text-white px-4 py-2"
+              >
+                -
+              </button>
+              <span className="px-4 py-2">
+                {cart.find((item) => item.productID === product._id)?.quantity}
+              </span>
+              <button
+                onClick={() => {
+                  UpdateItemInCart(product, "increment");
+                }}
+                className="bg-[#f17e13] text-white px-4 py-2"
+              >
+                +
+              </button>
             </div>
+          )}
+        </div>
 
-            <hr className="my-5" />
+        <hr className="my-5" />
 
-            <div className="flex gap-x-5">
-              <div className="flex flex-col items-center justify-center">
-                <Image height={30} width={30} src={delivery_30_min} alt={""} />
-                <span className="text-center text-sm mt-2 text-orange-500">
-                  30 min Delivery
-                </span>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <Image
-                  className="scale-105"
-                  height={30}
-                  width={30}
-                  src={instant_refund}
-                  alt={""}
-                />
-                <span className="text-center text-sm mt-2 text-orange-500">
-                  Instant Return
-                </span>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <Image
-                  height={30}
-                  width={30}
-                  src={mazinda_delivered}
-                  alt={""}
-                  className="scale-150"
-                />
-                <span className="text-center text-sm text-orange-500 mt-2">
-                  Mazinda Delivered
-                </span>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <Image height={30} width={30} src={pay_on_delivery} alt={""} />
-                <span className="text-center text-sm mt-2 text-orange-500">
-                  COD Available
-                </span>
-              </div>
-            </div>
+        <div className="flex gap-x-5">
+          <div className="flex flex-col items-center justify-center">
+            <Image height={30} width={30} src={delivery_30_min} alt={""} />
+            <span className="text-center text-sm mt-2 text-orange-500">
+              30 min Delivery
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <Image
+              className="scale-105"
+              height={30}
+              width={30}
+              src={instant_refund}
+              alt={""}
+            />
+            <span className="text-center text-sm mt-2 text-orange-500">
+              Instant Return
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <Image
+              height={30}
+              width={30}
+              src={mazinda_delivered}
+              alt={""}
+              className="scale-150"
+            />
+            <span className="text-center text-sm text-orange-500 mt-2">
+              Mazinda Delivered
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <Image height={30} width={30} src={pay_on_delivery} alt={""} />
+            <span className="text-center text-sm mt-2 text-orange-500">
+              COD Available
+            </span>
+          </div>
+        </div>
 
-            <hr className="my-5" />
+        <hr className="my-5" />
 
-            <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
+        {/* <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
               <span className="text-lg text-gray-500">Sold By</span>
               <hr />
               <div className="flex justify-between items-center mt-3">
@@ -298,30 +296,34 @@ const ViewProduct = () => {
                   <span className="text-[10px]">Products</span>
                 </div>
               </div>
+            </div> */}
+
+        {product.description.map((item, index) => (
+          <div
+            key={index}
+            className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg my-3"
+          >
+            <span className="text-lg text-gray-500">{item.heading}</span>
+            <hr />
+
+            <div className="flex justify-between items-center mt-3">
+              <p className="mx-5 text-gray-800">
+                {item.description.split("\n").map((line, lineIndex) => (
+                  <React.Fragment key={lineIndex}>
+                    {line}
+                    {lineIndex < item.description.split("\n").length - 1 && (
+                      <br />
+                    )}
+                  </React.Fragment>
+                ))}
+              </p>
             </div>
-
-            {product.description.map((item, index) => (
-              <div
-                key={index}
-                className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg my-3"
-              >
-                <span className="text-lg text-gray-500">{item.heading}</span>
-                <hr />
-
-                <div className="flex justify-between items-center mt-3">
-                  <p className="mx-5 text-gray-800">
-                    {item.description.split("\n").map((line, lineIndex) => (
-                      <React.Fragment key={lineIndex}>
-                        {line}
-                        {lineIndex <
-                          item.description.split("\n").length - 1 && <br />}
-                      </React.Fragment>
-                    ))}
-                  </p>
-                </div>
-              </div>
-            ))}
           </div>
+        ))}
+
+        <div>
+          <h1 className="text-lg pt-3 px-3">Similar Products</h1>
+          <CategoryPage params={{name: product.category, useInOtherPage: true}} />
         </div>
       </div>
 

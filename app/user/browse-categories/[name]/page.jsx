@@ -6,7 +6,7 @@ import axios from "axios";
 import ProductCard from "@/components/utility/ProductCard";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 
-const page = ({ params }) => {
+const CategoryPage = ({ params }) => {
   const categoryName = params.name;
 
   const [pageLoading, setPageLoading] = useState(true);
@@ -44,9 +44,9 @@ const page = ({ params }) => {
 
   return (
     <div className="mb-20">
-      <h1 className="text-center text-2xl">
+      {!params.useInOtherPage ? <h1 className="text-center text-2xl">
         Browsing <span className="font-semibold">"{categoryName}"</span>
-      </h1>
+      </h1> : null}
       <div className="flex flex-wrap mt-4 justify-evenly">
         {products.length ? (
           products.map((product) => {
@@ -60,4 +60,4 @@ const page = ({ params }) => {
   );
 };
 
-export default page;
+export default CategoryPage;
