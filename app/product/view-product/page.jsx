@@ -6,12 +6,13 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import Image from "next/image";
 import PriceLoading from "@/public/loading/PricingLoading.png";
 import ButtonLoading from "@/public/loading/ButtonLoading.png";
 import SmallRectangleLoading from "@/public/loading/SmallRectangleLoading.png";
@@ -142,7 +143,7 @@ const ViewProduct = () => {
     <>
       {/* Mobile Version */}
       <div className="md:w-1/2 lg:w-1/3 md:mx-auto md:hidden">
-        {isProductDefined ? (
+        {/* {isProductDefined ? (
           <div className="p-2">
             <Carousel arr={product.imagePaths} />
           </div>
@@ -150,90 +151,33 @@ const ViewProduct = () => {
           <div className="w-full flex justify-center">
             <Skeleton className="w-full h-[40vh] md:h-[54vh] mt-10 mb-2 mx-5 md:m-2 rounded-lg" />
           </div>
-        )}
+        )} */}
 
-        <div className="bg-gray-50 h-full p-4 rounded-3xl mt-5 flex flex-col items-center">
-          <span className="text-md text-gray-600 mb-5">
-            {isProductDefined ? product.productName : ""}
-          </span>
-          <div className="w-full">
-            <span className="text-[12px] text-gray-700">
-              {isProductDefined ? (
-                "Price:"
-              ) : (
-                <Image className="mb-3" src={SmallRectangleLoading} alt="" />
-              )}
-            </span>
-            {isPricingDefined ? (
-              <div>
-                <span className="text-xl">
-                  Rs {product.pricing.salesPrice}/-
-                </span>
-                <span className="ml-4 text-[12px] text-gray-500">
-                  <s>Rs {product.pricing.mrp}/-</s>
-                </span>
-              </div>
-            ) : (
-              <Image src={PriceLoading} alt="" />
-            )}
+        {isProductDefined ? (
+          <div className="px-3 mb-20">
+            <div>
+              <Carousel arr={product.imagePaths} />
+            </div>
 
-            {isProductDefined ? (
-              <div className="mt-4 w-full flex justify-center">
-                <button
-                  onClick={() => handleBuyNow(product)}
-                  className={`px-5 py-2 rounded-3xl text-white mx-1 text-md font-bold transition-all duration-300 ${
-                    !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
-                  }`}
-                >
-                  {!buyItemLoading ? "Buy Now" : "Redirecting..."}
-                </button>
+            <div className="text-lg mb-5 mt-2">{product.productName}</div>
 
-                {!isProductInCart ? (
-                  <button
-                    onClick={() => {
-                      UpdateItemInCart(product);
-                    }}
-                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-md border border-[#F17E13] transition-all duration-300"
-                  >
-                    {addingItemToCartLoading
-                      ? "Adding to Cart..."
-                      : "Add to Cart"}
-                  </button>
-                ) : (
-                  <div className="flex items-center bg-white rounded-3xl mx-1 text-lg">
-                    <button
-                      onClick={() => {
-                        UpdateItemInCart(product, "decrement");
-                      }}
-                      className="bg-[#f17e13] text-white px-3 py-1 rounded-l-full"
-                    >
-                      -
-                    </button>
-                    <span className="px-3">
-                      {
-                        cart.find((item) => item.productID === product._id)
-                          ?.quantity
-                      }
-                    </span>
-                    <button
-                      onClick={() => {
-                        UpdateItemInCart(product, "increment");
-                      }}
-                      className="bg-[#f17e13] text-white rounded-r-3xl px-3 py-1"
-                    >
-                      +
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center justify-center my-5">
-                <Image className="mx-2" src={ButtonLoading} alt="" />
-                <Image className="mx-2" src={ButtonLoading} alt="" />
-              </div>
-            )}
+            <div className="flex gap-3 items-center">
+              <span className="text-2xl">₹{product.pricing.costPrice}</span>
+              <span className="text-gray-500 line-through text-sm self-end mb-2">
+                ₹{product.pricing.mrp}
+              </span>
+              {/* <div className="text-center bg-orange-500 rounded-full px-2 py-1 text-white font-bold text-[12px]">
+                {String(
+                  ((product.pricing.mrp - product.pricing.salesPrice) /
+                    product.pricing.mrp) *
+                    100
+                ).slice(0, 4)}
+                % <br /> off
+              </div> */}
+            </div>
 
             <hr className="my-5" />
+
             <div className="flex gap-x-5">
               <div className="flex flex-col items-center justify-center">
                 <Image height={30} width={30} src={delivery_30_min} alt={""} />
@@ -275,28 +219,53 @@ const ViewProduct = () => {
 
             <hr className="my-5" />
 
-            {isProductDefined ? (
-              <div className="mt-4 mb-12">
-                {product.description.map((item, index) => (
-                  <div key={index} className="text-sm my-4 text-gray-600">
-                    <h1 className="text-lg font-semibold">{item.heading}</h1>
-                    <p className="mx-5 text-gray-800">
-                      {item.description.split("\n").map((line, lineIndex) => (
-                        <React.Fragment key={lineIndex}>
-                          {line}
-                          {lineIndex <
-                            item.description.split("\n").length - 1 && <br />}
-                        </React.Fragment>
-                      ))}
-                    </p>
-                  </div>
-                ))}
+            <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
+              <span className="text-lg text-gray-500">Sold By</span>
+              <hr />
+              <div className="flex justify-between items-center mt-3">
+                <span className="text-lg">Maana Creations</span>
+                <Link
+                  href={"/"}
+                  className="border border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md"
+                >
+                  View Shop
+                </Link>
               </div>
-            ) : (
-              <Image src={PriceLoading} alt="" />
-            )}
+
+              <div className="flex justify-evenly mt-3">
+                <div className="flex flex-col items-center">
+                  <span className="text-xl">22</span>
+                  <span className="text-[10px]">Followers</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-xl">29</span>
+                  <span className="text-[10px]">Products</span>
+                </div>
+              </div>
+            </div>
+
+            {product.description.map((item, index) => (
+                <div key={index} className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg my-3">
+                  <span className="text-lg text-gray-500">{item.heading}</span>
+                  <hr />
+
+                  <div className="flex justify-between items-center mt-3">
+                    <p className="mx-5 text-gray-800">
+                    {item.description.split("\n").map((line, lineIndex) => (
+                      <React.Fragment key={lineIndex}>
+                        {line}
+                        {lineIndex <
+                          item.description.split("\n").length - 1 && <br />}
+                      </React.Fragment>
+                    ))}
+                  </p>
+                  </div>
+                </div>
+            ))}
           </div>
-        </div>
+        ) : (
+          "loading"
+        )}
       </div>
 
       {/* Desktop Version */}

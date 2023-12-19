@@ -418,7 +418,7 @@ const Navbar = () => {
         </nav>
       )}
 
-      {pathname !== "/" && !pathname.includes("auth") && (
+      {/* {pathname !== "/" && !pathname.includes("auth") && (
         <button
           className="text-gray-600 rounded-md ml-2 hover:text-gray-700 focus:outline-none absolute md:hidden z-40 bg-white"
           onClick={() => window.history.back()}
@@ -436,7 +436,7 @@ const Navbar = () => {
             />
           </svg>
         </button>
-      )}
+      )} */}
     </>
   );
 };
