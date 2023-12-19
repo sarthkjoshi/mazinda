@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div className="mt-1 mx-2 overflow-hidden">
-        <span className="cursor-pointer text-sm mx-1 whitespace-nowrap">
+        <span className="cursor-pointer text-sm whitespace-nowrap">
           {product.productName}
         </span>
       </div>
