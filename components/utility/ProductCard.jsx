@@ -57,8 +57,8 @@ const ProductCard = ({ product }) => {
 
         <div
           className={`${
-            product.pricing.mrp.length > 5 ? "text-[7px]" : "text-[10px]"
-          } rounded-md border border-[#F17E13] p-1 mt-2 bg-[#fce5d0]`}
+            product.pricing.mrp.length > 3 ? "text-[7px]" : "text-[10px]"
+          } rounded-md border border-[#F17E13] p-1 mt-2 bg-[#fce5d0] whitespace-nowrap`}
         >
           Add To Cart
         </div>
