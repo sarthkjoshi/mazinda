@@ -57,7 +57,7 @@ const ViewProduct = () => {
   useEffect(() => {
     fetchProduct(product_id);
     fetchUserCart();
-  }, []);
+  }, [product_id]);
 
   const UpdateItemInCart = async (product, filter = "add") => {
     setAddingItemToCartLoading(true);
