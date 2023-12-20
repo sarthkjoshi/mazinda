@@ -34,7 +34,7 @@ const Order = () => {
     fetchData();
   }, []);
   return (
-    <div className="md:w-1/2 lg:w-1/3 mx-auto px-2">
+    <div className="md:w-1/2 lg:w-1/3 mx-auto px-2 mb-20">
       <h1 className="text-center text-2xl md:mb-10">Your Order</h1>
       {!loading ? (
         <>

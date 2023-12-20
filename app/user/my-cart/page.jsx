@@ -74,7 +74,7 @@ const MyCart = () => {
 
     if (cart) {
       cart.forEach((item) => {
-        total_mrp += parseFloat(item.mrp) * item.quantity;
+        total_mrp += parseFloat((item.mrp).replace(',', '')) * item.quantity;
         total_salesPrice += parseFloat(item.salesPrice) * item.quantity;
         total_costPrice += parseFloat(item.costPrice) * item.quantity;
       });

@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
     <Link
       key={product._id}
       href={`/product/view-product?id=${product._id}`}
-      className="m-2 rounded-md border shadow w-40 md:w-[200px] bg-white"
+      className="m-2 rounded-md border shadow w-[42vw] md:w-[200px] bg-white"
     >
       <div className="relative">
         {!(product.pricing.mrp === product.pricing.salesPrice) ? (
