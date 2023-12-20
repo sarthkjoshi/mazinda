@@ -159,7 +159,7 @@ const ViewProduct = () => {
         <div className="text-lg mb-5 mt-2">{product.productName}</div>
 
         <div className="flex gap-3 items-center">
-          <span className="text-2xl">₹{product.pricing.costPrice}</span>
+          <span className="text-2xl">₹{product.pricing.salesPrice}</span>
           <span className="text-gray-500 line-through text-sm self-end mb-2">
             ₹{product.pricing.mrp}
           </span>
