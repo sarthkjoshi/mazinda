@@ -68,7 +68,6 @@ const ShippingInfo = () => {
       !newAddress.name ||
       !newAddress.phone ||
       newAddress.phone.length !== 10 ||
-      !newAddress.email ||
       !newAddress.subaddress ||
       !newAddress.pincode ||
       !newAddress.state ||
@@ -78,7 +77,7 @@ const ShippingInfo = () => {
       return;
     }
 
-    const response = await axios.post(
+    const { data } = await axios.post(
       "/api/user/shipping-addresses/add-new-address",
       {
         newAddress,
@@ -86,8 +85,8 @@ const ShippingInfo = () => {
       }
     );
 
-    if (response.data.success) {
-      const newSavedAddresses = response.data.newSavedAddresses;
+    if (data.success) {
+      const newSavedAddresses = data.newSavedAddresses;
       setSavedAddresses(newSavedAddresses);
       setNewAddress({
         name: "",
