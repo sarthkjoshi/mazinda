@@ -117,16 +117,12 @@ const ShippingInfo = () => {
     const currentAddress = user.currentAddress;
     const savedAddresses = user.savedAddresses;
 
-    // console.log(selectedLocation);
     const pincodeResponse = await axios.post("/api/location/fetch-pincodes", {
       id: selectedLocation._id,
     });
     setSelectedAddress(currentAddress);
     setSavedAddresses(savedAddresses);
     setPincodes(pincodeResponse.data.pincodes);
-
-    // console.log(pincodeResponse.data);
-
     setSavedAddressLoading(false);
   };
 
