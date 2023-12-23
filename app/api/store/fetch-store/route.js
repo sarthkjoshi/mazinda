@@ -10,7 +10,7 @@ export async function POST(req) {
         await connectDB();
 
         // Checking if the Vendor already exists
-        let store = await Store.findById(storeId);
+        let store = await Store.findById(storeId).select('-mobileNumber -alternateMobileNumber -password')
 
         if (store) {
             return NextResponse.json({ success: true, message: "Store fetched successfully", store: store });
