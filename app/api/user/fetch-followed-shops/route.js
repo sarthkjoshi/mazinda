@@ -9,7 +9,7 @@ export async function POST(req) {
         // Connecting to the database
         await connectDB();
 
-        const stores = await Store.find({ followers: { $in: [userId] } }).select('-mobileNumber -alternateMobileNumber -password -storeAddress');
+        const stores = await Store.find({ followers: { $in: [userId] } }).select('-mobileNumber -alternateMobileNumber -password -storeAddress -email -createdAt -updatedAt');
 
         return NextResponse.json({ success: true, message: "Followed stores fetched successfully", stores });
 
