@@ -9,7 +9,7 @@ export async function POST(req) {
         const userData = jwt.verify(userToken, 'this is jwt secret');
 
         // Connecting to the database
-        await connectDB()
+        await connectDB();
 
         // Checking if the user already exists with either email or phone number
         const user = await User.findOne({ email: userData.email });

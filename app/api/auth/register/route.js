@@ -18,9 +18,9 @@ export async function POST(req) {
     }
 
     const encryptedPassword = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString();
-    await User.create({ name, email, phoneNumber, password: encryptedPassword });
+    const newUser = await User.create({ name, email, phoneNumber, password: encryptedPassword });
 
-    const token = jwt.sign({ name, email, phoneNumber }, 'this is jwt secret');
+    const token = jwt.sign({ userId: newUser._id, name, email, phoneNumber }, 'this is jwt secret');
     return NextResponse.json({ success: true, message: "User created successfully", token });
   } catch (error) {
     return NextResponse.json({ success: false, error: "An error occurred while creating the user: " + error });
