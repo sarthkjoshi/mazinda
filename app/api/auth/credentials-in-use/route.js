@@ -10,7 +10,7 @@ export async function POST(req) {
         await connectDB();
 
         const userByEmail = await User.findOne({ email });
-        const userByPhoneNumber = await User.findOne({ mobileNumber: phone_number });
+        const userByPhoneNumber = await User.findOne({ phoneNumber: phone_number });
 
         if (userByEmail && userByPhoneNumber) {
             return NextResponse.json({ success: true, usedStatus: true, message: 'User already exists' });
