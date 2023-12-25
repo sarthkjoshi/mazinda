@@ -13,11 +13,11 @@ export async function POST(req) {
         const userByPhoneNumber = await User.findOne({ mobileNumber: phone_number });
 
         if (userByEmail && userByPhoneNumber) {
-            return NextResponse.json({ success: true, usedStatus: true, message: 'both' });
+            return NextResponse.json({ success: true, usedStatus: true, message: 'User already exists' });
         } else if (userByEmail) {
-            return NextResponse.json({ success: true, usedStatus: true, message: 'email' });
+            return NextResponse.json({ success: true, usedStatus: true, message: 'Email already associated with another account' });
         } else if (userByPhoneNumber) {
-            return NextResponse.json({ success: true, usedStatus: "phone_number", message: 'phone_number' });
+            return NextResponse.json({ success: true, usedStatus: "phone_number", message: 'Phone Number already associated with another account' });
         } else {
             return NextResponse.json({ success: true, usedStatus: false });
         }
