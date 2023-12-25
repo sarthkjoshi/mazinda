@@ -1,7 +1,6 @@
 import User from "@/models/User";
 import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
 
 export async function POST(req) {
     try {
@@ -19,8 +18,7 @@ export async function POST(req) {
         });
 
         if (user) {
-            const token = jwt.sign({ userId: user._id, name: user.name, email: user.email }, 'this is jwt secret')
-            return NextResponse.json({ success: true, message: "Logged in successfully", user_token: token });
+            return NextResponse.json({ success: true, message: "User fetched successfully", user });
         } else {
             return NextResponse.json({ success: false, message: "User doesn't exist" });
         }
