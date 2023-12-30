@@ -3,12 +3,6 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Image from "next/image";
-
-import FirstImage from "@/public/top-slider-images/1.jpeg";
-import SecondImage from "@/public/top-slider-images/2.jpeg";
-import ThirdImage from "@/public/top-slider-images/3.jpeg";
-import FourthImage from "@/public/top-slider-images/4.jpeg";
 
 const TopCarousel = () => {
   const settings = {
@@ -22,12 +16,16 @@ const TopCarousel = () => {
     // dots: false,
   };
 
-  const img_path_arr = [FirstImage, SecondImage, ThirdImage, FourthImage];
-
   return (
     <Slider {...settings}>
-      {img_path_arr.map((path, index) => {
-        return <Image key={index} src={path} alt="image" />;
+      {[1, 2, 3, 4].map((counter) => {
+        return (
+          <img
+            key={counter}
+            src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/${counter}.jpeg`}
+            alt="image"
+          />
+        );
       })}
     </Slider>
   );

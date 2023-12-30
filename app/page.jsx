@@ -25,7 +25,7 @@ const Home = () => {
       <div className="my-6">
         <Link href="/">
           <img
-            src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/banner_mid.JPG`}
+            src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_one.JPG`}
             alt=""
           />
         </Link>
@@ -49,7 +49,7 @@ const Home = () => {
         <Link href="https://store.mazinda.com">
           <img
             className="hidden md:block"
-            src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/banner_end.JPG`}
+            src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_end.JPG`}
             alt=""
           />
           <Image
