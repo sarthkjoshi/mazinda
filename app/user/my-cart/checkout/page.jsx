@@ -138,7 +138,7 @@ const CheckoutPage = () => {
 
         router.push("/user/my-cart/checkout/success");
 
-        const storeIDs = cart.map((item) => item.storeID);
+        const storeIDs = cart.map((item) => item.storeId);
         let storeMobileNumbers = [];
 
         for (let store_id of storeIDs) {
@@ -159,7 +159,7 @@ const CheckoutPage = () => {
           }
         }
       } else {
-        toast.warn(response.data.message);
+        toast.warn(data.message);
       }
     } catch (err) {
       console.log(err);
