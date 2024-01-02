@@ -4,41 +4,39 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 export async function POST(req) {
+  const { itemInfo, userToken } = await req.json();
 
-    const { itemInfo, userToken } = await req.json();
+  // Verify the user's token to get their email
+  const userData = jwt.verify(userToken, "this is jwt secret");
 
-    console.log(itemInfo);
+  try {
+    await connectDB();
 
-    // Verify the user's token to get their email
-    const userData = jwt.verify(userToken, 'this is jwt secret');
+    // Find the user by their email
+    let user = await User.findOne({ email: userData.email });
 
-    try {
-        await connectDB();
+    if (user) {
+      user.cart = [
+        {
+          _id: itemInfo._id,
+          quantity: 1,
+        },
+      ];
 
-        // Find the user by their email
-        let user = await User.findOne({ email: userData.email });
+      // Save the updated user data
+      await user.save();
 
-        if (user) {
-            // If the product is not in the cart, add it with a quantity of 1
-            user.cart = [{
-                productID: itemInfo._id,
-                productName: itemInfo.productName,
-                quantity: 1,
-                imagePaths: itemInfo.imagePaths,
-                storeID: itemInfo.storeId,
-                costPrice: itemInfo.pricing.costPrice,
-                salesPrice: itemInfo.pricing.salesPrice,
-                mrp: itemInfo.pricing.mrp,
-            }];
-
-            // Save the updated user data
-            await user.save();
-
-            return NextResponse.json({ success: true, message: "Item added successfully" });
-        } else {
-            return NextResponse.json({ success: false, error: "User doesn't exist" });
-        }
-    } catch (err) {
-        return NextResponse.json({ success: false, error: "An error occurred while updating the cart: " + err });
+      return NextResponse.json({
+        success: true,
+        message: "Item added successfully",
+      });
+    } else {
+      return NextResponse.json({ success: false, error: "User doesn't exist" });
     }
+  } catch (err) {
+    return NextResponse.json({
+      success: false,
+      error: "An error occurred while updating the cart: " + err,
+    });
+  }
 }

@@ -17,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const MyCart = () => {
   const [cart, setCart] = useState([]);
+  const [itemData, setItemData] = useState([]);
   const [userToken, setUserToken] = useState(null);
   const [cartLoading, setCartLoading] = useState(true);
   const [pageLoading, setPageLoading] = useState(true);
@@ -39,7 +40,7 @@ const MyCart = () => {
           `/api/user/cart/add-update-item?filter=${filter}`,
           {
             itemInfo: {
-              productID: item.productID,
+              _id: item._id,
             },
             userToken,
           }
@@ -74,9 +75,9 @@ const MyCart = () => {
 
     if (cart) {
       cart.forEach((item) => {
-        total_mrp += parseFloat((item.mrp).replace(',', '')) * item.quantity;
-        total_salesPrice += parseFloat(item.salesPrice) * item.quantity;
-        total_costPrice += parseFloat(item.costPrice) * item.quantity;
+        total_mrp += parseFloat(item.pricing.mrp) * item.quantity;
+        total_salesPrice += parseFloat(item.pricing.salesPrice) * item.quantity;
+        total_costPrice += parseFloat(item.pricing.costPrice) * item.quantity;
       });
     }
 
@@ -92,15 +93,28 @@ const MyCart = () => {
     const fetchedUserToken = Cookies.get("user_token");
     setUserToken(fetchedUserToken);
 
-    const fetchData = async () => {
+    (async () => {
       const cart = await fetchUserCart(fetchedUserToken);
       setCart(cart);
       setCartLoading(false);
-      fetchPricing(cart);
-      setPageLoading(false);
-    };
-    fetchData();
+    })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const itemDataPromises = cart.map(async (item) => {
+        const { data } = await axios.post(
+          `/api/product/fetch-product?id=${item._id}`
+        );
+        return { ...data.product, quantity: item.quantity };
+      });
+
+      const fetchedItemData = await Promise.all(itemDataPromises);
+      setItemData(fetchedItemData);
+      fetchPricing(fetchedItemData);
+      setPageLoading(false);
+    })();
+  }, [cart]);
 
   if (pageLoading) {
     return (
@@ -119,19 +133,19 @@ const MyCart = () => {
       <h1 className="text-center text-2xl md:mb-10">Your Shopping Cart</h1>
 
       <div>
-        {cart && cart.length > 0 ? (
+        {itemData && itemData.length > 0 ? (
           <>
             <div className="px-2 md:px-0">
               <div>
                 {cartLoading ? (
                   <FallingLinesLoader />
                 ) : (
-                  cart.length > 0 &&
-                  cart.map((item) => {
+                  itemData.length > 0 &&
+                  itemData.map((item) => {
                     return (
                       <div
                         className="flex mt-3 border rounded-lg h-24 p-2 items-center shadow-md mx-2 relative"
-                        key={item.productID}
+                        key={item._id}
                       >
                         {/* Remove From Cart Button */}
                         <div
@@ -139,7 +153,7 @@ const MyCart = () => {
                           onClick={async () => {
                             const newCart = await removeItemFromCart(
                               userToken,
-                              item.productID
+                              item._id
                             );
                             if (newCart) {
                               setCart(newCart);
@@ -174,16 +188,16 @@ const MyCart = () => {
                           alt="img"
                         />
 
-                        <div className="flex flex-col ml-2 w-full">
-                          <span className="text-sm font-semibold">
+                        <div className="flex flex-col ml-2 w-full gap-2">
+                          <span className="text-sm whitespace-nowrap">
                             {item.productName.slice(0, 60)}...
                           </span>
 
                           <div className="flex justify-between">
-                            <div className="text-gray-600">
-                              Rs {item.salesPrice}/-
+                            <div className="text-lg font-semibold text-gray-700">
+                              ₹ {item.pricing.salesPrice}/-
                             </div>
-                            <div className="flex items-center bg-white rounded-3xl mx-1 border border-[#F17E13]">
+                            <div className="flex items-center bg-white rounded-3xl mx-1">
                               <button
                                 onClick={() => {
                                   UpdateItemInCart(item, "decrement");
@@ -195,8 +209,7 @@ const MyCart = () => {
                               <span className="px-2">
                                 {
                                   cart.find(
-                                    (product) =>
-                                      product.productID === item.productID
+                                    (product) => product._id === item._id
                                   )?.quantity
                                 }
                               </span>

@@ -15,12 +15,13 @@ import { useLocation } from "@/contexts/LocationContext";
 const CheckoutPage = () => {
   const router = useRouter();
 
-  const [cartLoading, setCartLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   const selectedLocation = useLocation();
 
   const [cart, setCart] = useState([]);
+  const [itemData, setItemData] = useState([]);
   const [pricing, setPricing] = useState({
     total_mrp: 0,
     total_salesPrice: 0,
@@ -43,8 +44,6 @@ const CheckoutPage = () => {
 
     if (cart.length) {
       setCart(cart);
-      fetchPricing(cart);
-      setCartLoading(false);
       if (currentAddress && Object.keys(currentAddress).length > 0) {
         if (
           selectedLocation &&
@@ -70,9 +69,9 @@ const CheckoutPage = () => {
 
     if (cart) {
       cart.forEach((item) => {
-        total_mrp += parseFloat(item.mrp) * item.quantity;
-        total_salesPrice += parseFloat(item.salesPrice) * item.quantity;
-        total_costPrice += parseFloat(item.costPrice) * item.quantity;
+        total_mrp += parseFloat(item.pricing.mrp) * item.quantity;
+        total_salesPrice += parseFloat(item.pricing.salesPrice) * item.quantity;
+        total_costPrice += parseFloat(item.pricing.costPrice) * item.quantity;
       });
     }
 
@@ -93,6 +92,22 @@ const CheckoutPage = () => {
     fetchData(userToken);
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const itemDataPromises = cart.map(async (item) => {
+        const { data } = await axios.post(
+          `/api/product/fetch-product?id=${item._id}`
+        );
+        return { ...data.product, quantity: item.quantity };
+      });
+
+      const fetchedItemData = await Promise.all(itemDataPromises);
+      setItemData(fetchedItemData);
+      fetchPricing(fetchedItemData);
+      setPageLoading(false);
+    })();
+  }, [cart]);
+
   const handlePlaceOrder = async () => {
     if (!paymentMethod) {
       setShowChoosePaymentMethod(true);
@@ -103,7 +118,7 @@ const CheckoutPage = () => {
       setSubmitting(true);
       const { data } = await axios.post("/api/order/create-order", {
         userToken,
-        userCart: cart,
+        userCart: itemData,
         pricing: pricing,
         address: shippingAddress,
         paymentMethod,
@@ -164,36 +179,42 @@ const CheckoutPage = () => {
 
       <div className="md:mt-10">
         <div>
-          {cartLoading ? (
+          {pageLoading ? (
             <FallingLinesLoader />
           ) : (
-            cart.length > 0 &&
-            cart.map((item) => {
+            itemData.length > 0 &&
+            itemData.map((item) => {
               return (
                 <div key={item.productID}>
-                  <div className="flex rounded-lg px-2 py-1 items-center mx-2 relative">
+                  <div className="flex rounded-lg px-2 py-3 items-center mx-2 relative">
                     <img
                       className="w-10 h-auto mr-3"
                       src={item.imagePaths[0]}
                       alt="img"
                     />
-                    <div className="flex flex-col ml-2">
+                    <div className="flex flex-col ml-2 w-full">
                       <span className="text-md">
                         {item.productName.slice(0, 40)}...
                       </span>
-                      <div>
-                        <span className="text-xl">₹ {item.salesPrice}/-</span>
-                        <span className="ml-2 text-md text-gray-500">
-                          <s>₹ {item.mrp}/-</s>
-                        </span>
-                        <span className="ml-4 text-lg text-green-600 font-bold">
-                          {String(
-                            ((item.mrp - item.salesPrice) / item.mrp) * 100
-                          ).slice(0, 4)}
-                          % off
-                        </span>
-                        <span className="text-gray-800 font-bold text-lg ml-5">
-                          x {item.quantity}
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <span className="text-lg">
+                            ₹ {item.pricing.salesPrice}/-
+                          </span>
+                          <span className="ml-2 text-sm text-gray-400">
+                            <s>₹ {item.pricing.mrp}/-</s>
+                          </span>
+                          <span className="ml-4 text-[9px] px-2 py-1 rounded-xl text-green-600 font-bold bg-green-200">
+                            {String(
+                              ((item.pricing.mrp - item.pricing.salesPrice) /
+                                item.pricing.mrp) *
+                                100
+                            ).slice(0, 4)}
+                            % OFF
+                          </span>
+                        </div>
+                        <span className="text-gray-400 text-[12px] ml-5 self-end">
+                          Quantity - {item.quantity}
                         </span>
                       </div>
                     </div>
@@ -205,7 +226,7 @@ const CheckoutPage = () => {
           )}
           <Link
             href="/user/my-cart/checkout/shipping-info"
-            className="flex my-2 items-center mx-2 justify-between"
+            className="flex my-2 items-center mx-2 justify-between px-2"
           >
             <span className="text-sm">Shipping To</span>
             <div
@@ -245,7 +266,7 @@ const CheckoutPage = () => {
           <div className="border p-4 m-2 shadow rounded-lg">
             <h1 className="font-bold mb-1">Billing Details</h1>
 
-            {!cartLoading ? (
+            {!pageLoading ? (
               <>
                 <div className="flex justify-between">
                   <span>Subtotal</span>

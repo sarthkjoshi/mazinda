@@ -2,10 +2,10 @@ import axios from "axios";
 
 export const fetchUserCart = async (userToken) => {
   try {
-    const response = await axios.post("/api/user/fetch-user", { userToken });
-    return response.data.user.cart;
+    const { data } = await axios.post("/api/user/fetch-user", { userToken });
+    return data.user.cart;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 

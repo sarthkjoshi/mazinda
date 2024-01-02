@@ -69,7 +69,7 @@ const ViewProduct = () => {
           `/api/user/cart/add-update-item?filter=${filter}`,
           {
             itemInfo: {
-              productID: product._id,
+              _id: product._id,
               productName: product.productName,
               imagePaths: product.imagePaths,
               storeID: product.storeId,
@@ -136,7 +136,7 @@ const ViewProduct = () => {
 
   // Check if the product is in the cart
   useEffect(() => {
-    setIsProductInCart(cart.some((item) => item.productID === product._id));
+    setIsProductInCart(cart.some((item) => item._id === product._id));
   }, [cart, product]);
 
   if (pageLoading) {
@@ -163,14 +163,14 @@ const ViewProduct = () => {
           <span className="text-gray-500 line-through text-sm self-end mb-2">
             ₹{product.pricing.mrp}
           </span>
-          {/* <div className="text-center bg-orange-500 rounded-full px-2 py-1 text-white font-bold text-[12px]">
-                {String(
-                  ((product.pricing.mrp - product.pricing.salesPrice) /
-                    product.pricing.mrp) *
-                    100
-                ).slice(0, 4)}
-                % <br /> off
-              </div> */}
+          <div className="text-center bg-green-200 rounded-full px-2 py-1 font-bold text-[12px] text-green-500">
+            {String(
+              ((product.pricing.mrp - product.pricing.salesPrice) /
+                product.pricing.mrp) *
+                100
+            ).slice(0, 4)}
+            % OFF
+          </div>
         </div>
 
         <div className="mt-10 w-full flex justify-center bottom-0">
@@ -216,7 +216,7 @@ const ViewProduct = () => {
                 -
               </button>
               <span className="px-4 py-2">
-                {cart.find((item) => item.productID === product._id)?.quantity}
+                {cart.find((item) => item._id === product._id)?.quantity}
               </span>
               <button
                 onClick={() => {
@@ -323,7 +323,9 @@ const ViewProduct = () => {
 
         <div>
           <h1 className="text-lg pt-3 px-3">Similar Products</h1>
-          <CategoryPage params={{name: product.category, useInOtherPage: true}} />
+          <CategoryPage
+            params={{ name: product.category, useInOtherPage: true }}
+          />
         </div>
       </div>
 
@@ -364,10 +366,7 @@ const ViewProduct = () => {
                     -
                   </button>
                   <span className="px-4">
-                    {
-                      cart.find((item) => item.productID === product._id)
-                        ?.quantity
-                    }
+                    {cart.find((item) => item._id === product._id)?.quantity}
                   </span>
                   <button
                     onClick={() => {

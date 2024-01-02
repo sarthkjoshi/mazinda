@@ -10,19 +10,22 @@ const OrdersList = ({ filter }) => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const response = await axios.post("/api/order/fetch-user-orders", {
-      userToken: Cookies.get("user_token"),
-      filter,
-    });
-    console.log(response.data.orders);
-    setOrders(response.data.orders);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchData();
+    setLoading(true);
+
+    (async () => {
+      const { data } = await axios.post("/api/order/fetch-user-orders", {
+        userToken: Cookies.get("user_token"),
+        filter,
+      });
+      if (data.success) {
+        setOrders(data.orders);
+      } else {
+        console.log("An error occurred" + data.error);
+      }
+    })();
+
+    setLoading(false);
   }, []);
 
   const formatTimestamp = (timestamp) => {
