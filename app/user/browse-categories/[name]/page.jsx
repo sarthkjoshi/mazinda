@@ -44,9 +44,14 @@ const CategoryPage = ({ params }) => {
 
   return (
     <div className="mb-20">
-      {!params.useInOtherPage ? <h1 className="text-center text-2xl">
-        Browsing <span className="font-semibold">"{categoryName}"</span>
-      </h1> : null}
+      {!params.useInOtherPage ? (
+        <h1 className="text-center text-2xl">
+          Browsing{" "}
+          <span className="font-semibold">
+            "{decodeURIComponent(categoryName)}"
+          </span>
+        </h1>
+      ) : null}
       <div className="flex flex-wrap mt-4 justify-evenly">
         {products.length ? (
           products.map((product) => {
