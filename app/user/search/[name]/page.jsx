@@ -9,6 +9,8 @@ import NoResultImage from "@/public/no-result-vector.png";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import { useToast } from "@/components/ui/use-toast";
+import OvalLoader from "@/components/loading-spinners/OvalLoader";
+import ProgressBarLoader from "@/components/loading-spinners/ProgressBarLoader";
 
 const SearchPage = ({ params }) => {
   const [pageLoading, setPageLoading] = useState(true);
@@ -75,10 +77,13 @@ const SearchPage = ({ params }) => {
   if (pageLoading) {
     return (
       <>
-        <div className="text-center font-bold px-10">
-          Search Results for "{product_name}"
+        <div>
+          <div className="items-center justify-center font-bold px-10 flex gap-2">
+            Search Results for "{product_name}"{" "}
+          </div>
+          {pageLoading ? <ProgressBarLoader /> : null}
+          <ProductsLoading />
         </div>
-        <ProductsLoading />
       </>
     );
   }

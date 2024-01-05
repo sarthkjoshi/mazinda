@@ -5,7 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
+import OvalLoader from "@/components/loading-spinners/OvalLoader";
 import OrdersList from "@/components/utility/OrdersList";
 import { signOut } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";

@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import MagnifyingLoader from "../Loading-Spinners/MagnifyingLoader";
+import MagnifyingLoader from "../loading-spinners/MagnifyingLoader";
 
 const OrdersList = ({ filter }) => {
   const [loading, setLoading] = useState(true);

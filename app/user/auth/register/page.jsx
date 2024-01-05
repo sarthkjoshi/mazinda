@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
+import OvalLoader from "@/components/loading-spinners/OvalLoader";
 import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 

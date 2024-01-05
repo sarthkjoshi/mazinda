@@ -11,41 +11,44 @@ const Categories = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
-  const fetchData = async () => {
-    const response = await axios.post("/api/category/fetch-categories");
-    if (response.data.success) {
-      const categories = response.data.categories;
-      setCategories(categories);
-    } else {
-      return <>Oops... Something Went Wrong !</>;
-    }
-    setPageLoading(false);
-  };
   useEffect(() => {
-    fetchData();
+    (async () => {
+      const { data } = await axios.post("/api/category/fetch-categories");
+      if (data.success) {
+        const categories = data.categories;
+        setCategories(categories);
+      } else {
+        return <>Oops... Something Went Wrong !</>;
+      }
+    })();
+    setPageLoading(false);
   }, []);
 
   return (
     <>
-      <h1 className="text-center text-2xl">Browse Categories</h1>
+      <h1 className="text-center text-2xl mt-2">Browse Categories</h1>
       {!pageLoading ? (
-        <div className="grid grid-cols-3 border items-center">
+        <div className="grid grid-cols-3 items-center px-2">
           {categories.map((category) => {
             return (
               <Link
                 key={category._id}
                 href={`/user/browse-categories/${category.categoryName}`}
-                className="flex flex-col items-center cursor-pointer w-[80px]"
+                className="flex flex-col items-center cursor-pointer px-6 py-3"
               >
-                <AspectRatio ratio={1 / 1}>
+                <AspectRatio
+                  className="flex items-center, justify-center"
+                  ratio={1 / 1}
+                >
                   <img
                     src={category.categoryImage}
                     alt={category.categoryName}
+                    className="p-1"
                   />
                 </AspectRatio>
-                {/* <span className="text-gray-600 font-bold">
+                <span className="text-gray-600 font-bold whitespace-nowrap text-[13px]">
                   {category.categoryName}
-                </span> */}
+                </span>
               </Link>
             );
           })}
