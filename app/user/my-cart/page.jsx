@@ -10,7 +10,7 @@ import empty_cart_img from "@/public/empty_cart.png";
 
 import { fetchUserCart, removeItemFromCart } from "@/utils/cart";
 
-import FallingLinesLoader from "@/components/loading-spinners/FallingLinesLoader";
+import FallingLinesLoader from "@/components/Loading-Spinners/FallingLinesLoader";
 import axios from "axios";
 
 import { Skeleton } from "@/components/ui/skeleton";

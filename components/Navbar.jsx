@@ -5,7 +5,7 @@ import MazindaLogoFull from "@/public/logo_mazinda_full.png";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import OvalLoader from "./loading-spinners/OvalLoader";
+import OvalLoader from "./Loading-Spinners/OvalLoader";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 

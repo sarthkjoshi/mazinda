@@ -20,7 +20,7 @@ import pay_on_delivery from "@/public/item_desc_icons/pay_on_delivery.png";
 
 import CartSVG from "@/public/svg/Cart";
 import NextSVG from "@/public/svg/Next";
-import OvalLoader from "@/components/loading-spinners/OvalLoader";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import CategoryPage from "@/app/user/browse-categories/[name]/page";
 
 const ViewProduct = () => {

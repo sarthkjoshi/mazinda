@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
-import FallingLinesLoader from "@/components/loading-spinners/FallingLinesLoader";
+import FallingLinesLoader from "@/components/Loading-Spinners/FallingLinesLoader";
 import Link from "next/link";
 import phonepesvg from "@/public/phonepe-1.svg";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import OvalLoader from "@/components/loading-spinners/OvalLoader";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import { useLocation } from "@/contexts/LocationContext";
 
 const CheckoutPage = () => {

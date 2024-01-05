@@ -1,6 +1,6 @@
 "use client";
 
-import MagnifyingLoader from "@/components/loading-spinners/MagnifyingLoader";
+import MagnifyingLoader from "@/components/Loading-Spinners/MagnifyingLoader";
 import Link from "next/link";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
