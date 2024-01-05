@@ -31,7 +31,7 @@ const SearchPage = ({ params }) => {
     }
 
     const { data } = await axios.post(
-      `/api/product/fetch-products?searchQuery=${searchQuery}`,
+      `/api/product/fetch-search-products?searchQuery=${searchQuery}`,
       {
         availablePincodes,
       }
@@ -44,7 +44,10 @@ const SearchPage = ({ params }) => {
 
     // If products are available with this search query, then add them to the SearchQueryTrack for service improvements
     if (Object.keys(data.products).length) {
-      await axios.post('/api/track/search-details', { userToken: Cookies.get('user_token'), searchQuery: product_name });
+      await axios.post("/api/track/search-details", {
+        userToken: Cookies.get("user_token"),
+        searchQuery: product_name,
+      });
     }
   };
 

@@ -6,12 +6,10 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import Carousel from "@/components/utility/Carousel";
 
@@ -23,7 +21,6 @@ import pay_on_delivery from "@/public/item_desc_icons/pay_on_delivery.png";
 import CartSVG from "@/public/svg/Cart";
 import NextSVG from "@/public/svg/Next";
 import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
-import SearchPage from "@/app/user/search/[name]/page";
 import CategoryPage from "@/app/user/browse-categories/[name]/page";
 
 const ViewProduct = () => {
