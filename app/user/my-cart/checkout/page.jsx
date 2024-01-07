@@ -138,10 +138,18 @@ const CheckoutPage = () => {
 
         router.push("/user/my-cart/checkout/success");
 
-        const storeIDs = cart.map((item) => item.storeId);
+        let storeIds = [];
+
+        for (let item of cart) {
+          const { data } = await axios.post(
+            `/api/product/fetch-product?id=${item._id}`
+          );
+          storeIds.push(data.product.storeId);
+        }
+
         let storeMobileNumbers = [];
 
-        for (let store_id of storeIDs) {
+        for (let store_id of storeIds) {
           const { data } = await axios.post("/api/store/fetch-store-number", {
             id: store_id,
           });
