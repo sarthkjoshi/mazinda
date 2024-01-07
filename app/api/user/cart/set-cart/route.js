@@ -1,15 +1,19 @@
 import User from "@/models/User";
 import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(req) {
-  const { userId, newCart } = await req.json();
+  const { userToken, newCart } = await req.json();
+
+  // Verify the user's token to get their email
+  const userData = jwt.verify(userToken, "this is jwt secret");
 
   try {
     await connectDB();
 
     // Find the user by their email
-    let user = await User.findById(userId);
+    let user = await User.findOne({ email: userData.email });
 
     if (user) {
       user.cart = newCart;
