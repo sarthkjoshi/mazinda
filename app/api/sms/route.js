@@ -1,21 +1,27 @@
 import { NextResponse } from "next/server";
-import axios from 'axios'
+import axios from "axios";
 
 export async function POST(req) {
+  const { phone, otp } = await req.json();
 
-    const { phone } = await req.json();
+  const sender_id = "TXXTOO";
+  const apikey = "PGQVweSwfUsoIuKn";
+  const template_id = "1607100000000295088";
 
-    const sender_id = 'TXXTOO';
-    const apikey = 'PGQVweSwfUsoIuKn';
+  const message = `${otp} is the verification code to log in to your Mazinda account. DO NOT share this code with anyone.
 
-    const response = await axios.post(`http://bulksms.thetechmore.in/vb/apikey.php?apikey=${apikey}&senderid=${sender_id}&number=${phone}&templateid=${template_id}&message=Dear%20User%2C%0AYour%20order%20has%20been%20confirmed.%20Please%20check%20the%20details%20on%20the%20app.%0ACitikartt.com%2FVendor%0AText2`)
+    Thanks,
+    mazinda.com Text2`;
 
-    console.log(response.data)
+  const { data } = await axios.post(
+    `http://bulksms.thetechmore.in/vb/apikey.php?apikey=${apikey}&senderid=${sender_id}&number=${phone}&templateid=${template_id}&message=${message}`
+  );
 
-    if (response.data.status === 'Success') {
-        return NextResponse.json({ status: 200, success: true })
-    }
+  console.log(data);
 
-    return NextResponse.json({ status: 400, success: false })
+  if (data.status === "Success") {
+    return NextResponse.json({ status: 200, success: true });
+  }
 
+  return NextResponse.json({ status: 400, success: false });
 }
