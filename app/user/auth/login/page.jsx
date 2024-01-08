@@ -102,12 +102,14 @@ const LoginPage = () => {
           loading ? "pointer-events-none" : null
         }`}
       >
-        <Image src={MazindaLogoFull} alt="Mazinda Logo" width={150} />
+        <Link href="/">
+          <Image src={MazindaLogoFull} alt="Mazinda Logo" width={150} />
+        </Link>
 
         <div className="max-w-md w-full px-10 lg:py-6 bg-white rounded-md mt-5 lg:border my-3">
           <h1 className="mb-1 text-center font-extrabold text-4xl">Log In</h1>
           <div className="flex items-center justify-center">
-            <p className="inline text-center text-gray-600">
+            {/* <p className="inline text-center text-gray-600">
               or{" "}
               <Link
                 href="/user/auth/register"
@@ -115,7 +117,7 @@ const LoginPage = () => {
               >
                 create account
               </Link>
-            </p>
+            </p> */}
           </div>
           <form onSubmit={handleSubmit} className="mt-8">
             <div className="mb-4">
@@ -195,7 +197,7 @@ const LoginPage = () => {
               </button>
 
               <Link
-                href="/"
+                href="/user/auth/register"
                 className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
               >
                 <svg
@@ -207,7 +209,7 @@ const LoginPage = () => {
                 >
                   <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
                 </svg>
-                <span>Continue as Guest</span>
+                <span className="text-white">Create an account</span>
               </Link>
             </div>
           </div>
