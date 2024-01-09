@@ -26,7 +26,7 @@ export async function POST(req) {
     } else {
       return NextResponse.json({
         success: false,
-        error: "User doesn't exists",
+        message: "User doesn't exists",
       });
     }
   } catch (error) {
