@@ -7,10 +7,15 @@ export async function POST(req) {
   try {
     await connectDB();
     const { name, email } = await req.json();
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ name, email });
     if (user) {
       const token = jwt.sign(
-        { userId: user._id, name, email },
+        {
+          userId: user._id,
+          name: user.name,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+        },
         "this is jwt secret"
       );
       return NextResponse.json({
@@ -19,15 +24,9 @@ export async function POST(req) {
         token,
       });
     } else {
-      const newUser = await User.create({ name, email });
-      const token = jwt.sign(
-        { userId: newUser._id, name, email },
-        "this is jwt secret"
-      );
       return NextResponse.json({
-        success: true,
-        message: "User created successfully",
-        token,
+        success: false,
+        error: "User doesn't exists",
       });
     }
   } catch (error) {

@@ -9,7 +9,6 @@ import NoResultImage from "@/public/no-result-vector.png";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import { useToast } from "@/components/ui/use-toast";
-import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import ProgressBarLoader from "@/components/Loading-Spinners/ProgressBarLoader";
 
 const SearchPage = ({ params }) => {
