@@ -19,6 +19,7 @@ const Home = () => {
       </div>
 
       <div className="my-5 p-3">
+        <h1 className="text-lg font-semibold ml-3">What are you looking for?</h1>
         <Subcategories />
       </div>
 

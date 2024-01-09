@@ -55,7 +55,9 @@ const RegisterPage = () => {
   return (
     <div className="lg:flex">
       <div className="scale-90 flex flex-col items-center pt-2 min-h-screen lg:justify-center lg:w-full">
-        <Image src={MazindaLogoFull} alt="Mazinda Logo" width={150} />
+        <Link href="/">
+          <Image src={MazindaLogoFull} alt="Mazinda Logo" width={150} />
+        </Link>
         <div className="max-w-md w-full px-10 lg:py-6 bg-white rounded-md lg:border my-4">
           <h1 className="mb-1 text-center font-extrabold text-4xl">Sign Up</h1>
           <div className="flex items-center justify-center">
