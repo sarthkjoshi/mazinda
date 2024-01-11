@@ -153,6 +153,10 @@ const ViewProduct = () => {
     }
   };
 
+  const handleGotoCart = async () => {
+    router.push("/user/my-cart/checkout");
+  }
+
   // Check if the product is in the cart
   useEffect(() => {
     setIsProductInCart(cart.some((item) => item._id === product._id));
@@ -225,8 +229,14 @@ const ViewProduct = () => {
               )}
             </button>
           ) : (
-            <div className="flex items-center bg-white mx-1 text-2xl border rounded-md border-[#f17e13] overflow-hidden">
-              <button
+            <div className="flex items-center bg-white mx-1 text-2xl   rounded-md  overflow-hidden">
+              <button 
+                    onClick={() => {
+                      handleGotoCart(product);
+                    }}
+                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"> Go to Cart</button>
+            
+              {/* <button
                 onClick={() => {
                   UpdateItemInCart(product, "decrement");
                 }}
@@ -244,7 +254,7 @@ const ViewProduct = () => {
                 className="bg-[#f17e13] text-white px-4 py-2"
               >
                 +
-              </button>
+              </button> */}
             </div>
           )}
         </div>
@@ -376,7 +386,14 @@ const ViewProduct = () => {
                 </button>
               ) : (
                 <div className="flex items-center bg-white rounded-3xl mx-1 text-2xl">
-                  <button
+
+                  <button 
+                    onClick={() => {
+                      handleGotoCart(product);
+                    }}
+                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]">Go to Cart</button>
+
+                  {/* <button
                     onClick={() => {
                       UpdateItemInCart(product, "decrement");
                     }}
@@ -394,7 +411,7 @@ const ViewProduct = () => {
                     className="bg-[#f17e13] text-white rounded-r-3xl px-4 py-2"
                   >
                     +
-                  </button>
+                  </button> */}
                 </div>
               )}
             </div>
