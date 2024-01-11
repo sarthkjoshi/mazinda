@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Image from "next/image";
-
+import Link from "next/link";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -31,6 +31,9 @@ const ViewProduct = () => {
   const product_id = searchParams.get("id");
 
   const [product, setProduct] = useState({});
+  const [store, setStore] = useState({});
+  const [storeFollowers, setStoreFollowers] = useState(0);
+  const [storeProducts, setStoreProducts] = useState(0);
   const [pageLoading, setPageLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [isProductInCart, setIsProductInCart] = useState(false);
@@ -40,6 +43,25 @@ const ViewProduct = () => {
   const fetchProduct = async (id) => {
     const { data } = await axios.post(`/api/product/fetch-product?id=${id}`);
     setProduct(data.product);
+    fetchStore(data.product.storeId);
+    fetchStoreProducts(data.product.storeId);
+    // setPageLoading(false);
+  };
+
+  const fetchStore = async (store_id) => {
+    const { data } = await axios.post("/api/store/fetch-store", {
+      storeId: store_id,
+    });
+    setStore(data.store);
+    setStoreFollowers(data.store.followers.length)
+    // setPageLoading(false);
+  };
+
+  const fetchStoreProducts = async (store_id) => {
+    const { data } = await axios.post("/api/store/fetch-store-products", {
+      storeId: store_id,
+    });
+    setStoreProducts(data.products.length);
     setPageLoading(false);
   };
 
@@ -131,6 +153,10 @@ const ViewProduct = () => {
     }
   };
 
+  const handleGotoCart = async () => {
+    router.push("/user/my-cart/checkout");
+  }
+
   // Check if the product is in the cart
   useEffect(() => {
     setIsProductInCart(cart.some((item) => item._id === product._id));
@@ -203,8 +229,14 @@ const ViewProduct = () => {
               )}
             </button>
           ) : (
-            <div className="flex items-center bg-white mx-1 text-2xl border rounded-md border-[#f17e13] overflow-hidden">
-              <button
+            <div className="flex items-center bg-white mx-1 text-2xl   rounded-md  overflow-hidden">
+              <button 
+                    onClick={() => {
+                      handleGotoCart(product);
+                    }}
+                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"> Go to Cart</button>
+            
+              {/* <button
                 onClick={() => {
                   UpdateItemInCart(product, "decrement");
                 }}
@@ -222,7 +254,7 @@ const ViewProduct = () => {
                 className="bg-[#f17e13] text-white px-4 py-2"
               >
                 +
-              </button>
+              </button> */}
             </div>
           )}
         </div>
@@ -270,13 +302,13 @@ const ViewProduct = () => {
 
         <hr className="my-5" />
 
-        {/* <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
+        <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
               <span className="text-lg text-gray-500">Sold By</span>
               <hr />
               <div className="flex justify-between items-center mt-3">
-                <span className="text-lg">Maana Creations</span>
+                <span className="text-lg">{store.storeName}</span>
                 <Link
-                  href={"/"}
+                  href={`/store/view-store?id=${store._id}`}
                   className="border border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md"
                 >
                   View Shop
@@ -285,15 +317,15 @@ const ViewProduct = () => {
 
               <div className="flex justify-evenly mt-3">
                 <div className="flex flex-col items-center">
-                  <span className="text-xl">22</span>
+                  <span className="text-xl">{storeFollowers}</span>
                   <span className="text-[10px]">Followers</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="text-xl">29</span>
+                  <span className="text-xl">{storeProducts}</span>
                   <span className="text-[10px]">Products</span>
                 </div>
               </div>
-            </div> */}
+        </div> 
 
         {product.description.map((item, index) => (
           <div
@@ -354,7 +386,14 @@ const ViewProduct = () => {
                 </button>
               ) : (
                 <div className="flex items-center bg-white rounded-3xl mx-1 text-2xl">
-                  <button
+
+                  <button 
+                    onClick={() => {
+                      handleGotoCart(product);
+                    }}
+                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]">Go to Cart</button>
+
+                  {/* <button
                     onClick={() => {
                       UpdateItemInCart(product, "decrement");
                     }}
@@ -372,7 +411,7 @@ const ViewProduct = () => {
                     className="bg-[#f17e13] text-white rounded-r-3xl px-4 py-2"
                   >
                     +
-                  </button>
+                  </button> */}
                 </div>
               )}
             </div>
@@ -433,6 +472,31 @@ const ViewProduct = () => {
           </div>
 
           <hr className="my-5" />
+
+          <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
+              <span className="text-lg text-gray-500">Sold By</span>
+              <hr />
+              <div className="flex flex-row  items-center mt-3">
+                <span className="text-lg">{store.storeName}</span>
+                <Link
+                  href={`/store/view-store?id=${store._id}`}
+                  className="ml-5 border border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md"
+                >
+                  View Shop
+                </Link>
+              </div>
+
+              <div className="flex mt-3">
+                <div className="flex flex-col mr-5 items-center">
+                  <span className="text-xl">{storeFollowers}</span>
+                  <span className="text-[10px]">Followers</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-xl"> {storeProducts}</span>
+                  <span className="text-[10px]">Products</span>
+                </div>
+              </div>
+          </div> 
 
           <div>
             {product.description.map((item, index) => {
