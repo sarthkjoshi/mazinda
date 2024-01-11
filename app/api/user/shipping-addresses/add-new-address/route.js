@@ -17,16 +17,18 @@ export async function POST(req) {
 
         if (user) {
             let savedAddresses = user.savedAddresses;
+            let randrom_id = cryptoRandomString({
+                length: 10,
+                type: 'alphanumeric'
+            });
+
             savedAddresses.push({
-                ...newAddress, id: cryptoRandomString({
-                    length: 10,
-                    type: 'alphanumeric'
-                })
+                ...newAddress, id: randrom_id
             });
             user.savedAddresses = savedAddresses;
 
             await user.save();
-            return NextResponse.json({ success: true, message: "New address added successfully", newSavedAddresses: savedAddresses });
+            return NextResponse.json({ success: true, message: "New address added successfully", newSavedAddresses: savedAddresses, newAddress_id:{...newAddress, id: randrom_id}});
         } else {
             return NextResponse.json({ success: false, message: "User does not exist" });
         }

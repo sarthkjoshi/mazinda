@@ -365,6 +365,7 @@ const CheckoutPage = () => {
                 type="radio"
                 name="payment_method"
                 value="pod"
+                id="pod"
                 onChange={handleOnChange}
               />
               <label htmlFor="pod" className="ml-3">

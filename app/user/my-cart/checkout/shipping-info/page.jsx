@@ -87,6 +87,7 @@ const ShippingInfo = () => {
 
     if (data.success) {
       const newSavedAddresses = data.newSavedAddresses;
+      const newSavedAddress = data.newAddress_id;
       setSavedAddresses(newSavedAddresses);
       setNewAddress({
         name: "",
@@ -98,8 +99,17 @@ const ShippingInfo = () => {
         state: "",
       });
       setExpandedNewAddress(false);
+      setDefaultAddress(newSavedAddress);
     }
   };
+
+  const setDefaultAddress = async (newAddress) => {
+    await axios.post("/api/user/shipping-addresses/set-current-address", {
+      userToken,
+      currentAddress: newAddress ? newAddress : null,
+    });
+    setSelectedAddress(newAddress)
+  }
 
   const handleAddressClick = async (address) => {
     setSelectedAddress(selectedAddress === address ? null : address);
@@ -120,7 +130,15 @@ const ShippingInfo = () => {
     const pincodeResponse = await axios.post("/api/location/fetch-pincodes", {
       id: selectedLocation._id,
     });
-    setSelectedAddress(currentAddress);
+
+    if(!currentAddress){
+      if(savedAddresses){
+        setSelectedAddress(savedAddresses[0]);
+      }
+    }else{
+      setSelectedAddress(currentAddress);
+    }
+    
     setSavedAddresses(savedAddresses);
     setPincodes(pincodeResponse.data.pincodes);
     setSavedAddressLoading(false);
