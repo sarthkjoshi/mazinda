@@ -20,13 +20,20 @@ const TopCarousel = () => {
     <Slider {...settings}>
       {[1, 2, 3, 4].map((counter) => {
         let href = "";
+        let src = "";
         let target = "";
-        if(counter==2){
-          href = "user/browse-categories/Stationary";
-        }else if(counter==3){
+        if(counter==1){
+          src = 'https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/1.jpeg';
+        }else if(counter==2){
+          src = `https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/3.jpeg`;
           href = "https://api.whatsapp.com/send?phone=917876901177&text=Hey Mazinda,%0APlease help me out.";
           target = "_blank"
+        }else if(counter==3){
+          src = `https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/2.jpeg`;
+          href = "user/browse-categories/Stationary";
+          target = "_blank"
         }else if(counter==4){
+          src = `https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/4.jpeg`;
           href = "user/browse-categories/Grocery";
           target = "_blank"
         }
@@ -35,8 +42,9 @@ const TopCarousel = () => {
           <Link href={href} target={target}>
             <img
               key={counter}
-              src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/${counter}.jpeg`}
+              src={src}
               alt="image"
+              className="w-full"
             />
           </Link>
         );

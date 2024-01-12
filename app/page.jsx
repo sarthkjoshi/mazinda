@@ -18,8 +18,14 @@ const Home = () => {
         <TopCarousel />
       </div>
 
-      <div className="my-5 p-3">
+      <div className="flex justify-between items-center px-3">
         <h1 className="text-lg font-semibold ml-3">What are you looking for?</h1>
+          <Link
+            className="text-md underline mr-2"
+            href={"/user/browse-categories"}
+          >View Details</Link>
+      </div>
+      <div>
         <Subcategories />
       </div>
 
@@ -28,6 +34,7 @@ const Home = () => {
           <img
             src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_one.JPG`}
             alt=""
+            className="w-full"
           />
         </Link>
       </div>
@@ -47,15 +54,16 @@ const Home = () => {
       </div>
 
       <div className="mb-20">
-        <Link href="https://store.mazinda.com">
+        <Link href="https://play.google.com/store/apps/details?id=com.abhey_gupta.MazindaApp">
           <img
-            className="hidden md:block"
+            className="hidden md:block w-full"
             src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_end.JPG`}
             alt=""
           />
-          <Image
+          <img
             className="w-full md:hidden"
-            src={SellOnMazindaImage}
+            src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_end.JPG`}
+           
             alt="Sell On Mazinda! Click Here"
           />
         </Link>
