@@ -18,8 +18,14 @@ const Home = () => {
         <TopCarousel />
       </div>
 
-      <div className="my-5 p-3">
+      <div className="flex justify-between items-center px-3">
         <h1 className="text-lg font-semibold ml-3">What are you looking for?</h1>
+          <Link
+            className="text-md underline mr-2"
+            href={"/user/browse-categories"}
+          >View Details</Link>
+      </div>
+      <div>
         <Subcategories />
       </div>
 
