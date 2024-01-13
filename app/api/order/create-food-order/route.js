@@ -41,7 +41,7 @@
 // }
 
 import FoodOrder from "@/models/FoodOrder";
-import connectDB from "@/libs/mongoose";
+import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
