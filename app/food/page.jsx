@@ -21,7 +21,7 @@ const HomePage = () => {
 
   const rendorCategoriesCard = (category) => (
     // <Link href={(category.name.toLowerCase() === 'food' || category.name.toLowerCase() === 'bakery') ? `/${category.name.toLowerCase()}` : `https://mazinda.com/user/browse-categories/${category.name}`} key={category.name}>
-    <Link href={`food/${category.name.toLowerCase()}`} key={category.name}>
+    <Link href={`/food/${category.name.toLowerCase()}`} key={category.name}>
       <div
         className="relative bg-white border rounded-lg shadow-md m-2 transition transform md:hover:scale-105"
         style={{

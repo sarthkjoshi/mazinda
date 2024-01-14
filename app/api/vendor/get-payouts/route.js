@@ -1,5 +1,5 @@
 import Vendor from "@/models/Vendor";
-import connectDB from "@/libs/mongoose";
+import connectCityDB from "@/lib/foodmongoose";
 import { NextResponse } from "next/server";
 
 const getDateFromTimestamp = (timestamp) => {
@@ -26,7 +26,7 @@ export async function POST(req) {
 
         const orderDate = getDateFromTimestamp(orderCreatedAt);
 
-        await connectDB();
+        await connectCityDB();
 
         let vendor = await Vendor.findById(vendorId);
 

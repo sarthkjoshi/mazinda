@@ -1,5 +1,5 @@
 import Vendor from "@/models/Vendor";
-import connectDB from "@/libs/mongoose";
+import connectCityDB from "@/lib/foodmongoose";
 import { NextResponse } from "next/server";
 
 export async function PUT(req) {
@@ -7,7 +7,7 @@ export async function PUT(req) {
         const { number } = await req.json();
 
         // Connecting to database
-        await connectDB()
+        await connectCityDB()
 
         // Checking if the Vendor already exists
         let vendor = await Vendor.findOne({ number });

@@ -3,7 +3,7 @@
 import React   from 'react'
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import OvalLoader from "@/components/OvalLoader";
+import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -21,9 +21,8 @@ const FoodCategory = ({ params })  => {
     useEffect(() => {
       const fetchVendors = async () => {
         try {
-          const response = await axios.post("http://localhost:3000/api/vendor/fetch-all-vendors");
+          const response = await axios.post("/api/vendor/fetch-all-vendors");
           const data = await response.data;
-         console.log("data",data)
           if (!data.success) {
             throw new Error("Network response was not ok");
           }
@@ -65,6 +64,7 @@ const FoodCategory = ({ params })  => {
     };
   
     const renderVendorCard = (vendor) => (
+      
       <div
         key={vendor._id}
         className="relative bg-white border rounded-lg shadow-md m-2 transition transform md:hover:scale-105"
@@ -108,7 +108,7 @@ const FoodCategory = ({ params })  => {
               </button>
             </div>
           ) : vendor.openStatus ? (
-            <Link href={`/order/${vendor._id}?campus=${selectedCampus}`}>
+            <Link href={`/food/order/${vendor._id}?campus=${selectedCampus}`}>
               <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-b-md w-full">
                 Order Now
               </button>
@@ -126,7 +126,7 @@ const FoodCategory = ({ params })  => {
       if (selectedCampus === "All") {
         toast.info("Kindly select your campus", { autoClose: 3000 });
       } else if (vendor.openStatus) {
-        router.push(`/order/${vendor._id}?campus=${selectedCampus}`);
+        router.push(`/food/order/${vendor._id}?campus=${selectedCampus}`);
       }
     };
   
@@ -139,7 +139,7 @@ const FoodCategory = ({ params })  => {
             vendor.deliveryLocations.includes(selectedCampus) &&
             (isDevelopment || vendor.name !== "test")
         );
-  
+      console.log(params.category);
     // Sort the vendors based on customSort
     filteredVendors.sort(customSort);
   
@@ -164,7 +164,7 @@ const FoodCategory = ({ params })  => {
         </div>
   
         {isLoading ? (
-          <div>Loading....</div>
+            <OvalLoader />
         ) : (
           <div className="flex flex-wrap justify-center">
             {filteredVendors.map(renderVendorCard)}

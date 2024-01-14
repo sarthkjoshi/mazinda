@@ -1,5 +1,5 @@
 import Vendor from "@/models/Vendor";
-import connectDB from "@/libs/mongoose";
+import connectCityDB from "@/lib/foodmongoose";
 import { NextResponse } from "next/server";
 import { headers } from 'next/headers';
 
@@ -13,7 +13,7 @@ export async function GET() {
         const data = jwt.verify(vendor_token, 'this is jwt secret')
         const number = data.number
         // Connecting to database
-        await connectDB()
+        await connectCityDB()
 
         // Checking if the user already exists
         let vendor = await Vendor.findOne({ number });
