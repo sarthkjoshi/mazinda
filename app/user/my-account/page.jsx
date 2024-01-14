@@ -6,9 +6,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
-import OrdersList from "@/components/utility/OrdersList";
+// import OrdersList from "@/components/utility/OrdersList";
 import { signOut } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
+import OrdersTabs from "@/components/utility/OrderTabs";
 
 import {
   Accordion,
@@ -62,6 +63,9 @@ const MyAccount = () => {
     }
     fetchData(userToken);
   }, []);
+
+
+ 
 
   return (
     <>
@@ -200,7 +204,7 @@ const MyAccount = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <OrdersList filter="active" />
+               <OrdersTabs filter="active"/>
             </AccordionContent>
           </AccordionItem>
 
@@ -214,7 +218,8 @@ const MyAccount = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <OrdersList filter="delivered" />
+              {/* <OrdersList filter="delivered" /> */}
+              <OrdersTabs filter="delivered"/>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

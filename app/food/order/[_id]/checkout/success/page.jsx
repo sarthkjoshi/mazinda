@@ -27,7 +27,7 @@ const OrderSuccessPage = () => {
       </p>
 
       <div className="mt-8">
-        <Link href="/myorders" className="text-blue-500 hover:underline text-lg mx-2">
+        <Link href="/user/my-account" className="text-blue-500 hover:underline text-lg mx-2">
             View Your Orders
         </Link>
       </div>
