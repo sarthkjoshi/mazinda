@@ -34,6 +34,7 @@ const Home = () => {
           <img
             src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_one.JPG`}
             alt=""
+            className="w-full"
           />
         </Link>
       </div>
@@ -53,15 +54,16 @@ const Home = () => {
       </div>
 
       <div className="mb-20">
-        <Link href="https://store.mazinda.com">
+        <Link href="https://play.google.com/store/apps/details?id=com.abhey_gupta.MazindaApp">
           <img
-            className="hidden md:block"
+            className="hidden md:block w-full"
             src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_end.JPG`}
             alt=""
           />
-          <Image
+          <img
             className="w-full md:hidden"
-            src={SellOnMazindaImage}
+            src={`${process.env.NEXT_PUBLIC_AWS_IMAGE_BUCKET_BASE_URI}/home-page/banner_end.JPG`}
+           
             alt="Sell On Mazinda! Click Here"
           />
         </Link>
