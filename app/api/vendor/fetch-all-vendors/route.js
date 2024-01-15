@@ -1,11 +1,14 @@
-import Vendor from "@/models/Vendor";
-import connectCityDB from "@/lib/foodmongoose";
+import VendorSchema from "@/models/Vendor";
+// import connectCityDB from "@/lib/foodmongoose";
+// import connectCityDB from "@/lib/foodmongoose";
+const db = require("@/lib/foodmongoose");
 import { NextResponse } from "next/server";
 
 export async function POST() {
     try {
-    
-        await connectCityDB()
+        const connectCityDB = db();
+        // console.log("here"+connectCityDB);
+        const Vendor = connectCityDB.model("Vendor",VendorSchema);
     
         let vendors = await Vendor.find().select('-password -number -alternateNumber -menu -whatsapp_group_id -payouts -payPercentage');
         // console.log("vendors"+vendors);

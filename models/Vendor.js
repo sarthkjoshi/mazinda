@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-var conn = require('../lib/foodmongoose');
+// const db = require('../lib/foodmongoose');
+// console.log("db", db); 
 const VendorSchema = new mongoose.Schema({
     name: { type: String, required: true },
     number: { type: Number, required: true, unique: true },
@@ -17,7 +18,7 @@ const VendorSchema = new mongoose.Schema({
     menu: {type: Object, default: {}},
     payPercentage: {type: Number},
     payouts: {type: Object},
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
-mongoose.models = {}
-export default mongoose.citicart.model("Vendor", VendorSchema);
+// mongoose.models = {}
+export default VendorSchema;

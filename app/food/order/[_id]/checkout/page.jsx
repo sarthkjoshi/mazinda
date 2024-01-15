@@ -188,84 +188,84 @@ const CheckoutPage = ({ params }) => {
         _id: params._id,
       });
 
-      // try {
-      //   await axios.post("/api/vendor/whatsapp/msg-to-group", {
-      //     group_id: data.vendor.whatsapp_group_id,
-      //     order_id: json.order._id,
-      //     products: cart,
-      //     user: user.name,
-      //     address,
-      //     instructions: address.instructions,
-      //     amount: total,
-      //     externalDeliveryRequired,
-      //   });
-      // } catch (err) {
-      //   console.log("Error in sending the WhatsApp message", err);
-      // }
+      try {
+        await axios.post("/api/vendor/whatsapp/msg-to-group", {
+          group_id: data.vendor.whatsapp_group_id,
+          order_id: json.order._id,
+          products: cart,
+          user: user.name,
+          address,
+          instructions: address.instructions,
+          amount: total,
+          externalDeliveryRequired,
+        });
+      } catch (err) {
+        console.log("Error in sending the WhatsApp message", err);
+      }
 
       // Adding this order in the payouts section of the vendor
-      // try {
-      //   const payouts_response = await axios.post("/api/vendor/get-payouts", {
-      //     orderId: json.order._id,
-      //     vendorId: data.vendor._id,
-      //     totalAmount: parseFloat(total),
-      //     payPercentage: data.vendor.payPercentage,
-      //     handlingCharge: vendorData.packingHandlingCharges,
-      //     serviceCharge: vendorData.serviceCharges,
-      //     externalDeliveryRequired,
-      //     // cutleryQuantity,
-      //     deliveryCharge,
-      //     orderCreatedAt: json.order.createdAt,
-      //   });
+      try {
+        const payouts_response = await axios.post("/api/vendor/get-payouts", {
+          orderId: json.order._id,
+          vendorId: data.vendor._id,
+          totalAmount: parseFloat(total),
+          payPercentage: data.vendor.payPercentage,
+          handlingCharge: vendorData.packingHandlingCharges,
+          serviceCharge: vendorData.serviceCharges,
+          externalDeliveryRequired,
+          // cutleryQuantity,
+          deliveryCharge,
+          orderCreatedAt: json.order.createdAt,
+        });
 
       //   console.log(payouts_response.data);
 
-      //   if (payouts_response.data.success) {
-      //     try {
-      //       const res = await axios.put("/api/vendor/update-vendor-payouts", {
-      //         _id: data.vendor._id,
-      //         payouts: payouts_response.data.payouts,
-      //       });
-      //       console.log(res.data);
-      //     } catch (err) {
-      //       console.log("Error in updating the payouts", err);
-      //     }
-      //   }
-      // } catch (err) {
-      //   console.log("Error in getting the payouts", err);
-      // }
+        if (payouts_response.data.success) {
+          try {
+            const res = await axios.put("/api/vendor/update-vendor-payouts", {
+              _id: data.vendor._id,
+              payouts: payouts_response.data.payouts,
+            });
+            console.log(res.data);
+          } catch (err) {
+            console.log("Error in updating the payouts", err);
+          }
+        }
+      } catch (err) {
+        console.log("Error in getting the payouts", err);
+      }
 
       router.push("checkout/success");
 
-      // setTimeout(async () => {
-      //   try {
-      //     await axios.post("/api/vendor/whatsapp/msg-to-user", {
-      //       userName: user.name,
-      //       userNumber: address.phoneNumber,
-      //       amount: total,
-      //     });
-      //   } catch (err) {
-      //     console.log("Error in sending the WhatsApp message", err);
-      //   }
-      // }, 2000);
+      setTimeout(async () => {
+        try {
+          await axios.post("/api/vendor/whatsapp/msg-to-user", {
+            userName: user.name,
+            userNumber: address.phoneNumber,
+            amount: total,
+          });
+        } catch (err) {
+          console.log("Error in sending the WhatsApp message", err);
+        }
+      }, 2000);
 
-      // if (externalDeliveryRequired) {
-      //   setTimeout(async () => {
-      //     try {
-      //       await axios.post("/api/vendor/whatsapp/msg-to-delivery", {
-      //         userName: user.name,
-      //         order_id: json.order._id,
-      //         products: cart,
-      //         address: address,
-      //         amount: total,
-      //         vendorName: data.vendor.name,
-      //         cutleryQuantity,
-      //       });
-      //     } catch (err) {
-      //       console.log("Error in sending the WhatsApp message", err);
-      //     }
-      //   }, 4000);
-      // }
+      if (externalDeliveryRequired) {
+        setTimeout(async () => {
+          try {
+            await axios.post("/api/vendor/whatsapp/msg-to-delivery", {
+              userName: user.name,
+              order_id: json.order._id,
+              products: cart,
+              address: address,
+              amount: total,
+              vendorName: data.vendor.name,
+              cutleryQuantity,
+            });
+          } catch (err) {
+            console.log("Error in sending the WhatsApp message", err);
+          }
+        }, 4000);
+      }
 
       clearCart();
 

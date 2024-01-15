@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+require('../lib/mongoose');
 const StoreSchema = new mongoose.Schema({
     ownerName: { type: String, required: true },
     storeName: { type: String, required: true },

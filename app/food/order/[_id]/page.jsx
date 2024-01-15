@@ -142,7 +142,7 @@ const CanteenPage = ({ params }) => {
             if (vendorNameInCart !== storeName) {
               // Show the custom alert when trying to add items from different vendors
               setAlertMessage(
-                "You can't add items from different vendors. Do you want to clear the cart?"
+                "You can't add items from different restaurant. Do you want to clear the cart?"
               );
               setShowAlert(true);
               return;

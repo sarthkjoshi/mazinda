@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+require('../lib/mongoose');
 const StorySchema = new mongoose.Schema(
   {
     product: { type: Object, required: true },

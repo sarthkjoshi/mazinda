@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+require('../lib/mongoose');
 const LocationSchema = new mongoose.Schema({
     city: { type: String, required: true },
     pincodes: { type: Array, required: true },

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+require('../lib/mongoose');
 const FoodOrderSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },

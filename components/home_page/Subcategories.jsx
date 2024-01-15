@@ -52,7 +52,7 @@ const Subcategories = () => {
             <div className="overflow-hidden relative w-[45vw] h-[45vw] md:w-[22vw] md:h-[22vw] rounded-md">
                <Link href="/food">
                   <img
-                      src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/square-four-images/5.jpg`}
+                      src={`https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/square-four-images/5.png`}
                       alt=""
                       className="border-gray-300 border-1 object-contain w-full h-full"
                   />

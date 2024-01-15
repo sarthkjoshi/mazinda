@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+require('../lib/mongoose');
 const CategorySchema = new mongoose.Schema({
     categoryName: { type: String, required: true },
     categoryImage: { type: String, required: true },

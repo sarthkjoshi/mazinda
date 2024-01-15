@@ -7,14 +7,14 @@ export async function POST(req) {
     const message = 
     `Hey ${userName},
     
-    Your order from Citikartt has been confirmed and will reach you very soon!
+    Your order from Mazinda has been confirmed and will reach you very soon!
 
     Please Pay Rs ${amount} through UPI/Cash to the delivery person.
     
     Meanwhile you can see your orders on 
-    https://www.citikartt.com/myorders
+    https://www.mazinda.com/myorders
 
-    Hope you will order again only on www.citikartt.com 
+    Hope you will order again only on www.mazinda.com 
 
     Thank You!
     `;

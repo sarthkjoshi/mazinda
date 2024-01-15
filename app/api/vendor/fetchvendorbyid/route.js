@@ -1,13 +1,20 @@
-import Vendor from "@/models/Vendor";
-import connectCityDB from "@/lib/foodmongoose";
+// import Vendor from "@/models/Vendor";
+import VendorSchema from "@/models/Vendor";
+// import connectCityDB from "@/lib/foodmongoose";
+const db = require("@/lib/foodmongoose");
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try {
+
+        const connectCityDB = db();
+        // console.log("here"+connectCityDB);
+        const Vendor = connectCityDB.model("Vendor",VendorSchema);
+
         const { _id } = await req.json();
 
         // Connecting to database
-        await connectCityDB()
+        // await connectCityDB()
 
         // Checking if the Vendor already exists
         let vendor = await Vendor.findById(_id).select('-password -number -alternateNumber');
