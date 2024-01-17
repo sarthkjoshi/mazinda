@@ -76,7 +76,7 @@ const CanteenPage = ({ params }) => {
 
     const fetchVendor = async () => {
       try {
-        const response = await axios.post(`/api/vendor/fetchvendorbyid`, {
+        const response = await axios.post(`https://citikartt.com/api/vendor/fetchvendorbyid`, {
           _id: params._id,
         });
         const json = await response.data;

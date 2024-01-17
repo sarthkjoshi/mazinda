@@ -205,7 +205,7 @@ const CheckoutPage = ({ params }) => {
 
       // Adding this order in the payouts section of the vendor
       try {
-        const payouts_response = await axios.post("/api/vendor/get-payouts", {
+        const payouts_response = await axios.post("https://citikartt.com/api/vendor/get-payouts", {
           orderId: json.order._id,
           vendorId: data.vendor._id,
           totalAmount: parseFloat(total),
@@ -222,7 +222,7 @@ const CheckoutPage = ({ params }) => {
 
         if (payouts_response.data.success) {
           try {
-            const res = await axios.put("/api/vendor/update-vendor-payouts", {
+            const res = await axios.put("https://citikartt.com/api/vendor/update-vendor-payouts", {
               _id: data.vendor._id,
               payouts: payouts_response.data.payouts,
             });
@@ -318,7 +318,7 @@ const CheckoutPage = ({ params }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const vendorResponse = await axios.post(`/api/vendor/fetchvendorbyid`, {
+      const vendorResponse = await axios.post(`https://citikartt.com/api/vendor/fetchvendorbyid`, {
         _id: params._id,
       });
       const vendorJson = vendorResponse.data;
