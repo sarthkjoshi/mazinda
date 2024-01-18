@@ -20,10 +20,10 @@ const FoodCategory = ({ params }) => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.post(
+        const { data } = await axios.post(
           "https://citikartt.com/api/vendor/fetch-all-vendors"
         );
-        const data = await response.data;
+
         if (!data.success) {
           throw new Error("Network response was not ok");
         }
