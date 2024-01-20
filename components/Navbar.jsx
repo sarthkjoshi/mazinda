@@ -68,7 +68,7 @@ const Navbar = () => {
 
   const fetchLocations = async () => {
     try {
-      const { data } = await axios.get("/api/location/fetch-locations");
+      const { data } = await axios.post("/api/location/fetch-locations");
       if (data.success) {
         setLocations(data.locations);
       }
