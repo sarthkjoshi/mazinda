@@ -33,7 +33,7 @@ export default function LocationProvider({ children }) {
     (async () => {
       try {
         setLocationLoading(true);
-        const response = await axios.get("/api/location/fetch-locations");
+        const response = await axios.post("/api/location/fetch-locations");
         let selectedLocation;
 
         try {

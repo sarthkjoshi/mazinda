@@ -21,7 +21,7 @@ export async function POST(req) {
         const products = await Product.find({
             approvalStatus: true,
             storeId: { $in: storeIds },
-        }).select('productName description').exec();
+        }).select('productName').exec();
 
 
         // Create two arrays to store products matching in 'productName' and 'description'
@@ -30,13 +30,14 @@ export async function POST(req) {
 
         products.forEach(product => {
             const productNameLower = product.productName.toLowerCase();
-            const descriptionLower = product.description.toLowerCase();
+            // const descriptionLower = product.description.toLowerCase();
 
             if (productNameLower.includes(lowercaseSearchQuery)) {
                 matchingName.push(product);
-            } else if (descriptionLower.includes(lowercaseSearchQuery)) {
-                matchingDescription.push(product);
             }
+            //  else if (descriptionLower.includes(lowercaseSearchQuery)) {
+            //     matchingDescription.push(product);
+            // }
         });
 
         // Combine results with products from 'productName' appearing first
