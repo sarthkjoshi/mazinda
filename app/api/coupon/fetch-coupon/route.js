@@ -6,7 +6,7 @@ export async function POST(req) {
   const { code } = await req.json();
   try {
     await connectDB();
-    let coupon = await Coupon.find({ $match: { code } });
+    let coupon = await Coupon.find({ code });
 
     return NextResponse.json({
       success: true,
