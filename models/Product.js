@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require('../lib/mongoose');
+require("../lib/mongoose");
 const ProductSchema = new mongoose.Schema(
   {
     productName: { type: String, required: true },
@@ -12,6 +12,7 @@ const ProductSchema = new mongoose.Schema(
     variants: { type: Object },
     variantsInfo: { type: Object },
     combinationName: { type: String },
+    minQuantity: { type: String },
     topDeal: { type: Boolean, default: false },
     trending: { type: Boolean, default: false },
     description: { type: Array },
