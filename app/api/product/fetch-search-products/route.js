@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   const searchParams = request.nextUrl.searchParams;
   const searchQuery = searchParams.get("searchQuery");
+  const type = searchParams.get("type");
 
   try {
     await connectDB();
@@ -14,9 +15,15 @@ export async function POST(request) {
 
     const { availablePincodes } = await request.json();
 
-    const stores = await Store.find({
-      "storeAddress.pincode": { $in: availablePincodes },
-    });
+    let query = { "storeAddress.pincode": { $in: availablePincodes } };
+
+    if (type === "b2b") {
+      query["store.businessType"] = { $in: ["b2b"] };
+    } else if (type === "b2c") {
+      query["store.businessType"] = { $in: ["b2c"] };
+    }
+
+    const stores = await Store.find(query);
 
     // Extract storeIds from the matching stores
     const storeIds = stores.map((store) => store._id);
@@ -33,8 +40,8 @@ export async function POST(request) {
         { storeId: { $in: storeIds } },
         {
           $or: [
-            { productName: { $regex: searchQuery, $options: 'i' } },
-            { tags: { $regex: searchQuery, $options: 'i' } },
+            { productName: { $regex: searchQuery, $options: "i" } },
+            { tags: { $regex: searchQuery, $options: "i" } },
           ],
         },
       ],
