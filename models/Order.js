@@ -1,14 +1,19 @@
-const mongoose = require('mongoose');
-require('../lib/mongoose');
-const OrderSchema = new mongoose.Schema({
+const mongoose = require("mongoose");
+require("../lib/mongoose");
+const OrderSchema = new mongoose.Schema(
+  {
     userId: { type: String, required: true },
     cart: { type: Array, required: true },
     pricing: { type: Object, required: true },
     address: { type: Object, required: true },
     paymentMethod: { type: String, required: true },
     isDelivered: { type: Boolean, default: false },
-    status: { type: String, default: 'Confirmed' },
-}, { timestamps: true });
+    vendorOTP: { type: Number },
+    userOTP: { type: Number },
+    status: { type: String, default: "Confirmed" },
+  },
+  { timestamps: true }
+);
 
 mongoose.models = {};
 export default mongoose.model("Order", OrderSchema);
