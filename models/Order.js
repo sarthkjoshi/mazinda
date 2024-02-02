@@ -8,8 +8,6 @@ const OrderSchema = new mongoose.Schema(
     address: { type: Object, required: true },
     paymentMethod: { type: String, required: true },
     isDelivered: { type: Boolean, default: false },
-    vendorOTP: { type: Number },
-    userOTP: { type: Number },
     status: { type: String, default: "Confirmed" },
   },
   { timestamps: true }

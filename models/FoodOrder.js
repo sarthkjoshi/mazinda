@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require('../lib/mongoose');
+require("../lib/mongoose");
 const FoodOrderSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },
@@ -8,6 +8,10 @@ const FoodOrderSchema = new mongoose.Schema(
     address: { type: Object, required: true },
     amount: { type: Number, required: true },
     instructions: { type: String },
+    vendorOTP: { type: Number },
+    userOTP: { type: Number },
+    vendorVerified: { type: Boolean, default: false },
+    userVerified: { type: Boolean, default: false },
     externalDeliveryRequired: { type: Boolean },
     cutleryQuantity: { type: Number },
     paymentInfo: { type: Object },
