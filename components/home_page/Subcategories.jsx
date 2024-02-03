@@ -27,13 +27,13 @@ const renderSubcategory = ({ counter }) => {
     </div>
   );
 };
-
+``
 const Subcategories = () => {
 
   const selectedLocation = useLocation();
   // console.log("selectedLocation" , selectedLocation);
   let show_food_cat = false;
-  if(selectedLocation.city == "Mandi"){
+  if(selectedLocation.city == "Mandi" || selectedLocation.city == "Kamand"){
     show_food_cat = true;
   }
   const arrayToMap = show_food_cat ? [1, 2, 3] : [1, 2, 3, 4];
