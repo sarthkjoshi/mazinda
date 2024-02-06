@@ -13,10 +13,16 @@ export async function POST(request) {
 
     const { availablePincodes } = await request.json();
 
-    const stores = await Store.find({
-      "storeAddress.pincode": { $in: availablePincodes },
-    });
+    let query = { "storeAddress.pincode": { $in: availablePincodes } };
 
+     if (type === "b2b") {
+      query["businessType"] = { $in: ["b2b"] };
+    } else if (type === "b2c") {
+      query["businessType"] = { $in: ["b2c"] };
+    }
+
+    const stores = await Store.find(query);
+    console.log(stores.length);
     // Extract storeIds from the matching stores
     const storeIds = stores.map((store) => store._id);
 

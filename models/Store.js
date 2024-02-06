@@ -10,6 +10,7 @@ const StoreSchema = new mongoose.Schema({
     storeAddress: { type: Object, required: true },
     category: { type: String },
     followers: { type: Array },
+    businessType: { type: Array },
     openStatus: { type: Boolean, default: true },
     approvedStatus: { type: String, default: "pending" }
 }, { timestamps: true });
