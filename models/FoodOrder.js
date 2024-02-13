@@ -4,6 +4,7 @@ const FoodOrderSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },
     vendorId: { type: String, required: true },
+    vendorName: { type: String },
     products: { type: Object, required: true },
     address: { type: Object, required: true },
     amount: { type: Number, required: true },

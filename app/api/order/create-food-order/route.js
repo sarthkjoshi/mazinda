@@ -7,6 +7,7 @@ export async function POST(req) {
     const {
       userId,
       vendorId,
+      vendorName,
       products,
       address,
       amount,
@@ -21,6 +22,7 @@ export async function POST(req) {
     const foodOrder = await FoodOrder.create({
       userId,
       vendorId,
+      vendorName,
       products,
       address,
       amount,

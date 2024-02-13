@@ -25,12 +25,12 @@ const MyAccount = () => {
   const [userLoading, setUserLoading] = useState(true);
   const [user, setUser] = useState({});
 
-  const [message, setMessage] = useState("");
-  const [messageSending, setMessageSending] = useState(false);
+  // const [message, setMessage] = useState("");
+  // const [messageSending, setMessageSending] = useState(false);
 
-  const onChange = (e) => {
-    setMessage(e.target.value);
-  };
+  // const onChange = (e) => {
+  //   setMessage(e.target.value);
+  // };
 
   const fetchData = async (userToken) => {
     try {
@@ -63,9 +63,6 @@ const MyAccount = () => {
     }
     fetchData(userToken);
   }, []);
-
-
- 
 
   return (
     <>
@@ -145,32 +142,32 @@ const MyAccount = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  setMessageSending(true);
-                  try {
-                    const { data } = await axios.post("/api/email/get-help", {
-                      message,
-                    });
-                    console.log(data);
-                    if (data.success) {
-                      toast({
-                        description: "Your message has been sent.",
-                      });
-                    } else {
-                      toast({
-                        variant: "destructive",
-                        title: "Uh oh! Something went wrong.",
-                        description:
-                          "There was a problem sending your message.",
-                      });
-                    }
-                  } catch (err) {
-                    console.log(err);
-                  }
-                  setMessageSending(false);
-                }}
+              {/* <form
+                // onSubmit={async (e) => {
+                //   e.preventDefault();
+                //   setMessageSending(true);
+                //   try {
+                //     const { data } = await axios.post("/api/email/get-help", {
+                //       message,
+                //     });
+                //     console.log(data);
+                //     if (data.success) {
+                //       toast({
+                //         description: "Your message has been sent.",
+                //       });
+                //     } else {
+                //       toast({
+                //         variant: "destructive",
+                //         title: "Uh oh! Something went wrong.",
+                //         description:
+                //           "There was a problem sending your message.",
+                //       });
+                //     }
+                //   } catch (err) {
+                //     console.log(err);
+                //   }
+                //   setMessageSending(false);
+                // }}
                 className="flex justify-center flex-col items-center"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -190,7 +187,14 @@ const MyAccount = () => {
                 >
                   {!messageSending ? "Submit" : "Sending..."}
                 </button>
-              </form>
+              </form> */}
+
+              <span>
+                Feel free to contact us{" "}
+                <Link href="/support" className="text-blue-500 underline">
+                  here
+                </Link>
+              </span>
             </AccordionContent>
           </AccordionItem>
 
@@ -204,7 +208,7 @@ const MyAccount = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-               <OrdersTabs filter="active"/>
+              <OrdersTabs filter="active" />
             </AccordionContent>
           </AccordionItem>
 
@@ -219,7 +223,7 @@ const MyAccount = () => {
             </AccordionTrigger>
             <AccordionContent>
               {/* <OrdersList filter="delivered" /> */}
-              <OrdersTabs filter="delivered"/>
+              <OrdersTabs filter="delivered" />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
