@@ -11,10 +11,14 @@ import MazindaLogoFull from "@/public/logo_mazinda.png";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import ThreeDotsLoader from "@/components/Loading-Spinners/ThreeDotsLoader";
+import { useSearchParams } from 'next/navigation'
 
 const LoginPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect')
+  
 
   const [loading, setLoading] = useState(true);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -78,8 +82,52 @@ const LoginPage = () => {
 
       if (response.data.success) {
         const { user_token } = response.data;
+        const  userToken  = user_token;
         Cookies.set("user_token", user_token, { expires: 1000 });
-        router.push("/");
+        if(redirect=="buynow"){
+          const product =  JSON.parse(localStorage.getItem('buynow-product'));
+           
+          localStorage.setItem('buynow-product',"");
+          try {
+            await axios.post("/api/user/cart/buy-item", {
+              itemInfo: product,
+              userToken
+            });
+            router.push("/user/my-cart/checkout");
+          } catch (err) {
+            console.log(err);
+          }
+        }else if(redirect=="cart"){
+          const product =  JSON.parse(localStorage.getItem('cart-product'));
+          localStorage.setItem('cart-product',"");
+
+          try {
+            const { data } = await axios.post(
+              `/api/user/cart/add-update-item?filter=add`,
+              {
+                itemInfo: {
+                  _id: product._id,
+                  productName: product.productName,
+                  imagePaths: product.imagePaths,
+                  storeID: product.storeId,
+                  costPrice: product.pricing.costPrice,
+                  salesPrice: product.pricing.salesPrice,
+                  mrp: product.pricing.mrp,
+                },
+                userToken,
+              }
+            );
+            if (data.success) {
+              router.push("/user/my-cart");
+            }
+          } catch (err) {
+            console.log("An error occurred", err);
+          }
+
+           
+        }else{
+          router.push("/");
+        }
       } else {
         toast.warn(response.data.message, { autoClose: 3000 });
       }

@@ -106,19 +106,23 @@ const ViewProduct = () => {
         console.log("An error occurred", err);
       }
     } else {
-      toast({
-        title: "New to Mazinda?",
-        description:
-          "Signup/Login now to customize your cart and experience shopping like never before!",
-        action: (
-          <ToastAction
-            altText="Try again"
-            onClick={() => router.push("/user/auth/login")}
-          >
-            Login
-          </ToastAction>
-        ),
-      });
+      // toast({
+      //   title: "New to Mazinda?",
+      //   description:
+      //     "Signup/Login now to customize your cart and experience shopping like never before!",
+      //   action: (
+      //     <ToastAction
+      //       altText="Try again"
+      //       onClick={() => router.push("/user/auth/login")}
+      //     >
+      //       Login
+      //     </ToastAction>
+      //   ),
+      // });
+      
+      localStorage.setItem('cart-product',JSON.stringify(product));
+      router.push("/user/auth/login?redirect=cart");
+      
     }
     setAddingItemToCartLoading(false);
   };
@@ -137,19 +141,23 @@ const ViewProduct = () => {
       }
       router.push("/user/my-cart/checkout");
     } else {
-      toast({
-        title: "New to Mazinda?",
-        description:
-          "Signup/Login now to customize your cart and experience shopping like never before!",
-        action: (
-          <ToastAction
-            altText="Try again"
-            onClick={() => router.push("/user/auth/login")}
-          >
-            Login
-          </ToastAction>
-        ),
-      });
+      // toast({
+      //   title: "New to Mazinda?",
+      //   description:
+      //     "Signup/Login now to customize your cart and experience shopping like never before!",
+      //   action: (
+      //     <ToastAction
+      //       altText="Try again"
+      //       onClick={() => router.push("/user/auth/login")}
+      //     >
+      //       Login
+      //     </ToastAction>
+      //   ),
+      // });
+      // add product to local storage and after login add to cart for the
+      localStorage.setItem('buynow-product',JSON.stringify(product));
+      
+      router.push("/user/auth/login?redirect=buynow");
     }
   };
 
