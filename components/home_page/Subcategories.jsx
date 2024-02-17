@@ -66,13 +66,11 @@ const Subcategories = () => {
       </div>
 
       <div className="md:hidden grid grid-cols-2 gap-4 mt-2 justify-center">
-        {subCategory &&
-          subCategory.length > 0 &&
-          subCategory.map((category, index) => (
-            <React.Fragment key={index}>
-              {renderSubcategory({ category })}
-            </React.Fragment>
-          ))}
+        {subCategory.map((category, index) => (
+          <React.Fragment key={index}>
+            {renderSubcategory({ category })}
+          </React.Fragment>
+        ))}
       </div>
 
       <div className="hidden mt-3 md:grid grid-cols-4">
