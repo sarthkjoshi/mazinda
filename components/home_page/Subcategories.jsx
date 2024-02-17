@@ -64,11 +64,14 @@ const Subcategories = () => {
       </div>
      
       <div className="md:hidden grid grid-cols-2 gap-4 mt-2 justify-center">
-          {subCategory.map((category, index) => (
-              <React.Fragment key={index}>
-                {renderSubcategory({ category })}
-              </React.Fragment>
-          ))}
+        {subCategory && subCategory.length > 0 && (
+          subCategory.map((category, index) => (
+            <React.Fragment key={index}>
+              {renderSubcategory({ category })}
+            </React.Fragment>
+          ))
+        )}
+
       </div>
        
       <div className="hidden mt-3 md:grid grid-cols-4">
@@ -86,11 +89,14 @@ const Subcategories = () => {
         )}
         
         
-        {subCategory.slice(0, show_food_cat ? 3 : subCategory.length).map((category, index) => (
+        {subCategory && subCategory.length > 0 && (
+          subCategory.slice(0, show_food_cat ? 3 : subCategory.length).map((category, index) => (
             <React.Fragment key={index}>
               {renderSubcategory({ category })}
             </React.Fragment>
-        ))}
+          ))
+        )}
+
 
 
       </div>
