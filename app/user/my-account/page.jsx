@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
-// import OrdersList from "@/components/utility/OrdersList";
 import { signOut } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import OrdersTabs from "@/components/utility/OrderTabs";
@@ -25,18 +24,11 @@ const MyAccount = () => {
   const [userLoading, setUserLoading] = useState(true);
   const [user, setUser] = useState({});
 
-  // const [message, setMessage] = useState("");
-  // const [messageSending, setMessageSending] = useState(false);
-
-  // const onChange = (e) => {
-  //   setMessage(e.target.value);
-  // };
-
   const fetchData = async (userToken) => {
     try {
-      const response = await axios.post("/api/user/fetch-user", { userToken });
-      if (response.data.success) {
-        setUser(response.data.user);
+      const { data } = await axios.post("/api/user/fetch-user", { userToken });
+      if (data.success) {
+        setUser(data.user);
         setUserLoading(false);
       } else {
         toast.error("An unexpected error occurred");
