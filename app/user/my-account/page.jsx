@@ -134,53 +134,6 @@ const MyAccount = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              {/* <form
-                // onSubmit={async (e) => {
-                //   e.preventDefault();
-                //   setMessageSending(true);
-                //   try {
-                //     const { data } = await axios.post("/api/email/get-help", {
-                //       message,
-                //     });
-                //     console.log(data);
-                //     if (data.success) {
-                //       toast({
-                //         description: "Your message has been sent.",
-                //       });
-                //     } else {
-                //       toast({
-                //         variant: "destructive",
-                //         title: "Uh oh! Something went wrong.",
-                //         description:
-                //           "There was a problem sending your message.",
-                //       });
-                //     }
-                //   } catch (err) {
-                //     console.log(err);
-                //   }
-                //   setMessageSending(false);
-                // }}
-                className="flex justify-center flex-col items-center"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <textarea
-                  className="rounded-md w-full border border-gray-300 p-2"
-                  name="gethelpinput"
-                  value={message}
-                  onChange={onChange}
-                  cols="50"
-                  rows="5"
-                />
-                <button
-                  className={`px-5 py-1 w-fit my-1 rounded-full font-bold text-white md:rounded-lg transition-all duration-300 ${
-                    messageSending ? "bg-gray-400" : "bg-[#F17E13]"
-                  }`}
-                  type="submit"
-                >
-                  {!messageSending ? "Submit" : "Sending..."}
-                </button>
-              </form> */}
-
               <span>
                 Feel free to contact us{" "}
                 <Link href="/support" className="text-blue-500 underline">
