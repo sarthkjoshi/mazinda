@@ -189,7 +189,7 @@ const LoginPage = () => {
           console.log("error "+ error)
           setOtpSubmitting((prev) => ({
             ...prev,
-            ["sms"]: true,
+            ["sms"]: false,
           }));
         }
 
@@ -200,6 +200,10 @@ const LoginPage = () => {
         
       }else{
         setOtpError("Incorrect OTP");
+        setOtpSubmitting((prev) => ({
+          ...prev,
+          ["sms"]: false,
+        }));
       }
   }
 
