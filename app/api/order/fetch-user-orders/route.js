@@ -14,7 +14,7 @@ export async function POST(req) {
 
         await connectDB()
 
-        let user = await User.findOne({ email: userData.email })
+        let user = await User.findOne({ phoneNumber: userData.phoneNumber })
         if (!user) {
             return NextResponse.json({ success: false, error: "User doesn't exists" });
         }

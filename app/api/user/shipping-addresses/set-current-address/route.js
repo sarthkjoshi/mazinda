@@ -12,7 +12,7 @@ export async function POST(req) {
         await connectDB()
 
         // Checking if the user already exists with either email or phone number
-        const user = await User.findOne({ email: userData.email });
+        const user = await User.findOne({ phoneNumber: userData.phoneNumber });
 
         if (user) {
             user.currentAddress = currentAddress;

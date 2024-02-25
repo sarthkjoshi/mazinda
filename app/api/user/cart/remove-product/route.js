@@ -14,7 +14,7 @@ export async function POST(req) {
         await connectDB();
 
         // Find the user by their email
-        let user = await User.findOne({ email: userData.email });
+        let user = await User.findOne({ phoneNumber: userData.phoneNumber });
 
         if (user) {
             // Check if the product is already in the cart

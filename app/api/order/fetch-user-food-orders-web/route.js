@@ -11,7 +11,7 @@ export async function POST(req) {
 
     await connectDB();
 
-    let user = await User.findOne({ email: userData.email })
+    let user = await User.findOne({ phoneNumber: userData.phoneNumber })
     // let user = await User.findOne({ _id: "6589ccaff72caa2ade345cc5" })
 
     if (!user) {

@@ -25,7 +25,7 @@ export async function POST(req) {
         user,
       });
     } else {
-      const newUser = await User.create({ phoneNumber });
+      const newUser = await User.create({ phoneNumber, email:'' });
 
       const token = jwt.sign(
         { userId: newUser._id, phoneNumber },

@@ -12,131 +12,198 @@ import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import ThreeDotsLoader from "@/components/Loading-Spinners/ThreeDotsLoader";
 import { useSearchParams } from 'next/navigation'
-
+import { Button, Label, TextInput } from 'flowbite-react';
 const LoginPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect')
-  
 
+  const [canProceedOTP, setCanProceedOTP] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
   const [loading, setLoading] = useState(true);
-  const [googleLoading, setGoogleLoading] = useState(false);
-
-  const handleContinueWithGoogle = async () => {
-    try {
-      const response = await axios.post("/api/auth/continue-with-google", {
-        name: session.user.name,
-        email: session.user.email,
-      });
-
-      const { success, token: userToken, message } = response.data;
-
-      if (success) {
-        Cookies.set("user_token", userToken, { expires: 1000 });
-        router.push("/");
-      } else {
-        toast.warn(message, { autoClose: 3000 });
-      }
-    } catch (error) {
-      console.error("An error occurred during Continue with Google:", error);
-    }
-  };
-
+  const [mobileError, setMobileError] = useState(true);
+  const [otpError, setOtpError] = useState(true);
+ 
   useEffect(() => {
     const loadData = async () => {
       const token = Cookies.get("user_token");
       if (token) {
         router.push("/");
-      } else if (session && !token) {
-        await handleContinueWithGoogle();
-      }
+      }  
       setLoading(false);
     };
 
     loadData();
   }, [session]);
 
-  const [submitting, setSubmitting] = useState(false);
+  const [otpSubmitting, setOtpSubmitting] = useState({
+    sms: false,
+    whatsapp: false,
+  });
   const [credentials, setCredentials] = useState({
-    identifier: "",
-    password: "",
+    phoneNumber: "",
+    otp: "",
   });
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials({
-      ...credentials,
-      [name]: value,
-    });
+    setMobileError("");
+    setOtpError("");
+    const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+    setCredentials({ ...credentials, [e.target.name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      const response = await axios.post("/api/auth/login", {
-        credentials,
-      });
-
-      if (response.data.success) {
-        const { user_token } = response.data;
-        const  userToken  = user_token;
-        Cookies.set("user_token", user_token, { expires: 1000 });
-        if(redirect=="buynow"){
-          const product =  JSON.parse(localStorage.getItem('buynow-product'));
-           
-          localStorage.setItem('buynow-product',"");
-          try {
-            await axios.post("/api/user/cart/buy-item", {
-              itemInfo: product,
-              userToken
-            });
-            router.push("/user/my-cart/checkout");
-          } catch (err) {
-            console.log(err);
-          }
-        }else if(redirect=="cart"){
-          const product =  JSON.parse(localStorage.getItem('cart-product'));
-          localStorage.setItem('cart-product',"");
-
-          try {
-            const { data } = await axios.post(
-              `/api/user/cart/add-update-item?filter=add`,
-              {
-                itemInfo: {
-                  _id: product._id,
-                  productName: product.productName,
-                  imagePaths: product.imagePaths,
-                  storeID: product.storeId,
-                  costPrice: product.pricing.costPrice,
-                  salesPrice: product.pricing.salesPrice,
-                  mrp: product.pricing.mrp,
-                },
-                userToken,
-              }
-            );
-            if (data.success) {
-              router.push("/user/my-cart");
-            }
-          } catch (err) {
-            console.log("An error occurred", err);
-          }
-
-           
-        }else{
-          router.push("/");
-        }
-      } else {
-        toast.warn(response.data.message, { autoClose: 3000 });
+  const handleLoginWithOTP = async (platform) => {
+     setOtpError("");
+      if(credentials.phoneNumber=='' || credentials.phoneNumber.length < 10){
+        setMobileError("Please enter a valid mobile number(10 digits)");
+        return;
       }
-    } catch (error) {
-      console.error("An error occurred during login:", error);
+
+      setOtpSubmitting((prev) => ({
+        ...prev,
+        [platform]: true,
+      }));
+
+      try {
+        const otpSent = await sendOTP(credentials.phoneNumber, platform);
+
+        if (otpSent) {
+          setCanProceedOTP(true);
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setOtpSubmitting((prev) => ({
+          ...prev,
+          [platform]: false,
+        }));
+      }
+  } 
+
+  const sendOTP = async (phoneNumber, platform) => {
+    let data;
+   
+    try{
+      const generatedVerificationCode = Math.floor(
+        1000 + Math.random() * 9000
+      ).toString();
+      setVerificationCode(generatedVerificationCode);
+      
+      if (platform === "sms") {
+        const res1 = await axios.post("/api/sms", {
+          phone: phoneNumber,
+          otp: generatedVerificationCode,
+        });
+        data = res1.data;
+      } else if (platform === "whatsapp") {
+        const res2 = await axios.post(
+          "/api/whatsapp/msg-to-phone-no",
+          {
+            phone_number: phoneNumber,
+            message: `${generatedVerificationCode} is the verification code to verify your Mazinda account. DO NOT share this code with anyone. Thanks`,
+          }
+        );
+  
+        data = res2.data;
+      }
+    }catch(error){
+      setOtpError("Error while sending OTP! Please try another method.");
     }
 
-    setSubmitting(false);
+    return data.success;
   };
+
+  const verifyOTP = async () => {
+      if(credentials.otp=='' || credentials.otp.length < 4){
+        setOtpError("Please enter a valid OTP(4 digits)");
+        return;
+      }
+
+      setOtpSubmitting((prev) => ({
+        ...prev,
+        ["sms"]: true,
+      }));
+
+      if (credentials.otp === verificationCode) {
+        try{
+          const response = await axios.post(
+            "/api/auth/continue-with-otp",
+            { phoneNumber:credentials.phoneNumber }
+          );
+          
+
+          if (response.data.success) {
+            const { user_token } = response.data;
+            const  userToken  = user_token;
+            Cookies.set("user_token", user_token, { expires: 1000 });
+            if(redirect=="buynow"){
+              const product =  JSON.parse(localStorage.getItem('buynow-product'));
+               
+              localStorage.setItem('buynow-product',"");
+              try {
+                await axios.post("/api/user/cart/buy-item", {
+                  itemInfo: product,
+                  userToken
+                });
+                router.push("/user/my-cart/checkout");
+              } catch (err) {
+                console.log(err);
+              }
+            }else if(redirect=="cart"){
+              const product =  JSON.parse(localStorage.getItem('cart-product'));
+              localStorage.setItem('cart-product',"");
+    
+              try {
+                const { data } = await axios.post(
+                  `/api/user/cart/add-update-item?filter=add`,
+                  {
+                    itemInfo: {
+                      _id: product._id,
+                      productName: product.productName,
+                      imagePaths: product.imagePaths,
+                      storeID: product.storeId,
+                      costPrice: product.pricing.costPrice,
+                      salesPrice: product.pricing.salesPrice,
+                      mrp: product.pricing.mrp,
+                    },
+                    userToken,
+                  }
+                );
+                if (data.success) {
+                  router.push("/user/my-cart");
+                }
+              } catch (err) {
+                console.log("An error occurred", err);
+              }
+    
+               
+            }else{
+              router.push("/");
+            }
+          } else {
+            toast.warn(response.data.message, { autoClose: 3000 });
+          }
+
+        }catch(error){
+          console.log("error "+ error)
+          setOtpSubmitting((prev) => ({
+            ...prev,
+            ["sms"]: true,
+          }));
+        }
+
+        setOtpSubmitting((prev) => ({
+          ...prev,
+          ["sms"]: false,
+        }));
+        
+      }else{
+        setOtpError("Incorrect OTP");
+      }
+  }
+
+ 
 
   return (
     <div className="lg:flex">
@@ -154,114 +221,97 @@ const LoginPage = () => {
           <Image src={MazindaLogoFull} alt="Mazinda Logo" width={150} />
         </Link>
 
-        <div className="max-w-md w-full px-10 lg:py-6 bg-white rounded-md mt-5 lg:border my-3">
-          <h1 className="mb-1 text-center font-extrabold text-4xl">Log In</h1>
-          <div className="flex items-center justify-center">
-            {/* <p className="inline text-center text-gray-600">
-              or{" "}
-              <Link
-                href="/user/auth/register"
-                className="text-gray-600 underline"
-              >
-                create account
-              </Link>
-            </p> */}
-          </div>
-          <form onSubmit={handleSubmit} className="mt-8">
-            <div className="mb-4">
-              <label
-                htmlFor="identifier"
-                className="block text-gray-700 font-bold mb-1"
-              >
-                Phone/Email
-              </label>
-              <input
-                type="text"
-                id="identifier"
-                name="identifier"
-                className="w-full px-5 py-2 border rounded-full"
-                placeholder="Enter your email or phone"
-                value={credentials.identifier}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="block text-gray-700 font-bold mb-1"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className="w-full px-5 py-2 border rounded-full"
-                placeholder="Enter your password"
-                value={credentials.password}
-                onChange={handleInputChange}
-              />
-            </div>
+        {/* login section */}
 
-            <div className="mb-4">
-              <button
-                type="submit"
-                className="w-full bg-black text-white font-bold py-2 px-4 rounded-full hover:opacity-70"
-              >
-                {submitting ? <OvalLoader /> : "Log In"}
-              </button>
-              <div className="text-center mt-1">
-                <a href="#" className="underline font-semibold text-sm">
-                  Forgot Password?
-                </a>
+        {!canProceedOTP && (
+          <div className="max-w-md w-full px-10 lg:py-6  rounded-md mt-5 lg:border my-3">
+            <h3 className="mb-1 text-center font-bold text-2xl">
+              Login <span className="text-sm text-gray-600">or</span> Signup
+            </h3>
+            <div className="flex items-center justify-center ">
+              <div className="w-full bg-white">
+                <div className="mb-2 block bg-white">
+                  <Label htmlFor="mobile_number" value="Mobile Number" />
+                </div>
+                <TextInput 
+                  id="phoneNumber" 
+                  name="phoneNumber"
+                  value={credentials.phoneNumber}
+                  onChange={handleInputChange}
+                  placeholder="Mobile Number"
+                  addon="+91" 
+                  maxLength="10"
+                  minLength="10"
+                  required />
               </div>
             </div>
-          </form>
-
-          <div className="text-center">
-            <span className="font-extrabold text-gray-800">or</span>
-
-            <div>
-              <button
-                className={`mt-2 w-full justify-center px-4 py-2 border flex gap-2 border-slate-200 rounded-full text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150 ${
-                  googleLoading ? "filter grayscale" : null
-                }`}
-                onClick={() => {
-                  setGoogleLoading(true);
-                  signIn("google");
+            <div className="flex justify-left">
+              <p className="text-red-500">{mobileError}</p>
+            </div>
+            <div className="flex justify-left">
+              <p className="text-red-500">{otpError}</p>
+            </div>
+            <div className="flex items-center justify-center">
+                <Button 
+                    onClick = {() => {
+                      handleLoginWithOTP("sms");
+                    }}
+                    color="gray" pill className=" font-500 bg-[#0f0a05] mt-3 w-full border-[#0f0a05] text-white px-2 py-1 rounded-md">
+                  {otpSubmitting["sms"] ? <OvalLoader /> : "Send OTP via SMS"} 
+                </Button>
+            </div>
+            <div className="text-center mt-5">
+              <span className="font-extrabold text-gray-800">or</span>
+              <Button 
+                onClick = {() => {
+                  handleLoginWithOTP("whatsapp");
                 }}
-              >
-                <img
-                  className="w-6 h-6"
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  loading="lazy"
-                  alt="google logo"
-                />
-                <span>
-                  {googleLoading
-                    ? "Redirecting Securely ..."
-                    : "Continue with Google"}
-                </span>
-              </button>
-
-              <Link
-                href="/user/auth/register"
-                className="mt-2 w-full bg-[#fe6321] text-white justify-center px-4 py-2 flex gap-2 border-slate-200 rounded-full hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
-              >
-                <svg
-                  className="w-6 h-6 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 18"
-                >
-                  <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                </svg>
-                <span className="text-white">Create an account</span>
-              </Link>
+              color="gray" pill className="border mt-5 w-full border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md">
+                {otpSubmitting["whatsapp"] ? <OvalLoader /> : "Send OTP via WhatsApp"}  
+                </Button>
             </div>
           </div>
-        </div>
+        )}
+        
+
+        {/* otp section */}
+        {canProceedOTP && (
+          <div className="max-w-md w-full px-10 lg:py-6  rounded-md mt-5 lg:border my-3">
+            <h3 className="mb-1 text-center font-bold text-2xl">
+              Verify OTP
+            </h3>
+            <div className="flex items-center justify-center ">
+              <div className="w-full bg-white">
+                <div className="mb-2 block bg-white">
+                  <Label htmlFor="otp" value="Enter OTP" />
+                </div>
+                <TextInput 
+                  id="otp" 
+                  name="otp"
+                  value={credentials.otp}
+                  onChange={handleInputChange}
+                  placeholder="OTP"
+                  maxLength="4"
+                  minLength="4"
+                  required />
+              </div>
+            </div>
+            <div className="flex justify-left">
+              <p className="text-red-500">{otpError}</p>
+            </div>
+            <div className="flex items-center justify-center">
+                <Button 
+                    onClick = {verifyOTP}
+                    color="gray" pill className=" font-500 bg-[#0f0a05] mt-3 w-full border-[#0f0a05] text-white px-2 py-1 rounded-md">
+                  {otpSubmitting["sms"] ? <OvalLoader /> : "Verify OTP"} 
+                </Button>
+            </div>
+            
+
+          
+          </div>
+         )}
+
         <footer className="text-center text-gray-500">
           &copy; 2023 All Rights Reserved
           <br />
@@ -282,11 +332,10 @@ const LoginPage = () => {
             </Link>
           </div>
         </footer>
+
       </div>
 
-      {/* <div className="w-full hidden lg:block">
-        <Image src={AuthScreenPNG} className="h-screen w-full" alt="mazinda" />
-      </div> */}
+       
     </div>
   );
 };

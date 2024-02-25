@@ -14,7 +14,7 @@ export async function POST(req) {
         await connectDB();
 
         // Find the user by their email
-        let user = await User.findOne({ email: userData.email });
+        let user = await User.findOne({ phoneNumber: userData.phoneNumber });
 
         if (user) {
             user.pricing = { total_mrp, total_salesPrice, total_costPrice, service_charge, delivery_fees, additional_discount }
