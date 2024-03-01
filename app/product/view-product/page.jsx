@@ -53,7 +53,7 @@ const ViewProduct = () => {
       storeId: store_id,
     });
     setStore(data.store);
-    setStoreFollowers(data.store.followers.length)
+    setStoreFollowers(data.store.followers.length);
     // setPageLoading(false);
   };
 
@@ -119,10 +119,9 @@ const ViewProduct = () => {
       //     </ToastAction>
       //   ),
       // });
-      
-      localStorage.setItem('cart-product',JSON.stringify(product));
+
+      localStorage.setItem("cart-product", JSON.stringify(product));
       router.push("/user/auth/login?redirect=cart");
-      
     }
     setAddingItemToCartLoading(false);
   };
@@ -155,15 +154,15 @@ const ViewProduct = () => {
       //   ),
       // });
       // add product to local storage and after login add to cart for the
-      localStorage.setItem('buynow-product',JSON.stringify(product));
-      
+      localStorage.setItem("buynow-product", JSON.stringify(product));
+
       router.push("/user/auth/login?redirect=buynow");
     }
   };
 
   const handleGotoCart = async () => {
     router.push("/user/my-cart/checkout");
-  }
+  };
 
   // Check if the product is in the cart
   useEffect(() => {
@@ -238,12 +237,16 @@ const ViewProduct = () => {
             </button>
           ) : (
             <div className="flex items-center bg-white mx-1 text-2xl   rounded-md  overflow-hidden">
-              <button 
-                    onClick={() => {
-                      handleGotoCart(product);
-                    }}
-                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"> Go to Cart</button>
-            
+              <button
+                onClick={() => {
+                  handleGotoCart(product);
+                }}
+                className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
+              >
+                {" "}
+                Go to Cart
+              </button>
+
               {/* <button
                 onClick={() => {
                   UpdateItemInCart(product, "decrement");
@@ -311,29 +314,29 @@ const ViewProduct = () => {
         <hr className="my-5" />
 
         <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
-              <span className="text-lg text-gray-500">Sold By</span>
-              <hr />
-              <div className="flex justify-between items-center mt-3">
-                <span className="text-lg">{store.storeName}</span>
-                <Link
-                  href={`/store/view-store?id=${store._id}`}
-                  className="border border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md"
-                >
-                  View Shop
-                </Link>
-              </div>
+          <span className="text-lg text-gray-500">Sold By</span>
+          <hr />
+          <div className="flex justify-between items-center mt-3">
+            <span className="text-lg">{store.storeName}</span>
+            <Link
+              href={`/store/view-store?id=${store._id}`}
+              className="border border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md"
+            >
+              View Shop
+            </Link>
+          </div>
 
-              <div className="flex justify-evenly mt-3">
-                <div className="flex flex-col items-center">
-                  <span className="text-xl">{storeFollowers}</span>
-                  <span className="text-[10px]">Followers</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-xl">{storeProducts}</span>
-                  <span className="text-[10px]">Products</span>
-                </div>
-              </div>
-        </div> 
+          <div className="flex justify-evenly mt-3">
+            <div className="flex flex-col items-center">
+              <span className="text-xl">{storeFollowers}</span>
+              <span className="text-[10px]">Followers</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-xl">{storeProducts}</span>
+              <span className="text-[10px]">Products</span>
+            </div>
+          </div>
+        </div>
 
         {product.description.map((item, index) => (
           <div
@@ -358,12 +361,12 @@ const ViewProduct = () => {
           </div>
         ))}
 
-        <div>
+        {/* <div>
           <h1 className="text-lg pt-3 px-3">Similar Products</h1>
           <CategoryPage
             params={{ name: product.category, useInOtherPage: true }}
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Desktop Version */}
@@ -394,12 +397,14 @@ const ViewProduct = () => {
                 </button>
               ) : (
                 <div className="flex items-center bg-white rounded-3xl mx-1 text-2xl">
-
-                  <button 
+                  <button
                     onClick={() => {
                       handleGotoCart(product);
                     }}
-                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]">Go to Cart</button>
+                    className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
+                  >
+                    Go to Cart
+                  </button>
 
                   {/* <button
                     onClick={() => {
@@ -481,30 +486,30 @@ const ViewProduct = () => {
 
           <hr className="my-5" />
 
-          <div className="shadow-[-2px_2px_10px_0px_#00000010] py-2 px-3 rounded-lg">
-              <span className="text-lg text-gray-500">Sold By</span>
-              <hr />
-              <div className="flex flex-row  items-center mt-3">
-                <span className="text-lg">{store.storeName}</span>
-                <Link
-                  href={`/store/view-store?id=${store._id}`}
-                  className="ml-5 border border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md"
-                >
-                  View Shop
-                </Link>
-              </div>
+          <div className="shadow-[-2px_2px_10px_0px_#00000010] py-3 px-6 rounded-lg w-fit">
+            <span className="text-lg text-gray-500">Sold By</span>
+            <hr />
+            <div className="flex flex-row  items-center mt-3">
+              <span className="text-lg">{store.storeName}</span>
+              <Link
+                href={`/${store.storeName.toLowerCase().replace(/\s+/g, "-")}`}
+                className="ml-5 border border-[#F17E13] text-[#F17E13] px-2 py-1 rounded-md"
+              >
+                View Shop
+              </Link>
+            </div>
 
-              <div className="flex mt-3">
-                <div className="flex flex-col mr-5 items-center">
-                  <span className="text-xl">{storeFollowers}</span>
-                  <span className="text-[10px]">Followers</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-xl"> {storeProducts}</span>
-                  <span className="text-[10px]">Products</span>
-                </div>
+            <div className="flex mt-3">
+              <div className="flex flex-col mr-5 items-center">
+                <span className="text-xl">{storeFollowers}</span>
+                <span className="text-[10px]">Followers</span>
               </div>
-          </div> 
+              <div className="flex flex-col items-center">
+                <span className="text-xl"> {storeProducts}</span>
+                <span className="text-[10px]">Products</span>
+              </div>
+            </div>
+          </div>
 
           <div>
             {product.description.map((item, index) => {

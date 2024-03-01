@@ -21,6 +21,7 @@ const CategoryPage = ({ params }) => {
       `/api/product/fetch-products?category=${categoryName}`,
       { availablePincodes }
     );
+    console.log("data", data);
     setProducts(data.products);
     setPageLoading(false);
   };
