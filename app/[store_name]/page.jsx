@@ -24,9 +24,13 @@ const ViewStore = ({ params }) => {
     const { data } = await axios.post("/api/store/fetch-store-by-name", {
       store_name: params.store_name,
     });
-    console.log(data);
-    setStore(data.store);
-    const followers = data.store.followers;
+
+    if (data.success) {
+      setStore(data.store);
+      const followers = data.store.followers;
+    } else {
+      setPageLoading(false);
+    }
     // const userToken = Cookies.get("user_token");
     // if (userToken) {
     //   const { data } = await axios.post("/api/user/fetch-user", { userToken });
@@ -90,6 +94,17 @@ const ViewStore = ({ params }) => {
     return (
       <div className="flex items-center justify-center h-[75vh]">
         <OvalLoader />
+      </div>
+    );
+  }
+
+  if (store && !Object.keys(store).length) {
+    return (
+      <div className="flex items-center justify-center h-[80vh]">
+        <div className="flex flex-col items-center justify-center gap-1">
+          <span className="font-extrabold text-5xl">404</span>
+          <span className="text-gray-500">Store Not Found</span>
+        </div>
       </div>
     );
   }
