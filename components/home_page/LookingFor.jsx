@@ -16,7 +16,7 @@ const LookingFor = () => {
   const renderLookingFor = (banner) => {
     let href =
       banner.link_type === "category"
-        ? `user/browse-categories/${encodeURIComponent(banner.category_id)}`
+        ? `browse-categories/${encodeURIComponent(banner.category_id)}`
         : "#";
     return (
       <div className="overflow-hidden relative w-[45vw] h-[45vw] md:w-[22vw] md:h-[22vw] rounded-md mb-3">
