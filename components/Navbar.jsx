@@ -153,7 +153,7 @@ const Navbar = () => {
                           return (
                             <Link
                               key={category._id}
-                              href={`/user/browse-categories/${category.categoryName}`}
+                              href={`/browse-categories/${category.categoryName}`}
                               className="m-2 p-2 flex flex-col items-center cursor-pointer"
                             >
                               <img

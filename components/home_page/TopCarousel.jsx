@@ -3,8 +3,12 @@ import Link from "next/link";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const TopCarousel = () => {
+  const [banners, setBanners] = useState([]);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -16,33 +20,52 @@ const TopCarousel = () => {
     // dots: false,
   };
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await axios.post("/api/banner/fetch", {
+          banner_type: "carousel",
+        });
+        console.log(data);
+        if (data.success) {
+          setBanners(data.banners);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
   return (
     <Slider {...settings}>
-      {[1, 2, 3, 4].map((counter) => {
+      {banners.map((banner) => {
         let href = "";
-        let src = "";
-        let target = "";
-        if(counter==1){
-          src = 'https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/1.jpeg';
-        }else if(counter==2){
-          src = `https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/3.jpeg`;
-          href = "https://api.whatsapp.com/send?phone=917876901177&text=Hey Mazinda,%0APlease help me out.";
-          target = "_blank"
-        }else if(counter==3){
-          src = `https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/2.jpeg`;
-          href = "user/browse-categories/Stationary";
-          target = "_blank"
-        }else if(counter==4){
-          src = `https://mazindabucket.s3.ap-south-1.amazonaws.com/home-page/top-carousel/4.jpeg`;
-          href = "user/browse-categories/Grocery";
-          target = "_blank"
+
+        switch (banner.link_type) {
+          case "no_link":
+            href = "#";
+            break;
+          case "category":
+            href = `browse-categories/${encodeURIComponent(
+              banner.category_id
+            )}`;
+            break;
+          case "product":
+            href = `user/product/view-product?id=${banner.product_id}`;
+            break;
+          case "external_link":
+            href = banner.external_link;
+            break;
+
+          default:
+            break;
         }
 
         return (
-          <Link href={href} target={target}>
+          <Link href={href} target={href == "#" ? "" : "_blank"}>
             <img
-              key={counter}
-              src={src}
+              key={banner._id}
+              src={banner.image}
               alt="image"
               className="w-full"
             />

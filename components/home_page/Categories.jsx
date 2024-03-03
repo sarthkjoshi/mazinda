@@ -22,10 +22,7 @@ const Categories = () => {
     <>
       <div className="flex justify-between items-center px-3">
         <h1 className="text-lg font-semibold">Categories</h1>
-        <Link
-          className="text-md underline mr-2"
-          href={"/user/browse-categories"}
-        >
+        <Link className="text-md underline mr-2" href={"/browse-categories"}>
           View Details
         </Link>
       </div>
@@ -34,7 +31,7 @@ const Categories = () => {
           return (
             <Link
               key={category._id}
-              href={`/user/browse-categories/${category.categoryName}`}
+              href={`/browse-categories/${category.categoryName}`}
               className="m-2 p-2 flex flex-col items-center cursor-pointer"
             >
               <img

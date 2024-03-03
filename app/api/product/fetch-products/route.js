@@ -2,11 +2,12 @@ import Product from "@/models/Product";
 import Store from "@/models/Store";
 import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
+import Category from "@/models/Category";
 
 export async function POST(request) {
   const searchParams = request.nextUrl.searchParams;
   const filter = searchParams.get("filter");
-  const category = searchParams.get("category");
+  const category_id = searchParams.get("category_id");
 
   try {
     await connectDB();
@@ -41,7 +42,7 @@ export async function POST(request) {
 
           break;
       }
-    } else if (category) {
+    } else if (category_id) {
       const { availablePincodes } = await request.json();
 
       const stores = await Store.find({
@@ -49,8 +50,11 @@ export async function POST(request) {
       });
 
       const storeIds = stores.map((store) => store._id);
+
+      const category = await Category.findById(category_id);
+
       products = await Product.find({
-        category,
+        category: category?.categoryName,
         approvalStatus: true,
         storeId: { $in: storeIds },
       });

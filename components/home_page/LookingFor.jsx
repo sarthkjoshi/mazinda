@@ -1,53 +1,51 @@
 "use client";
 import Link from "next/link";
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 import axios from "axios";
-const renderSubcategory = ({ category }) => {
-  let href = `user/browse-categories/${encodeURIComponent(
-    category.category_id.categoryName
-  )}`;
-  return (
-    <div className="overflow-hidden relative w-[45vw] h-[45vw] md:w-[22vw] md:h-[22vw] rounded-md mb-3">
-      <Link href={href}>
-        <img
-          src={category.image}
-          alt={category._id}
-          className="border-gray-300 border-1 object-contain w-full h-full"
-        />
-      </Link>
-    </div>
-  );
-};
 
-const Subcategories = () => {
-  const [subCategory, setSubcategories] = useState([]);
+const LookingFor = () => {
   const selectedLocation = useLocation();
+  const [banners, setBanners] = useState([]);
 
   let show_food_cat = false;
   if (selectedLocation.city == "Mandi" || selectedLocation.city == "Kamand") {
     show_food_cat = true;
   }
 
-  const fetchSubcategories = async () => {
-    try {
-      if (selectedLocation && selectedLocation._id) {
-        const { data } = await axios.post(`/api/fetch-looking-for`, {
-          id: selectedLocation._id,
-        });
-        setSubcategories(data.sections);
-      } else {
-        // console.error("Selected location or _id is undefined");
-      }
-    } catch (error) {
-      // console.error("Error fetching subcategories:", error);
-    }
+  const renderLookingFor = (banner) => {
+    let href =
+      banner.link_type === "category"
+        ? `user/browse-categories/${encodeURIComponent(banner.category_id)}`
+        : "#";
+    return (
+      <div className="overflow-hidden relative w-[45vw] h-[45vw] md:w-[22vw] md:h-[22vw] rounded-md mb-3">
+        <Link href={href}>
+          <img
+            src={banner.image}
+            alt={banner._id}
+            className="border-gray-300 border-1 object-contain w-full h-full"
+          />
+        </Link>
+      </div>
+    );
   };
 
   useEffect(() => {
-    fetchSubcategories();
-  }, [selectedLocation]);
+    (async () => {
+      try {
+        const { data } = await axios.post("/api/banner/fetch", {
+          banner_type: "looking-for",
+        });
+        console.log(data);
+        if (data.success) {
+          setBanners(data.banners);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -66,9 +64,9 @@ const Subcategories = () => {
       </div>
 
       <div className="md:hidden grid grid-cols-2 gap-4 mt-2 justify-center">
-        {subCategory.map((category, index) => (
+        {banners.map((banner, index) => (
           <React.Fragment key={index}>
-            {renderSubcategory({ category })}
+            {renderLookingFor(banner)}
           </React.Fragment>
         ))}
       </div>
@@ -86,11 +84,11 @@ const Subcategories = () => {
           </div>
         )}
 
-        {subCategory
-          .slice(0, show_food_cat ? 3 : subCategory.length)
-          .map((category, index) => (
+        {banners
+          .slice(0, show_food_cat ? 3 : banners.length)
+          .map((banner, index) => (
             <React.Fragment key={index}>
-              {renderSubcategory({ category })}
+              {renderLookingFor(banner)}
             </React.Fragment>
           ))}
       </div>
@@ -98,4 +96,4 @@ const Subcategories = () => {
   );
 };
 
-export default Subcategories;
+export default LookingFor;

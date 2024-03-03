@@ -7,7 +7,7 @@ import ProductCard from "@/components/utility/ProductCard";
 import { useLocation, useLocationLoading } from "@/contexts/LocationContext";
 
 const CategoryPage = ({ params }) => {
-  const categoryName = params.name;
+  const category_id = params.id;
 
   const [pageLoading, setPageLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -18,10 +18,9 @@ const CategoryPage = ({ params }) => {
   const fetchData = async () => {
     const availablePincodes = selectedLocation.pincodes;
     const { data } = await axios.post(
-      `/api/product/fetch-products?category=${categoryName}`,
+      `/api/product/fetch-products?category_id=${category_id}`,
       { availablePincodes }
     );
-    console.log("data", data);
     setProducts(data.products);
     setPageLoading(false);
   };
@@ -35,9 +34,7 @@ const CategoryPage = ({ params }) => {
   if (pageLoading) {
     return (
       <>
-        <h1 className="text-center text-2xl">
-          Browsing <span className="font-semibold">"{categoryName}"</span>
-        </h1>
+        <h1 className="text-center text-2xl">Please Wait ...</h1>
         <ProductsLoading />
       </>
     );
@@ -48,9 +45,7 @@ const CategoryPage = ({ params }) => {
       {!params.useInOtherPage ? (
         <h1 className="text-center text-2xl">
           Browsing{" "}
-          <span className="font-semibold">
-            "{decodeURIComponent(categoryName)}"
-          </span>
+          <span className="font-semibold">"{products[0].category}"</span>
         </h1>
       ) : null}
       <div className="flex flex-wrap mt-4 justify-evenly">
