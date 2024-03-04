@@ -4,6 +4,9 @@ import { headers } from "next/headers";
 export async function GET(req) {
   const headersList = headers();
   const userAgent = headersList.get("user-agent");
+
+  console.log(userAgent);
+
   let targetUrl;
 
   if (userAgent && userAgent.includes("Android")) {
