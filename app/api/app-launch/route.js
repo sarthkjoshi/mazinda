@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 
 export async function GET(req) {
-  const userAgent = req.headers["user-agent"];
+  const headersList = headers();
+  const userAgent = headersList.get("user-agent");
   let targetUrl;
 
-  if (userAgent.includes("Android")) {
+  if (userAgent && userAgent.includes("Android")) {
     targetUrl =
       "https://play.google.com/store/apps/details?id=com.abhey_gupta.MazindaApp";
   } else if (userAgent.includes("iPhone")) {
