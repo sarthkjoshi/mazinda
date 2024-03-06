@@ -9,14 +9,12 @@ export async function GET(req) {
 
   let targetUrl;
 
-  if (userAgent && userAgent.includes("Android")) {
-    targetUrl =
-      "https://play.google.com/store/apps/details?id=com.abhey_gupta.MazindaApp";
-  } else if (userAgent.includes("iPhone")) {
+  if (userAgent.includes("iPhone")) {
     targetUrl =
       "https://apps.apple.com/in/app/mazinda-ab-maze-mein-india/id6477349293";
   } else {
-    targetUrl = "https://mazinda.com";
+    targetUrl =
+      "https://play.google.com/store/apps/details?id=com.abhey_gupta.MazindaApp";
   }
 
   return NextResponse.redirect(targetUrl);
