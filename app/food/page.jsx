@@ -1,10 +1,9 @@
 "use client";
-import React, { useEffect }   from 'react'
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 // import connectCityDB from "@/lib/foodmongoose";
 const HomePage = () => {
-  
   // useEffect(() => {
   //   connectCityDB();
   // });
@@ -22,7 +21,6 @@ const HomePage = () => {
         "https://static.toiimg.com/thumb/48201473/best-bakery-guide.jpg?width=1200&height=900",
       availabilityStatus: true,
     },
-     
   ];
 
   const rendorCategoriesCard = (category) => (
@@ -84,7 +82,7 @@ const HomePage = () => {
         {categories.map(rendorCategoriesCard)}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
