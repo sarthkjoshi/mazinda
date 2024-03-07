@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
 
 import Carousel from "@/components/utility/Carousel";
 
@@ -21,11 +19,8 @@ import pay_on_delivery from "@/public/item_desc_icons/pay_on_delivery.png";
 import CartSVG from "@/public/svg/Cart";
 import NextSVG from "@/public/svg/Next";
 import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
-import CategoryPage from "@/app/browse-categories/[id]/page";
 
 const ViewProduct = () => {
-  const { toast } = useToast();
-
   const searchParams = useSearchParams();
   const router = useRouter();
   const product_id = searchParams.get("id");

@@ -16,10 +16,10 @@ const LookingFor = () => {
   const renderLookingFor = (banner) => {
     let href =
       banner.link_type === "category"
-        ? `browse-categories/${encodeURIComponent(banner.category_id)}`
+        ? `browse-categories/${banner.category_id}`
         : "#";
     return (
-      <div className="overflow-hidden relative w-[45vw] h-[45vw] md:w-[22vw] md:h-[22vw] rounded-md mb-3">
+      <div className="overflow-hidden mx-auto w-[45vw] h-[45vw] md:w-[22vw] md:h-[22vw] rounded-md mb-3">
         <Link href={href}>
           <img
             src={banner.image}
@@ -49,7 +49,7 @@ const LookingFor = () => {
 
   return (
     <>
-      <div className="md:hidden grid  w-full ">
+      <div className="md:hidden grid w-full">
         {show_food_cat && (
           <div className=" overflow-hidden relative   rounded-md">
             <Link href="/food">
@@ -63,7 +63,7 @@ const LookingFor = () => {
         )}
       </div>
 
-      <div className="md:hidden grid grid-cols-2 gap-4 mt-2 justify-center">
+      <div className="md:hidden grid grid-cols-2 mt-2 justify-center items-center">
         {banners.map((banner, index) => (
           <React.Fragment key={index}>
             {renderLookingFor(banner)}
