@@ -17,11 +17,9 @@ const Home = () => {
       </div>
 
       <div className="flex justify-between items-center px-3">
-        <h1 className="text-lg font-semibold ml-3">
-          What are you looking for?
-        </h1>
+        <h1 className="text-md font-semibold">What are you looking for?</h1>
         <Link
-          className="text-md underline mr-2"
+          className="text-sm text-gray-400 underline mr-2"
           href={"/user/browse-categories"}
         >
           View Details
@@ -40,12 +38,12 @@ const Home = () => {
       </div>
 
       <div className="my-5">
-        <h1 className="text-lg font-semibold ml-3">Mazinda Top Deals</h1>
+        <h1 className="text-md font-semibold ml-3">Mazinda Top Deals</h1>
         <ProductCollection filter={"top-deal"} />
       </div>
 
       <div className="my-5">
-        <h1 className="text-lg font-semibold ml-3">Trending Products</h1>
+        <h1 className="text-md font-semibold ml-3">Trending Products</h1>
         <ProductCollection filter={"trending"} />
       </div>
 

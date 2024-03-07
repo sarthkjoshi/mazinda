@@ -7,8 +7,11 @@ const Categories = async () => {
   return (
     <>
       <div className="flex justify-between items-center px-3">
-        <h1 className="text-lg font-semibold">Categories</h1>
-        <Link className="text-md underline mr-2" href={"/browse-categories"}>
+        <h1 className="text-md font-semibold">Categories</h1>
+        <Link
+          className="text-sm text-gray-400 underline mr-2"
+          href={"/browse-categories"}
+        >
           View Details
         </Link>
       </div>
