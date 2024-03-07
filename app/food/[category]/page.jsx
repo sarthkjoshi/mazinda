@@ -8,6 +8,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import AlertBar from "@/components/utility/AlertBar";
 
 const FoodCategory = ({ params }) => {
   const router = useRouter();
@@ -149,6 +150,10 @@ const FoodCategory = ({ params }) => {
 
   return (
     <div className="p-4">
+      <div className="bg-red-500 text-white">
+        <AlertBar />
+      </div>
+
       <div className="sticky top-0 bg-white z-50 py-2">
         <div className="flex justify-center">
           <select
@@ -166,7 +171,6 @@ const FoodCategory = ({ params }) => {
           </select>
         </div>
       </div>
-
       {isLoading ? (
         <OvalLoader />
       ) : (
