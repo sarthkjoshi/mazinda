@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import OvalLoader from "@/components/Loading-Spinners/OvalLoader";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import AlertBar from "@/components/utility/AlertBar";

@@ -11,8 +11,8 @@ const ProductCard = ({ product }) => {
   return (
     <Link
       key={product._id}
-      href={`/product/view-product?id=${product._id}`}
-      // href={`/product/${product._id}`}
+      // href={`/product/view-product?id=${product._id}`}
+      href={`/product/${product._id}`}
       target="_blank"
       className="m-2 rounded-md border shadow w-[42vw] md:w-[200px] bg-white"
     >

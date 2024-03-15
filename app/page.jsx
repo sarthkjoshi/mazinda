@@ -20,7 +20,7 @@ const Home = () => {
         <h1 className="text-md font-semibold">What are you looking for?</h1>
         <Link
           className="text-sm text-gray-400 underline mr-2"
-          href={"/user/browse-categories"}
+          href={"/browse-categories"}
         >
           View Details
         </Link>

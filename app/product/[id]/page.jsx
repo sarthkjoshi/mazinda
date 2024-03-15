@@ -26,7 +26,7 @@ const ProductPage = async ({ params }) => {
   const product = await fetchProduct(params.id);
 
   return (
-    <>
+    <div>
       {/* Desktop Version */}
       <div className="hidden md:flex">
         <div className="w-1/3 h-screen bg-white fixed top-auto left-0 overflow-y-auto overflow-x-hidden">
@@ -192,8 +192,24 @@ const ProductPage = async ({ params }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default ProductPage;
+
+// or Dynamic metadata
+export async function generateMetadata({ params }) {
+  const product = await fetchProduct(params.id);
+
+  let description;
+
+  product.description.map((item, index) => {
+    description += item.description;
+  });
+
+  return {
+    title: `${product.productName} : mazinda.com`,
+    description: `${description} : Mazinda - Ab Maze Mein India. Mazinda mazinda.com`,
+  };
+}
