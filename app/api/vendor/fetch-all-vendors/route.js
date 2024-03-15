@@ -8,7 +8,7 @@ export async function POST() {
     // console.log("here"+connectCityDB);
 
     let vendors = await Vendor.find().select(
-      "-password -number -alternateNumber -menu -whatsapp_group_id -payouts -payPercentage"
+      "-password -number -alternateNumber -whatsapp_group_id -payouts -payPercentage"
     );
     return NextResponse.json({ success: true, vendors });
   } catch (error) {
