@@ -4,6 +4,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   const { city } = await req.json();
+
+  if (city === "Kamand") {
+    city = "Mandi";
+  }
+
   try {
     await connectDB();
     let location = await Location.findOne({ city });
