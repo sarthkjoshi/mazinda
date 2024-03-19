@@ -24,7 +24,7 @@ export async function POST(req) {
   const {
     group_id,
     order_id,
-    user,
+    // user,
     address,
     products,
     instructions,
@@ -44,7 +44,6 @@ export async function POST(req) {
     (externalDeliveryRequired
       ? ""
       : `
-    *Name:* ${user}
     *Address:* ${address.hostel}, ${address.campus}
     *Phone Number:* ${address.phoneNumber}`) +
     `\n*Instructions:* ${instructions}\n` +
