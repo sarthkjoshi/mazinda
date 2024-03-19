@@ -3,7 +3,7 @@ import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const { city } = await req.json();
+  let { city } = await req.json();
 
   if (city === "Kamand") {
     city = "Mandi";
