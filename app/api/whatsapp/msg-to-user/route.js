@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 
 export async function POST(req) {
-  const { userName, userNumber, amount } = await req.json();
+  const { userNumber, amount } = await req.json();
 
-  const message = `Hey ${userName},
+  const message = `Hey,
     
     Your order from Mazinda has been confirmed and will reach you very soon!
 
