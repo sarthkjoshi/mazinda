@@ -52,12 +52,12 @@ const CanteenPage = ({ params }) => {
   useEffect(() => {
     const fetchCartData = async () => {
       const token = Cookies.get("user_token");
-     
-      if(token){
+
+      if (token) {
         try {
           const response = await axios.post(`/api/vendor/fetchcart`, { token });
           const json = response.data;
-  
+
           if (json.success) {
             setCart(json.cart || {}); // Initialize cart as an empty object if it's null
           } else {
@@ -66,17 +66,17 @@ const CanteenPage = ({ params }) => {
         } catch (error) {
           console.error("An error occurred while fetching cart:", error);
         }
-      }else{
+      } else {
         setCart({});
       }
-      
     };
 
     fetchCartData();
 
     const fetchVendor = async () => {
+      console.log("here");
       try {
-        const response = await axios.post(`https://citikartt.com/api/vendor/fetchvendorbyid`, {
+        const response = await axios.post(`/api/vendor/fetch-vendor-by-id`, {
           _id: params._id,
         });
         const json = await response.data;
@@ -117,60 +117,56 @@ const CanteenPage = ({ params }) => {
 
   const addToCart = (item) => {
     try {
- 
       // check login
       const userToken = Cookies.get("user_token");
       if (!userToken) {
-        
-          toast({
-            title: "New to Mazinda?",
-            description:
-              "Signup/Login now to customize your cart and experience shopping like never before!",
-            action: (
-              <ToastAction
-                altText="Try again"
-                onClick={() => router.push("/user/auth/login")}
-              >
-                Login
-              </ToastAction>
-            ),
-          });
-      }else{
-          // Check if the cart is associated with a vendor
-          if (Object.keys(cart).length > 0) {
-            const vendorNameInCart = Object.values(cart)[0].vendorName;
-            if (vendorNameInCart !== storeName) {
-              // Show the custom alert when trying to add items from different vendors
-              setAlertMessage(
-                "You can't add items from different restaurant. Do you want to clear the cart?"
-              );
-              setShowAlert(true);
-              return;
-            }
+        toast({
+          title: "New to Mazinda?",
+          description:
+            "Signup/Login now to customize your cart and experience shopping like never before!",
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => router.push("/user/auth/login")}
+            >
+              Login
+            </ToastAction>
+          ),
+        });
+      } else {
+        // Check if the cart is associated with a vendor
+        if (Object.keys(cart).length > 0) {
+          const vendorNameInCart = Object.values(cart)[0].vendorName;
+          if (vendorNameInCart !== storeName) {
+            // Show the custom alert when trying to add items from different vendors
+            setAlertMessage(
+              "You can't add items from different restaurant. Do you want to clear the cart?"
+            );
+            setShowAlert(true);
+            return;
           }
+        }
 
-          // Check if the item is already in the cart
-          if (item.name in cart) {
-            // If the item is already in the cart, update its quantity
-            const updatedCart = { ...cart };
-            updatedCart[item.name].quantity += 1;
-            setCart(updatedCart);
-            updateCart(updatedCart);
-          } else {
-            // If the item is not in the cart, add it
-            const newItem = {
-              name: item.name,
-              quantity: 1,
-              price: item.price,
-              vendorName: storeName,
-            };
-            const newCart = { ...cart, [item.name]: newItem };
-            setCart(newCart);
-            updateCart(newCart);
-          }
+        // Check if the item is already in the cart
+        if (item.name in cart) {
+          // If the item is already in the cart, update its quantity
+          const updatedCart = { ...cart };
+          updatedCart[item.name].quantity += 1;
+          setCart(updatedCart);
+          updateCart(updatedCart);
+        } else {
+          // If the item is not in the cart, add it
+          const newItem = {
+            name: item.name,
+            quantity: 1,
+            price: item.price,
+            vendorName: storeName,
+          };
+          const newCart = { ...cart, [item.name]: newItem };
+          setCart(newCart);
+          updateCart(newCart);
+        }
       }
-
-      
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
@@ -196,7 +192,7 @@ const CanteenPage = ({ params }) => {
 
   return (
     <div className="container mx-auto p-5 md:w-1/2">
-        <h1 className="text-xl font-semibold text-center my-2">{storeName}</h1>
+      <h1 className="text-xl font-semibold text-center my-2">{storeName}</h1>
       <div className="mb-5 sticky top-0 bg-white rounded-xl">
         <input
           type="text"
@@ -211,90 +207,93 @@ const CanteenPage = ({ params }) => {
         <OvalLoader />
       ) : Object.entries(filteredMenu).length > 0 ? (
         <div className="mb-16">
-          {Object.entries(filteredMenu).map(([category, products]) => (
-            // Check if the category has any products before rendering
-            products.length > 0 && (
-              <div
-                key={category}
-                className="mb-4 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] p-2 rounded-md"
-              >
-                <h3 className="text-lg font-semibold ml-2 mb-2 underline">
-                  {category}
-                </h3>
-                <ul className="list-disc ml-6">
-                  {products
-                    .filter((product) => product !== null)
-                    .map((product, index) => (
-                      <li
-                        key={index}
-                        disabled={product.availability === "over"}
-                        className={`mb-2 list-none flex justify-between items-center ${
-                          product.availability === "over" ? "opacity-50" : ""
-                        }`}
-                      >
-                        <span className="flex items-center justify-center">
-                          {product.imageName && product.imageName !== "" ? (
-                            <img
-                              src={product.imageName}
-                              alt=""
-                              className={`rounded-md mr-4 w-12 h-12 ${
-                                selectedImage === product.imageName
-                                  ? "w-52 h-52 absolute"
-                                  : ""
-                              }`}
-                              onClick={() => toggleImageSize(product.imageName)}
-                            />
-                          ) : null}
-                          {product.name}
-                          <span
-                            className={
-                              product.categoryType === "nonveg"
-                                ? "bg-red-500 p-1 text-white rounded-lg ml-2 text-[10px]"
-                                : "bg-white p-1 text-white rounded-lg ml-2 text-[10px]"
-                            }
-                          >
-                            {product.categoryType}
-                          </span>
-                        </span>
-                        <div className="flex">
-                          <div
-                            id="quantityPill"
-                            className={`flex mr-2 scale-[0.85] border ${
-                              cart &&
-                              cart[product.name] &&
-                              cart[product.name].quantity > 0
-                                ? "border-gray-300 bg-gray-200" // Apply the grey background and different border for non-zero quantity
-                                : "border-gray-300" // Default border for zero quantity
-                            } rounded-md h-[28px]`}
-                          >
-                            <button
-                              disabled={product.availability === "over"}
-                              className="pl-3 pr-1 rounded-l-xl"
-                              onClick={() => decreaseQuantity(product.name)}
+          {Object.entries(filteredMenu).map(
+            ([category, products]) =>
+              // Check if the category has any products before rendering
+              products.length > 0 && (
+                <div
+                  key={category}
+                  className="mb-4 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] p-2 rounded-md"
+                >
+                  <h3 className="text-lg font-semibold ml-2 mb-2 underline">
+                    {category}
+                  </h3>
+                  <ul className="list-disc ml-6">
+                    {products
+                      .filter((product) => product !== null)
+                      .map((product, index) => (
+                        <li
+                          key={index}
+                          disabled={product.availability === "over"}
+                          className={`mb-2 list-none flex justify-between items-center ${
+                            product.availability === "over" ? "opacity-50" : ""
+                          }`}
+                        >
+                          <span className="flex items-center justify-center">
+                            {product.imageName && product.imageName !== "" ? (
+                              <img
+                                src={product.imageName}
+                                alt=""
+                                className={`rounded-md mr-4 w-12 h-12 ${
+                                  selectedImage === product.imageName
+                                    ? "w-52 h-52 absolute"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  toggleImageSize(product.imageName)
+                                }
+                              />
+                            ) : null}
+                            {product.name}
+                            <span
+                              className={
+                                product.categoryType === "nonveg"
+                                  ? "bg-red-500 p-1 text-white rounded-lg ml-2 text-[10px]"
+                                  : "bg-white p-1 text-white rounded-lg ml-2 text-[10px]"
+                              }
                             >
-                              -
-                            </button>
-                            <span className="px-2 border border-gray-100">
-                              {cart && cart[product.name]
-                                ? cart[product.name].quantity
-                                : "0"}
+                              {product.categoryType}
                             </span>
-                            <button
-                              disabled={product.availability === "over"}
-                              className="pr-2 pl-1 rounded-r-xl"
-                              onClick={() => addToCart(product)}
+                          </span>
+                          <div className="flex">
+                            <div
+                              id="quantityPill"
+                              className={`flex mr-2 scale-[0.85] border ${
+                                cart &&
+                                cart[product.name] &&
+                                cart[product.name].quantity > 0
+                                  ? "border-gray-300 bg-gray-200" // Apply the grey background and different border for non-zero quantity
+                                  : "border-gray-300" // Default border for zero quantity
+                              } rounded-md h-[28px]`}
                             >
-                              +
-                            </button>
+                              <button
+                                disabled={product.availability === "over"}
+                                className="pl-3 pr-1 rounded-l-xl"
+                                onClick={() => decreaseQuantity(product.name)}
+                              >
+                                -
+                              </button>
+                              <span className="px-2 border border-gray-100">
+                                {cart && cart[product.name]
+                                  ? cart[product.name].quantity
+                                  : "0"}
+                              </span>
+                              <button
+                                disabled={product.availability === "over"}
+                                className="pr-2 pl-1 rounded-r-xl"
+                                onClick={() => addToCart(product)}
+                              >
+                                +
+                              </button>
+                            </div>
+                            <span className="w-[40px]">₹{product.price}</span>
                           </div>
-                          <span className="w-[40px]">₹{product.price}</span>
-                        </div>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            )
-          ))}
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              )
+          )}
         </div>
       ) : (
         <p className="text-center">No matching items found.</p>
@@ -325,7 +324,6 @@ const CanteenPage = ({ params }) => {
                       theme: "light",
                     }
                   );
-                  
                 }
               });
             }}

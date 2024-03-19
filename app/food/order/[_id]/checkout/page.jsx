@@ -184,7 +184,7 @@ const CheckoutPage = ({ params }) => {
     const json = response.data;
 
     if (json.success) {
-      const { data } = await axios.post("/api/vendor/fetchvendorbyid", {
+      const { data } = await axios.post("/api/vendor/fetch-vendor-by-id", {
         _id: params._id,
       });
 
@@ -323,7 +323,7 @@ const CheckoutPage = ({ params }) => {
   useEffect(() => {
     const fetchData = async () => {
       const vendorResponse = await axios.post(
-        `https://citikartt.com/api/vendor/fetchvendorbyid`,
+        `/api/vendor/fetch-vendor-by-id`,
         {
           _id: params._id,
         }
