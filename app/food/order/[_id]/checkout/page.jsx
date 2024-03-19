@@ -179,7 +179,7 @@ const CheckoutPage = ({ params }) => {
       externalDeliveryRequired,
       cutleryQuantity,
       paymentMethod: "Pay on Delivery",
-      paymentLink: `upi://pay?pa=${process.env.NEXT_PUBLIC_UPI_ID}&pn=Citikartt&am=${total}&cu=INR&tn=Payment at Citikartt`,
+      paymentLink: `upi://pay?pa=${process.env.NEXT_PUBLIC_UPI_ID}&pn=Mazinda&am=${total}&cu=INR&tn=Payment at Mazinda`,
     });
     const json = response.data;
 
