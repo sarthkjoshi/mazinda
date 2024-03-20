@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,7 +12,8 @@ function BottomMenu() {
     <>
       {!pathname.includes("/store") &&
         !pathname.includes("auth") &&
-        !pathname.includes("admin") && !pathname.includes("food") && (
+        !pathname.includes("admin") &&
+        !pathname.includes("food") && (
           <div className="fixed bottom-0 z-50 w-full h-14 border-t border-gray-200 bg-[#fbe4d0] md:hidden rounded-t-2xl">
             <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium scale-90">
               <Link
@@ -50,7 +51,7 @@ function BottomMenu() {
 
               <Link
                 className="inline-flex flex-col items-center justify-center px-5 hover:scale-110 transition-all ease-in pt-[2px]"
-                href="/user/browse-categories"
+                href="/browse-categories"
               >
                 <svg
                   width="20"
@@ -119,7 +120,7 @@ function BottomMenu() {
               </Link> */}
 
               <Link
-                href='/user/my-account'
+                href="/user/my-account"
                 className="inline-flex flex-col items-center justify-center px-5 hover:scale-110 transition-all ease-in"
               >
                 <ProfileSVG />
