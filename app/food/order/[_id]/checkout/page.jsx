@@ -46,6 +46,7 @@ const CheckoutPage = ({ params }) => {
   const [deliveryCharge, setDeliveryCharge] = useState(0.0);
 
   const calculateSubtotal = () =>
+    cart &&
     Object.keys(cart)
       .reduce(
         (subtotal, itemName) =>
@@ -81,7 +82,8 @@ const CheckoutPage = ({ params }) => {
   };
 
   const handleProceedToPaymentOnline = async (amount) => {
-    const isAddressComplete = Object.values(address).every((val) => val !== "");
+    const isAddressComplete =
+      address && Object.values(address).every((val) => val !== "");
     const isValidPhoneNumber = /^\d{10}$/.test(address.phoneNumber);
 
     if (!isAddressComplete || !isValidPhoneNumber) {
@@ -155,7 +157,8 @@ const CheckoutPage = ({ params }) => {
 
   const handleProceedToPaymentOffline = async () => {
     setOrderPlaceButtonLoading(true);
-    let isAddressComplete = Object.values(address).every((val) => val !== "");
+    let isAddressComplete =
+      address && Object.values(address).every((val) => val !== "");
     if (!isAddressComplete && address.instructions == "") {
       isAddressComplete = true;
     }
