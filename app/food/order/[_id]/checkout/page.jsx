@@ -170,7 +170,7 @@ const CheckoutPage = ({ params }) => {
       return;
     }
 
-    const response = await axios.post(`/api/order/create-food-order`, {
+    const { data: json } = await axios.post(`/api/order/create-food-order`, {
       userId: user._id,
       vendorId: params._id,
       products: cart,
@@ -181,7 +181,6 @@ const CheckoutPage = ({ params }) => {
       paymentMethod: "Pay on Delivery",
       paymentLink: `upi://pay?pa=${process.env.NEXT_PUBLIC_UPI_ID}&pn=Mazinda&am=${total}&cu=INR&tn=Payment at Mazinda`,
     });
-    const json = response.data;
 
     if (json.success) {
       const { data } = await axios.post("/api/vendor/fetch-vendor-by-id", {
@@ -400,6 +399,7 @@ const CheckoutPage = ({ params }) => {
           <h2 className="text-lg font-semibold mb-2">Items in Cart</h2>
           <div className="bg-white shadow-md rounded-lg overflow-auto">
             {!cartLoading ? (
+              cart &&
               Object.keys(cart).map((itemName) => (
                 <div
                   key={itemName}
