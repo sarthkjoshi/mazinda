@@ -5,6 +5,7 @@ const BannerSchema = new mongoose.Schema({
   banner_type: { type: String, required: true },
   link_type: { type: String, required: true },
   city_ids: { type: Array, required: true },
+  blurhash: { type: String },
   category_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import { AspectRatio } from "./ui/aspect-ratio";
 
-const CarouselShadcn = ({ images }) => {
+const ProductImageCarousel = ({ images }) => {
   return (
     <Carousel
       opts={{
@@ -38,4 +38,4 @@ const CarouselShadcn = ({ images }) => {
   );
 };
 
-export default CarouselShadcn;
+export default ProductImageCarousel;
