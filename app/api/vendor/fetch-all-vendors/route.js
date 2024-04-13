@@ -7,9 +7,7 @@ export async function POST() {
     await connectDB();
     // console.log("here"+connectCityDB);
 
-    let vendors = await Vendor.find().select(
-      "-password -number -alternateNumber -whatsapp_group_id -payouts -payPercentage"
-    );
+    let vendors = await Vendor.find().select("-password");
     return NextResponse.json({ success: true, vendors });
   } catch (error) {
     return NextResponse.json({
