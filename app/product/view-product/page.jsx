@@ -172,6 +172,17 @@ const ViewProduct = () => {
     );
   }
 
+  if (product.store_disabled || !product.isAvailable) {
+    return (
+      <div className="flex items-center justify-center h-[75vh]">
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Out of Stock</h2>
+          <p>This product is currently not available for purchase.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Mobile Version */}
