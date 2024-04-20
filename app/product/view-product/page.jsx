@@ -172,23 +172,26 @@ const ViewProduct = () => {
     );
   }
 
-  if (product.store_disabled || !product.isAvailable) {
-    return (
-      <div className="flex items-center justify-center h-[75vh]">
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Out of Stock</h2>
-          <p>This product is currently not available for purchase.</p>
-        </div>
-      </div>
-    );
-  }
+  // if (product.store_disabled || !product.isAvailable) {
+  //   return (
+  //     <div className="flex items-center justify-center h-[75vh]">
+  //       <div>
+  //         <h2 className="text-2xl font-bold mb-4">Out of Stock</h2>
+  //         <p>This product is currently not available for purchase.</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
       {/* Mobile Version */}
       <div className="md:w-1/2 lg:w-1/3 md:mx-auto md:hidden px-3 mb-20">
-        {/* <div className=""> */}
-        <div className="mb-8">
+        <div
+          className={`mb-8 ${
+            product.store_disabled || !product.isAvailable ? "grayscale" : ""
+          }`}
+        >
           <Carousel arr={product.imagePaths} />
         </div>
 
@@ -210,23 +213,34 @@ const ViewProduct = () => {
         </div>
 
         <div className="mt-10 w-full flex justify-center bottom-0">
-          <button
-            onClick={() => handleBuyNow(product)}
-            className={`px-5 py-2 rounded-md text-white mx-1 text-lg font-bold transition-all duration-300 ${
-              !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
-            }`}
-          >
-            {!buyItemLoading ? (
-              <span className="flex items-center gap-1">
-                <NextSVG />
-                Buy Now
-              </span>
-            ) : (
-              "Redirecting..."
-            )}
-          </button>
+          {product.store_disabled || !product.isAvailable ? (
+            <button
+              disabled
+              className="px-5 py-2 rounded-md text-white mx-1 text-lg font-bold bg-gray-400"
+            >
+              Out of Stock !
+            </button>
+          ) : (
+            <button
+              onClick={() => handleBuyNow(product)}
+              className={`px-5 py-2 rounded-md text-white mx-1 text-lg font-bold transition-all duration-300 ${
+                !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
+              }`}
+            >
+              {!buyItemLoading ? (
+                <span className="flex items-center gap-1">
+                  <NextSVG />
+                  Buy Now
+                </span>
+              ) : (
+                "Redirecting..."
+              )}
+            </button>
+          )}
 
-          {!isProductInCart ? (
+          {product.store_disabled || !product.isAvailable ? (
+            <></>
+          ) : !isProductInCart ? (
             <button
               onClick={() => {
                 UpdateItemInCart(product);
@@ -249,29 +263,8 @@ const ViewProduct = () => {
                 }}
                 className="bg-white px-4 py-2 rounded-3xl text-[#F17E13] mx-1 text-lg border border-[#F17E13]"
               >
-                {" "}
                 Go to Cart
               </button>
-
-              {/* <button
-                onClick={() => {
-                  UpdateItemInCart(product, "decrement");
-                }}
-                className="bg-[#f17e13] text-white px-4 py-2"
-              >
-                -
-              </button>
-              <span className="px-4 py-2">
-                {cart.find((item) => item._id === product._id)?.quantity}
-              </span>
-              <button
-                onClick={() => {
-                  UpdateItemInCart(product, "increment");
-                }}
-                className="bg-[#f17e13] text-white px-4 py-2"
-              >
-                +
-              </button> */}
             </div>
           )}
         </div>
@@ -379,18 +372,37 @@ const ViewProduct = () => {
       <div className="hidden md:flex">
         <div className="w-1/3 h-screen bg-white fixed top-auto left-0 overflow-y-auto overflow-x-hidden">
           <div className="p-2 w-full">
-            <Carousel arr={product.imagePaths} />
+            <div
+              className={`${
+                product.store_disabled || !product.isAvailable
+                  ? "grayscale"
+                  : ""
+              }`}
+            >
+              <Carousel arr={product.imagePaths} />
+            </div>
             <div className="mt-10 w-full flex justify-center">
-              <button
-                onClick={() => handleBuyNow(product)}
-                className={`px-5 py-2 rounded-3xl text-white mx-1 text-lg font-bold transition-all duration-300 ${
-                  !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
-                }`}
-              >
-                {!buyItemLoading ? "Buy Now" : "Redirecting..."}
-              </button>
+              {product.store_disabled || !product.isAvailable ? (
+                <button
+                  disabled
+                  className="px-5 py-2 rounded-md text-white mx-1 text-lg font-bold bg-gray-400"
+                >
+                  Out of Stock !
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleBuyNow(product)}
+                  className={`px-5 py-2 rounded-3xl text-white mx-1 text-lg font-bold transition-all duration-300 ${
+                    !buyItemLoading ? "bg-[#F17E13]" : "bg-gray-400"
+                  }`}
+                >
+                  {!buyItemLoading ? "Buy Now" : "Redirecting..."}
+                </button>
+              )}
 
-              {!isProductInCart ? (
+              {product.store_disabled || !product.isAvailable ? (
+                <></>
+              ) : !isProductInCart ? (
                 <button
                   onClick={() => {
                     UpdateItemInCart(product);
